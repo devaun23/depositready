@@ -2,6 +2,7 @@ import type { StateCode } from '@/lib/state-rules/types';
 
 /**
  * Types for DepositReady dispute packet
+ * Simplified for 4-step wizard flow
  */
 
 // Wizard step data
@@ -9,67 +10,29 @@ export interface WizardData {
   // State selection (determines which rules apply)
   stateCode: StateCode | null;
 
-  // Step 1: Situation
-  situation: "moved_out" | "still_living" | null;
-
-  // Step 2: Timeline
+  // Step 1: Basics
+  email: string; // For delivery
   moveOutDate: string | null; // ISO date string
-  depositPaidDate: string | null;
-
-  // Step 3: Deposit Details
   depositAmount: number | null;
-  wasItemized: boolean | null;
 
-  // Step 4: Landlord Info
+  // Landlord Info
   landlord: {
     name: string;
     address: string;
     city: string;
     state: string;
     zip: string;
-    email: string;
-    phone: string;
   };
 
-  // Step 5: Property Info
+  // Step 2: Property & Tenant
   property: {
     address: string;
     city: string;
     state: string;
     zip: string;
     unit: string;
-    leaseStartDate: string | null;
-    leaseEndDate: string | null;
   };
 
-  // Step 6: What Happened
-  issueType: "no_refund" | "unfair_deductions" | "partial_refund" | null;
-  amountReceived: number | null;
-
-  // Step 7: Deductions (if applicable)
-  deductions: Deduction[];
-
-  // Step 8: Evidence
-  evidence: {
-    hasPhotos: boolean;
-    hasVideos: boolean;
-    hasReceipts: boolean;
-    hasLeaseAgreement: boolean;
-    hasMoveInChecklist: boolean;
-    hasMoveOutChecklist: boolean;
-    hasCorrespondence: boolean;
-    otherEvidence: string;
-  };
-
-  // Step 9: Prior Communication
-  priorCommunication: {
-    hasContacted: boolean;
-    contactMethod: "email" | "phone" | "letter" | "in_person" | null;
-    contactDate: string | null;
-    response: string;
-  };
-
-  // Step 10: Tenant Info (for documents)
   tenant: {
     name: string;
     currentAddress: string;
@@ -78,6 +41,22 @@ export interface WizardData {
     zip: string;
     email: string;
     phone: string;
+  };
+
+  // Step 3: Dispute
+  issueType: "no_refund" | "unfair_deductions" | "partial_refund" | null;
+  amountReceived: number | null;
+  deductions: Deduction[];
+
+  // Step 4: Review (evidence checkboxes)
+  evidence: {
+    hasPhotos: boolean;
+    hasVideos: boolean;
+    hasReceipts: boolean;
+    hasLeaseAgreement: boolean;
+    hasMoveInChecklist: boolean;
+    hasMoveOutChecklist: boolean;
+    hasCorrespondence: boolean;
   };
 }
 
@@ -114,19 +93,15 @@ export interface DisputeRecord {
 // Empty wizard data for initialization
 export const EMPTY_WIZARD_DATA: WizardData = {
   stateCode: null,
-  situation: null,
+  email: "",
   moveOutDate: null,
-  depositPaidDate: null,
   depositAmount: null,
-  wasItemized: null,
   landlord: {
     name: "",
     address: "",
     city: "",
     state: "",
     zip: "",
-    email: "",
-    phone: "",
   },
   property: {
     address: "",
@@ -134,8 +109,15 @@ export const EMPTY_WIZARD_DATA: WizardData = {
     state: "",
     zip: "",
     unit: "",
-    leaseStartDate: null,
-    leaseEndDate: null,
+  },
+  tenant: {
+    name: "",
+    currentAddress: "",
+    city: "",
+    state: "",
+    zip: "",
+    email: "",
+    phone: "",
   },
   issueType: null,
   amountReceived: null,
@@ -148,21 +130,5 @@ export const EMPTY_WIZARD_DATA: WizardData = {
     hasMoveInChecklist: false,
     hasMoveOutChecklist: false,
     hasCorrespondence: false,
-    otherEvidence: "",
-  },
-  priorCommunication: {
-    hasContacted: false,
-    contactMethod: null,
-    contactDate: null,
-    response: "",
-  },
-  tenant: {
-    name: "",
-    currentAddress: "",
-    city: "",
-    state: "",
-    zip: "",
-    email: "",
-    phone: "",
   },
 };
