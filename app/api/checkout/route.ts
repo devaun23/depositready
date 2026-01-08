@@ -1,23 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
-import Stripe from "stripe";
 import { supabaseAdmin, generateDownloadToken } from "@/lib/supabase";
+import { stripeFetch } from "@/lib/stripe-fetch";
 
-// Force Node.js runtime for better Stripe compatibility
+// Force Node.js runtime
 export const runtime = "nodejs";
 export const maxDuration = 30;
 
 const PRICE_CENTS = 3900; // $39.00
 
-function getStripe(): Stripe {
-  if (!process.env.STRIPE_SECRET_KEY) {
-    throw new Error("STRIPE_SECRET_KEY is not configured");
-  }
-  return new Stripe(process.env.STRIPE_SECRET_KEY);
-}
-
 export async function POST(request: NextRequest) {
   try {
-    const stripe = getStripe();
     const body = await request.json();
     const { tenantName, tenantEmail, propertyAddress, depositAmount, formData } =
       body;
@@ -29,8 +21,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const baseUrl =
-      process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+    const baseUrl = (process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000").trim();
 
     // Generate a download token for this order
     const downloadToken = generateDownloadToken();
@@ -58,8 +49,8 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Create Stripe checkout session with order_id in metadata
-    const session = await stripe.checkout.sessions.create({
+    // Create Stripe checkout session with order_id in metadata (using fetch-based client)
+    const session = await stripeFetch.checkout.sessions.create({
       payment_method_types: ["card"],
       mode: "payment",
       line_items: [
@@ -100,10 +91,6 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error("Checkout session error:", error);
 
-    if (error instanceof Stripe.errors.StripeError) {
-      return NextResponse.json({ error: error.message }, { status: 400 });
-    }
-
     if (
       error instanceof Error &&
       error.message.includes("STRIPE_SECRET_KEY")
@@ -115,7 +102,7 @@ export async function POST(request: NextRequest) {
     }
 
     return NextResponse.json(
-      { error: "Failed to create checkout session" },
+      { error: error instanceof Error ? error.message : "Failed to create checkout session" },
       { status: 500 }
     );
   }
