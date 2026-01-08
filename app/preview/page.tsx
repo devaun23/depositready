@@ -4,11 +4,8 @@ import { useEffect, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { WizardData } from "@/types/dispute";
-import {
-  analyzeDeadlines,
-  formatLegalDate,
-  FLORIDA_RULES,
-} from "@/lib/florida-rules";
+import { analyzeDeadlines } from "@/lib/state-rules/deadlines";
+import { getStateRulesByCode, FLORIDA, formatLegalDate } from "@/lib/state-rules";
 
 function PreviewContent() {
   const [data, setData] = useState<WizardData | null>(null);
@@ -37,7 +34,7 @@ function PreviewContent() {
         body: JSON.stringify({
           tenantName: data.tenant.name,
           tenantEmail: data.tenant.email,
-          propertyAddress: `${data.property.address}, ${data.property.city}, FL`,
+          propertyAddress: `${data.property.address}, ${data.property.city}, ${data.stateCode || 'FL'}`,
           depositAmount: data.depositAmount,
           formData: data, // Pass full wizard data for database storage
         }),
@@ -68,16 +65,21 @@ function PreviewContent() {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <p className="text-gray-600 mb-4">No dispute data found.</p>
-          <Link href="/wizard" className="text-blue-600 hover:text-blue-700">
-            Start the wizard
+          <Link href="/" className="text-blue-600 hover:text-blue-700">
+            Select your state to begin
           </Link>
         </div>
       </div>
     );
   }
 
+  // Get state rules based on wizard data
+  const stateRules = data.stateCode
+    ? getStateRulesByCode(data.stateCode)
+    : FLORIDA;
+
   const deadlines = data.moveOutDate
-    ? analyzeDeadlines(new Date(data.moveOutDate))
+    ? analyzeDeadlines(new Date(data.moveOutDate), stateRules)
     : null;
 
   const totalDeductions = data.deductions.reduce((sum, d) => sum + d.amount, 0);
@@ -92,7 +94,7 @@ function PreviewContent() {
             DepositReady
           </Link>
           <Link
-            href="/wizard"
+            href={`/${stateRules.slug}/wizard`}
             className="text-sm text-gray-500 hover:text-gray-700"
           >
             Edit answers
@@ -129,7 +131,7 @@ function PreviewContent() {
               <span className="ml-2 font-medium">
                 {data.property.address}
                 {data.property.unit && `, ${data.property.unit}`},{" "}
-                {data.property.city}, FL
+                {data.property.city}, {stateRules.code}
               </span>
             </div>
             <div>
@@ -158,7 +160,7 @@ function PreviewContent() {
             <div className="mt-4 p-3 bg-green-50 border border-green-200 rounded-lg">
               <p className="text-sm text-green-800">
                 <strong>Deadline Violation Detected:</strong> Your landlord
-                missed the legal deadline under Florida Statute 83.49. This
+                missed the legal deadline under {stateRules.statuteTitle}. This
                 strengthens your case.
               </p>
             </div>
@@ -174,13 +176,13 @@ function PreviewContent() {
             {[
               {
                 title: "Customized Demand Letter",
-                description: `Addressed to ${data.landlord.name}, citing Florida Statute 83.49, demanding return of your $${data.depositAmount?.toFixed(2) || "0.00"} deposit.`,
+                description: `Addressed to ${data.landlord.name}, citing ${stateRules.statuteTitle}, demanding return of your $${data.depositAmount?.toFixed(2) || "0.00"} deposit.`,
                 preview: true,
               },
               {
                 title: "Legal Timeline Analysis",
                 description: deadlines
-                  ? `Shows the 15-day deadline (${formatLegalDate(deadlines.returnDeadline)}) and 30-day deadline (${formatLegalDate(deadlines.claimDeadline)}) with violation status.`
+                  ? `Shows the ${stateRules.returnDeadline}-day deadline (${formatLegalDate(deadlines.returnDeadline)}) and ${stateRules.claimDeadline}-day deadline (${formatLegalDate(deadlines.claimDeadline)}) with violation status.`
                   : "Deadline calculations based on your move-out date.",
                 preview: true,
               },
@@ -200,11 +202,11 @@ function PreviewContent() {
               },
               {
                 title: "Small Claims Court Guide",
-                description: `Step-by-step instructions for filing in Florida small claims court (up to $${FLORIDA_RULES.maxSmallClaims.toLocaleString()}).`,
+                description: `Step-by-step instructions for filing in ${stateRules.name} small claims court (up to $${stateRules.maxSmallClaims.toLocaleString()}).`,
                 preview: false,
               },
               {
-                title: "Florida Statute 83.49 Reference",
+                title: `${stateRules.statuteTitle} Reference`,
                 description:
                   "Full text of the security deposit law with key sections highlighted.",
                 preview: false,

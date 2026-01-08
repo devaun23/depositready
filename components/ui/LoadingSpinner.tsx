@@ -15,7 +15,7 @@ export default function LoadingSpinner({
 }: LoadingSpinnerProps) {
   return (
     <svg
-      className={`animate-spin text-blue-600 ${sizeClasses[size]} ${className}`}
+      className={`animate-spin text-black ${sizeClasses[size]} ${className}`}
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
       viewBox="0 0 24 24"
