@@ -4,5 +4,6 @@ export { Select } from "./Select";
 export { Card, CardHeader, CardContent, CardTitle } from "./Card";
 export { StepIndicator } from "./StepIndicator";
 export { Collapsible } from "./Collapsible";
+export { Logo } from "./Logo";
 export { default as ErrorFallback } from "./ErrorFallback";
 export { default as LoadingSpinner } from "./LoadingSpinner";

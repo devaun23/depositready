@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Button } from "@/components/ui";
+import { Button, Logo } from "@/components/ui";
 
 export function Navbar() {
   return (
@@ -9,8 +9,9 @@ export function Navbar() {
       <nav className="max-w-6xl mx-auto px-4 sm:px-6">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link href="/" className="text-xl font-semibold text-black">
-            DepositReady
+          <Link href="/" className="flex items-center gap-2 text-xl font-semibold text-black">
+            <Logo size="md" />
+            <span className="font-serif">DepositReady</span>
           </Link>
 
           {/* Center Links - Hidden on mobile */}

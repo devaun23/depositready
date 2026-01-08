@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { Logo } from "@/components/ui";
 import { useWizard, WIZARD_STEPS } from "./WizardContext";
 
 interface WizardShellProps {
@@ -29,8 +30,9 @@ export function WizardShell({ children, onComplete }: WizardShellProps) {
       {/* Header */}
       <header className="bg-white border-b border-gray-200">
         <div className="max-w-3xl mx-auto px-4 py-4 flex items-center justify-between">
-          <Link href="/" className="font-serif text-xl font-semibold text-black">
-            DepositReady
+          <Link href="/" className="flex items-center gap-2 font-serif text-xl font-semibold text-black">
+            <Logo size="md" />
+            <span>DepositReady</span>
           </Link>
           <div className="text-sm text-gray-500">
             Step {currentStep} of {totalSteps}
