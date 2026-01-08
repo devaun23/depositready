@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#f8fafc"/>
+  <rect x="0" y="0" width="1200" height="8" fill="#2563eb"/>
+  <text x="600" y="250" text-anchor="middle" font-family="system-ui, sans-serif" font-size="72" font-weight="bold" fill="#1f2937">DepositReady</text>
+  <text x="600" y="330" text-anchor="middle" font-family="system-ui, sans-serif" font-size="36" fill="#4b5563">Get Your Florida Security Deposit Back</text>
+  <text x="600" y="420" text-anchor="middle" font-family="system-ui, sans-serif" font-size="28" fill="#2563eb">$39 | 10-Minute Wizard | Instant Download</text>
+  <rect x="450" y="480" width="300" height="60" rx="8" fill="#2563eb"/>
+  <text x="600" y="520" text-anchor="middle" font-family="system-ui, sans-serif" font-size="24" font-weight="600" fill="#fff">Generate Your Packet</text>
+</svg>

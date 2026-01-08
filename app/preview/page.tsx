@@ -1,12 +1,21 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { WizardData, EMPTY_WIZARD_DATA } from "@/types/dispute";
-import { analyzeDeadlines, formatLegalDate, FLORIDA_RULES } from "@/lib/florida-rules";
+import { WizardData } from "@/types/dispute";
+import {
+  analyzeDeadlines,
+  formatLegalDate,
+  FLORIDA_RULES,
+} from "@/lib/florida-rules";
 
-export default function PreviewPage() {
+function PreviewContent() {
   const [data, setData] = useState<WizardData | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const searchParams = useSearchParams();
+  const canceled = searchParams.get("canceled");
 
   useEffect(() => {
     const stored = localStorage.getItem("disputeData");
@@ -14,6 +23,45 @@ export default function PreviewPage() {
       setData(JSON.parse(stored));
     }
   }, []);
+
+  const handlePurchase = async () => {
+    if (!data) return;
+
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const response = await fetch("/api/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          tenantName: data.tenant.name,
+          tenantEmail: data.tenant.email,
+          propertyAddress: `${data.property.address}, ${data.property.city}, FL`,
+          depositAmount: data.depositAmount,
+          formData: data, // Pass full wizard data for database storage
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(
+          errorData.error || "Failed to create checkout session"
+        );
+      }
+
+      const { url } = await response.json();
+
+      if (url) {
+        window.location.href = url;
+      }
+    } catch (err) {
+      console.error("Checkout error:", err);
+      setError(err instanceof Error ? err.message : "Something went wrong");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   if (!data) {
     return (
@@ -192,16 +240,54 @@ export default function PreviewPage() {
 
         {/* Purchase CTA */}
         <div className="bg-white rounded-lg shadow-sm p-6 text-center">
+          {canceled && (
+            <div className="bg-yellow-50 border border-yellow-200 text-yellow-800 rounded-lg p-3 mb-4 text-sm">
+              Payment was canceled. Your data is still saved - try again when
+              ready.
+            </div>
+          )}
+
           <div className="text-3xl font-bold text-gray-900 mb-2">$39</div>
           <p className="text-gray-600 mb-6">
             One-time purchase. Instant download. No subscription.
           </p>
+
+          {error && (
+            <div className="bg-red-50 border border-red-200 text-red-700 rounded-lg p-3 mb-4 text-sm">
+              {error}
+            </div>
+          )}
+
           <button
-            onClick={() => alert("Stripe integration coming soon!")}
-            className="w-full md:w-auto px-8 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors"
+            onClick={handlePurchase}
+            disabled={isLoading}
+            className="w-full md:w-auto px-8 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 disabled:bg-blue-400 disabled:cursor-not-allowed transition-colors"
           >
-            Get Your Dispute Packet
+            {isLoading ? (
+              <span className="flex items-center justify-center gap-2">
+                <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                    fill="none"
+                  />
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+                  />
+                </svg>
+                Redirecting to checkout...
+              </span>
+            ) : (
+              "Get Your Dispute Packet"
+            )}
           </button>
+
           <p className="text-xs text-gray-500 mt-4">
             Secure payment via Stripe. You will receive a download link
             immediately after purchase.
@@ -218,5 +304,19 @@ export default function PreviewPage() {
         </div>
       </main>
     </div>
+  );
+}
+
+export default function PreviewPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        </div>
+      }
+    >
+      <PreviewContent />
+    </Suspense>
   );
 }

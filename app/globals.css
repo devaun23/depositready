@@ -25,3 +25,135 @@ body {
   background: var(--background);
   color: var(--foreground);
 }
+
+/* Skip to content link for accessibility */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: var(--primary);
+  color: white;
+  padding: 8px 16px;
+  z-index: 100;
+  text-decoration: none;
+  font-weight: 500;
+  border-radius: 0 0 4px 0;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+/* Improved focus styles for accessibility */
+*:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* Remove default focus outline since we handle it with focus-visible */
+*:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Touch-friendly utilities for mobile */
+.btn-touch {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* Ensure all interactive elements are touch-friendly */
+button,
+a,
+input,
+select,
+textarea {
+  touch-action: manipulation;
+}
+
+/* Prevent text selection on buttons for better mobile UX */
+button {
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* Better tap highlighting on mobile */
+@media (hover: none) {
+  button:active,
+  a:active {
+    opacity: 0.8;
+  }
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Print styles */
+@media print {
+  /* Hide non-essential elements */
+  .no-print,
+  nav,
+  footer,
+  button,
+  .print-hidden {
+    display: none !important;
+  }
+
+  /* Reset backgrounds for printing */
+  body {
+    background: white !important;
+    color: black !important;
+    font-size: 12pt;
+    line-height: 1.5;
+  }
+
+  /* Ensure text is readable */
+  * {
+    color: black !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  /* Handle links */
+  a {
+    text-decoration: underline;
+  }
+
+  a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-size: 10pt;
+    color: #666 !important;
+  }
+
+  /* Page breaks */
+  h1,
+  h2,
+  h3 {
+    page-break-after: avoid;
+  }
+
+  p,
+  li {
+    orphans: 3;
+    widows: 3;
+  }
+
+  /* Ensure images don't overflow */
+  img {
+    max-width: 100% !important;
+    page-break-inside: avoid;
+  }
+
+  /* Tables */
+  table {
+    border-collapse: collapse;
+  }
+
+  th,
+  td {
+    border: 1px solid #ddd;
+    padding: 8px;
+  }
+}
