@@ -1,9 +1,14 @@
+import type { StateCode } from '@/lib/state-rules/types';
+
 /**
  * Types for DepositReady dispute packet
  */
 
 // Wizard step data
 export interface WizardData {
+  // State selection (determines which rules apply)
+  stateCode: StateCode | null;
+
   // Step 1: Situation
   situation: "moved_out" | "still_living" | null;
 
@@ -108,6 +113,7 @@ export interface DisputeRecord {
 
 // Empty wizard data for initialization
 export const EMPTY_WIZARD_DATA: WizardData = {
+  stateCode: null,
   situation: null,
   moveOutDate: null,
   depositPaidDate: null,
@@ -117,7 +123,7 @@ export const EMPTY_WIZARD_DATA: WizardData = {
     name: "",
     address: "",
     city: "",
-    state: "FL",
+    state: "",
     zip: "",
     email: "",
     phone: "",
@@ -125,7 +131,7 @@ export const EMPTY_WIZARD_DATA: WizardData = {
   property: {
     address: "",
     city: "",
-    state: "FL",
+    state: "",
     zip: "",
     unit: "",
     leaseStartDate: null,

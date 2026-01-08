@@ -1,16 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import Stripe from "stripe";
 import { supabaseAdmin } from "@/lib/supabase";
+import { stripeFetch } from "@/lib/stripe-fetch";
 
 export const runtime = "nodejs";
 export const maxDuration = 30;
-
-function getStripe(): Stripe {
-  if (!process.env.STRIPE_SECRET_KEY) {
-    throw new Error("STRIPE_SECRET_KEY is not configured");
-  }
-  return new Stripe(process.env.STRIPE_SECRET_KEY);
-}
 
 export async function GET(request: NextRequest) {
   const sessionId = request.nextUrl.searchParams.get("session_id");
@@ -20,8 +13,7 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const stripe = getStripe();
-    const session = await stripe.checkout.sessions.retrieve(sessionId);
+    const session = await stripeFetch.checkout.sessions.retrieve(sessionId);
 
     if (session.payment_status !== "paid") {
       return NextResponse.json({
@@ -57,15 +49,8 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     console.error("Session retrieval error:", error);
 
-    if (error instanceof Stripe.errors.StripeError) {
-      return NextResponse.json(
-        { error: error.message, paid: false },
-        { status: 400 }
-      );
-    }
-
     return NextResponse.json(
-      { error: "Failed to verify payment", paid: false },
+      { error: error instanceof Error ? error.message : "Failed to verify payment", paid: false },
       { status: 500 }
     );
   }

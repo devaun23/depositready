@@ -8,6 +8,7 @@ import {
   ReactNode,
 } from "react";
 import { WizardData, EMPTY_WIZARD_DATA, Deduction } from "@/types/dispute";
+import type { StateCode } from "@/lib/state-rules/types";
 
 interface WizardContextType {
   data: WizardData;
@@ -47,8 +48,21 @@ export const WIZARD_STEPS = [
   { id: 10, title: "Your Info", shortTitle: "You" },
 ] as const;
 
-export function WizardProvider({ children }: { children: ReactNode }) {
-  const [data, setData] = useState<WizardData>(EMPTY_WIZARD_DATA);
+interface WizardProviderProps {
+  children: ReactNode;
+  initialStateCode?: StateCode;
+}
+
+export function WizardProvider({ children, initialStateCode }: WizardProviderProps) {
+  const [data, setData] = useState<WizardData>(() => ({
+    ...EMPTY_WIZARD_DATA,
+    stateCode: initialStateCode || null,
+    // Pre-fill property state to match stateCode
+    property: {
+      ...EMPTY_WIZARD_DATA.property,
+      state: initialStateCode || '',
+    },
+  }));
   const [currentStep, setCurrentStep] = useState(1);
   const [canProceed, setCanProceed] = useState(false);
 

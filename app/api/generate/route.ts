@@ -3,12 +3,19 @@ import { renderToBuffer } from "@react-pdf/renderer";
 import { FullPacket } from "@/components/pdf/FullPacket";
 import { WizardData } from "@/types/dispute";
 import { supabaseAdmin } from "@/lib/supabase";
+import { getStateRulesByCode, FLORIDA } from "@/lib/state-rules";
 import React from "react";
 
 async function generatePDF(data: WizardData, tenantName: string) {
+  // Get state rules (default to Florida if not specified)
+  const stateRules = data.stateCode
+    ? getStateRulesByCode(data.stateCode)
+    : FLORIDA;
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const pdfDocument = React.createElement(FullPacket, {
     data,
+    stateRules,
     generatedDate: new Date(),
   }) as any;
 

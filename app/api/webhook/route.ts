@@ -1,15 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
-import Stripe from "stripe";
 import { supabaseAdmin } from "@/lib/supabase";
+import { verifyWebhookSignature } from "@/lib/stripe-fetch";
 
 export const runtime = "nodejs";
 export const maxDuration = 30;
 
-function getStripe(): Stripe {
-  if (!process.env.STRIPE_SECRET_KEY) {
-    throw new Error("STRIPE_SECRET_KEY is not configured");
-  }
-  return new Stripe(process.env.STRIPE_SECRET_KEY);
+interface CheckoutSession {
+  id: string;
+  payment_status: string;
+  customer_email: string | null;
+  amount_total: number;
+  payment_intent?: string | { id: string };
+  metadata?: Record<string, string>;
 }
 
 export async function POST(request: NextRequest) {
@@ -31,11 +33,10 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  let event: Stripe.Event;
+  let event: { type: string; data: { object: CheckoutSession } };
 
   try {
-    const stripe = getStripe();
-    event = stripe.webhooks.constructEvent(
+    event = verifyWebhookSignature(
       body,
       signature,
       process.env.STRIPE_WEBHOOK_SECRET
@@ -51,7 +52,7 @@ export async function POST(request: NextRequest) {
 
   switch (event.type) {
     case "checkout.session.completed": {
-      const session = event.data.object as Stripe.Checkout.Session;
+      const session = event.data.object;
       const orderId = session.metadata?.order_id;
 
       console.log("Payment successful:", {
@@ -64,15 +65,17 @@ export async function POST(request: NextRequest) {
 
       if (orderId) {
         // Update order to paid status
+        const paymentIntent =
+          typeof session.payment_intent === "string"
+            ? session.payment_intent
+            : session.payment_intent?.id || null;
+
         const { error: updateError } = await supabaseAdmin
           .from("orders")
           .update({
             payment_status: "paid",
             paid_at: new Date().toISOString(),
-            stripe_payment_intent:
-              typeof session.payment_intent === "string"
-                ? session.payment_intent
-                : session.payment_intent?.id || null,
+            stripe_payment_intent: paymentIntent,
             email: session.customer_email || undefined,
           })
           .eq("id", orderId);
@@ -90,7 +93,7 @@ export async function POST(request: NextRequest) {
     }
 
     case "checkout.session.expired": {
-      const session = event.data.object as Stripe.Checkout.Session;
+      const session = event.data.object;
       const orderId = session.metadata?.order_id;
 
       console.log("Checkout session expired:", session.id);

@@ -6,7 +6,8 @@ import {
   StyleSheet,
 } from "@react-pdf/renderer";
 import { WizardData } from "@/types/dispute";
-import { DeadlineAnalysis, FLORIDA_RULES, analyzeDeadlines } from "@/lib/florida-rules";
+import type { StateRules, DeadlineAnalysis } from "@/lib/state-rules";
+import { analyzeDeadlines } from "@/lib/state-rules";
 
 // Note: React-PDF doesn't support combining multiple Documents.
 // This creates a single comprehensive document with all sections.
@@ -253,6 +254,7 @@ const styles = StyleSheet.create({
 
 interface FullPacketProps {
   data: WizardData;
+  stateRules: StateRules;
   generatedDate?: Date;
 }
 
@@ -271,9 +273,9 @@ function formatCurrency(amount: number): string {
   }).format(amount);
 }
 
-export function FullPacket({ data, generatedDate = new Date() }: FullPacketProps) {
+export function FullPacket({ data, stateRules, generatedDate = new Date() }: FullPacketProps) {
   const deadlines = data.moveOutDate
-    ? analyzeDeadlines(new Date(data.moveOutDate))
+    ? analyzeDeadlines(new Date(data.moveOutDate), stateRules)
     : null;
 
   const depositAmount = data.depositAmount || 0;
@@ -281,7 +283,7 @@ export function FullPacket({ data, generatedDate = new Date() }: FullPacketProps
   const amountOwed = depositAmount - amountReceived;
   const totalDeductions = data.deductions.reduce((sum, d) => sum + d.amount, 0);
 
-  const propertyAddress = `${data.property.address}${data.property.unit ? `, ${data.property.unit}` : ""}, ${data.property.city}, FL ${data.property.zip}`;
+  const propertyAddress = `${data.property.address}${data.property.unit ? `, ${data.property.unit}` : ""}, ${data.property.city}, ${stateRules.code} ${data.property.zip}`;
   const landlordAddress = `${data.landlord.address}, ${data.landlord.city}, ${data.landlord.state} ${data.landlord.zip}`;
   const tenantAddress = `${data.tenant.currentAddress}, ${data.tenant.city}, ${data.tenant.state} ${data.tenant.zip}`;
 
@@ -290,7 +292,7 @@ export function FullPacket({ data, generatedDate = new Date() }: FullPacketProps
       {/* COVER PAGE */}
       <Page size="LETTER" style={styles.coverPage}>
         <Text style={styles.coverTitle}>Security Deposit{"\n"}Dispute Packet</Text>
-        <Text style={styles.coverSubtitle}>Prepared Under Florida Statute 83.49</Text>
+        <Text style={styles.coverSubtitle}>Prepared Under {stateRules.statuteTitle}</Text>
 
         <Text style={styles.coverProperty}>{propertyAddress}</Text>
         <Text style={styles.coverInfo}>{data.tenant.name} vs. {data.landlord.name}</Text>
@@ -327,11 +329,11 @@ export function FullPacket({ data, generatedDate = new Date() }: FullPacketProps
 
         {[
           { num: "1", label: "Demand Letter", desc: "Formal demand for deposit return" },
-          { num: "2", label: "Legal Timeline", desc: "Florida deadline analysis" },
+          { num: "2", label: "Legal Timeline", desc: `${stateRules.name} deadline analysis` },
           { num: "3", label: "Deductions Summary", desc: "Line-by-line dispute table" },
           { num: "4", label: "Evidence Checklist", desc: "Documentation to gather" },
           { num: "5", label: "Small Claims Guide", desc: "Court filing instructions" },
-          { num: "6", label: "Florida Statute 83.49", desc: "Full legal reference" },
+          { num: "6", label: stateRules.statuteTitle, desc: "Full legal reference" },
         ].map((item, i) => (
           <View key={i} style={styles.tocItem}>
             <Text style={styles.tocNumber}>{item.num}</Text>
@@ -378,18 +380,18 @@ export function FullPacket({ data, generatedDate = new Date() }: FullPacketProps
         </Text>
 
         <Text style={styles.paragraph}>
-          Under <Text style={styles.bold}>Florida Statute {FLORIDA_RULES.statute}</Text>, a landlord must either return the tenant's security deposit within{" "}
-          <Text style={styles.bold}>15 days</Text> of the tenant vacating the premises, or, if the landlord intends to impose a claim on the deposit, provide the tenant with written notice by certified mail within{" "}
-          <Text style={styles.bold}>30 days</Text> stating the landlord's intention to impose a claim and the reason for imposing the claim.
+          Under <Text style={styles.bold}>{stateRules.statuteTitle}</Text>, a landlord must either return the tenant's security deposit within{" "}
+          <Text style={styles.bold}>{stateRules.returnDeadline} days</Text> of the tenant vacating the premises, or, if the landlord intends to impose a claim on the deposit, provide the tenant with written notice{stateRules.certifiedMailRequired ? " by certified mail" : ""} within{" "}
+          <Text style={styles.bold}>{stateRules.claimDeadline} days</Text> stating the landlord's intention to impose a claim and the reason for imposing the claim.
         </Text>
 
         {deadlines?.landlordInViolation && (
           <View style={styles.alertBox}>
             <Text style={styles.alertTitle}>DEADLINE VIOLATION</Text>
             <Text style={styles.alertText}>
-              {deadlines.violationType === "both" && "Both the 15-day return deadline and 30-day claim deadline have passed without proper action."}
-              {deadlines.violationType === "return" && "The 15-day deadline to return the deposit (when no deductions are claimed) has passed."}
-              {deadlines.violationType === "claim" && "The 30-day deadline to provide written notice of intent to claim deductions has passed."}
+              {deadlines.violationType === "both" && `Both the ${stateRules.returnDeadline}-day return deadline and ${stateRules.claimDeadline}-day claim deadline have passed without proper action.`}
+              {deadlines.violationType === "return" && `The ${stateRules.returnDeadline}-day deadline to return the deposit (when no deductions are claimed) has passed.`}
+              {deadlines.violationType === "claim" && `The ${stateRules.claimDeadline}-day deadline to provide written notice of intent to claim deductions has passed.`}
             </Text>
           </View>
         )}
@@ -402,8 +404,8 @@ export function FullPacket({ data, generatedDate = new Date() }: FullPacketProps
         )}
 
         <Text style={styles.paragraph}>
-          Florida Statute {FLORIDA_RULES.statute}(3)(c) provides that if a landlord fails to comply with the requirements of this section, the landlord forfeits the right to impose a claim upon the security deposit. Furthermore, if the failure to return the deposit is found to be in bad faith, I may be entitled to{" "}
-          <Text style={styles.bold}>triple the amount</Text> of the deposit wrongfully withheld, plus court costs and reasonable attorney's fees.
+          {stateRules.statuteTitle} provides that if a landlord fails to comply with the requirements of this section, the landlord forfeits the right to impose a claim upon the security deposit. Furthermore, if the failure to return the deposit is found to be in bad faith, I may be entitled to{" "}
+          <Text style={styles.bold}>{stateRules.damagesDescription}</Text> of the deposit wrongfully withheld, plus court costs and reasonable attorney's fees.
         </Text>
 
         <View style={styles.infoBox}>
@@ -433,7 +435,7 @@ export function FullPacket({ data, generatedDate = new Date() }: FullPacketProps
         <Page size="LETTER" style={styles.page}>
           <View style={styles.pageHeader}>
             <Text style={styles.pageTitle}>Section 2: Legal Timeline</Text>
-            <Text style={styles.pageSubtitle}>Florida Statute 83.49 Deadline Analysis</Text>
+            <Text style={styles.pageSubtitle}>{stateRules.statuteTitle} Deadline Analysis</Text>
           </View>
 
           <View style={styles.section}>
@@ -450,7 +452,7 @@ export function FullPacket({ data, generatedDate = new Date() }: FullPacketProps
                 <View style={{ width: "30%" }}><Text style={styles.tableCell}>Day 0</Text></View>
               </View>
               <View style={styles.tableRow}>
-                <View style={{ width: "40%" }}><Text style={styles.tableCell}>15-Day Return Deadline</Text></View>
+                <View style={{ width: "40%" }}><Text style={styles.tableCell}>{stateRules.returnDeadline}-Day Return Deadline</Text></View>
                 <View style={{ width: "30%" }}><Text style={styles.tableCell}>{formatDate(deadlines.returnDeadline)}</Text></View>
                 <View style={{ width: "30%" }}>
                   <Text style={[styles.tableCell, { color: deadlines.returnDeadlinePassed ? "#dc2626" : "#15803d" }]}>
@@ -459,7 +461,7 @@ export function FullPacket({ data, generatedDate = new Date() }: FullPacketProps
                 </View>
               </View>
               <View style={styles.tableRow}>
-                <View style={{ width: "40%" }}><Text style={styles.tableCell}>30-Day Claim Deadline</Text></View>
+                <View style={{ width: "40%" }}><Text style={styles.tableCell}>{stateRules.claimDeadline}-Day Claim Deadline</Text></View>
                 <View style={{ width: "30%" }}><Text style={styles.tableCell}>{formatDate(deadlines.claimDeadline)}</Text></View>
                 <View style={{ width: "30%" }}>
                   <Text style={[styles.tableCell, { color: deadlines.claimDeadlinePassed ? "#dc2626" : "#15803d" }]}>
@@ -479,20 +481,20 @@ export function FullPacket({ data, generatedDate = new Date() }: FullPacketProps
             <View style={styles.alertBox}>
               <Text style={styles.alertTitle}>LANDLORD IN VIOLATION</Text>
               <Text style={styles.alertText}>
-                Based on the timeline above, your landlord has failed to comply with Florida Statute {FLORIDA_RULES.statute}.
-                Under Florida law, this failure may result in your landlord forfeiting the right to impose any claim on your deposit.
+                Based on the timeline above, your landlord has failed to comply with {stateRules.statuteTitle}.
+                Under {stateRules.name} law, this failure may result in your landlord forfeiting the right to impose any claim on your deposit.
               </Text>
             </View>
           )}
 
           <View style={styles.infoBox}>
-            <Text style={styles.infoTitle}>Florida Statute 83.49 Requirements</Text>
+            <Text style={styles.infoTitle}>{stateRules.statuteTitle} Requirements</Text>
             <View style={styles.list}>
-              <Text style={styles.listItem}>• If NO deductions: Landlord must return full deposit within 15 days</Text>
-              <Text style={styles.listItem}>• If claiming deductions: Landlord must send certified mail notice within 30 days</Text>
+              <Text style={styles.listItem}>• If NO deductions: Landlord must return full deposit within {stateRules.returnDeadline} days</Text>
+              <Text style={styles.listItem}>• If claiming deductions: Landlord must send {stateRules.certifiedMailRequired ? "certified mail " : ""}notice within {stateRules.claimDeadline} days</Text>
               <Text style={styles.listItem}>• Notice must itemize each deduction with specific amounts</Text>
               <Text style={styles.listItem}>• Failure to comply: Landlord forfeits right to claim any deductions</Text>
-              <Text style={styles.listItem}>• Bad faith retention: Tenant may recover triple the deposit amount</Text>
+              <Text style={styles.listItem}>• Bad faith retention: Tenant may recover {stateRules.damagesDescription}</Text>
             </View>
           </View>
 
@@ -546,7 +548,7 @@ export function FullPacket({ data, generatedDate = new Date() }: FullPacketProps
           <View style={styles.infoBox}>
             <Text style={styles.infoTitle}>No Itemized Deductions Received</Text>
             <Text style={styles.infoText}>
-              Your landlord did not provide itemized deductions. Under Florida Statute 83.49, if the landlord intends to impose a claim on the security deposit, they must provide written notice by certified mail within 30 days of the tenant vacating the premises, specifying the reason for imposing the claim.
+              Your landlord did not provide itemized deductions. Under {stateRules.statuteTitle}, if the landlord intends to impose a claim on the security deposit, they must provide written notice{stateRules.certifiedMailRequired ? " by certified mail" : ""} within {stateRules.claimDeadline} days of the tenant vacating the premises, specifying the reason for imposing the claim.
               {"\n\n"}
               Failure to provide this notice means the landlord forfeits any right to claim deductions from your deposit.
             </Text>
@@ -627,15 +629,16 @@ export function FullPacket({ data, generatedDate = new Date() }: FullPacketProps
       <Page size="LETTER" style={styles.page}>
         <View style={styles.pageHeader}>
           <Text style={styles.pageTitle}>Section 5: Small Claims Court Guide</Text>
-          <Text style={styles.pageSubtitle}>Florida Filing Instructions</Text>
+          <Text style={styles.pageSubtitle}>{stateRules.name} Filing Instructions</Text>
         </View>
 
-        <View style={amountOwed <= FLORIDA_RULES.maxSmallClaims ? styles.successBox : styles.alertBox}>
-          <Text style={amountOwed <= FLORIDA_RULES.maxSmallClaims ? styles.successTitle : styles.alertTitle}>
-            {amountOwed <= FLORIDA_RULES.maxSmallClaims ? "Eligible for Small Claims" : "May Exceed Limit"}
+        <View style={amountOwed <= stateRules.maxSmallClaims ? styles.successBox : styles.alertBox}>
+          <Text style={amountOwed <= stateRules.maxSmallClaims ? styles.successTitle : styles.alertTitle}>
+            {amountOwed <= stateRules.maxSmallClaims ? "Eligible for Small Claims" : "May Exceed Limit"}
           </Text>
-          <Text style={amountOwed <= FLORIDA_RULES.maxSmallClaims ? styles.successText : styles.alertText}>
-            Your claim of {formatCurrency(amountOwed)} is {amountOwed <= FLORIDA_RULES.maxSmallClaims ? "within" : "may exceed"} Florida's {formatCurrency(FLORIDA_RULES.maxSmallClaims)} small claims limit.
+          <Text style={amountOwed <= stateRules.maxSmallClaims ? styles.successText : styles.alertText}>
+            Your claim of {formatCurrency(amountOwed)} is {amountOwed <= stateRules.maxSmallClaims ? "within" : "may exceed"} {stateRules.name}'s {formatCurrency(stateRules.maxSmallClaims)} small claims limit.
+            {stateRules.smallClaimsNote && ` Note: ${stateRules.smallClaimsNote}`}
           </Text>
         </View>
 
@@ -663,14 +666,14 @@ export function FullPacket({ data, generatedDate = new Date() }: FullPacketProps
         <View style={styles.section}>
           <Text style={[styles.bold, { marginBottom: 10 }]}>Step 4: Mediation</Text>
           <Text style={styles.paragraph}>
-            Florida requires mediation before trial. Bring all evidence. Many cases settle at this stage.
+            Many courts require mediation before trial. Bring all evidence. Many cases settle at this stage.
           </Text>
         </View>
 
         <View style={styles.section}>
           <Text style={[styles.bold, { marginBottom: 10 }]}>Step 5: Trial</Text>
           <Text style={styles.paragraph}>
-            If mediation fails, present your case to a judge. Bring 3 copies of all evidence. Cite Florida Statute 83.49.
+            If mediation fails, present your case to a judge. Bring 3 copies of all evidence. Cite {stateRules.statuteTitle}.
           </Text>
         </View>
 
@@ -702,43 +705,47 @@ export function FullPacket({ data, generatedDate = new Date() }: FullPacketProps
       {/* STATUTE REFERENCE */}
       <Page size="LETTER" style={styles.page}>
         <View style={styles.pageHeader}>
-          <Text style={styles.pageTitle}>Section 6: Florida Statute 83.49</Text>
-          <Text style={styles.pageSubtitle}>Security Deposit Law - Key Excerpts</Text>
+          <Text style={styles.pageTitle}>Section 6: {stateRules.statuteTitle}</Text>
+          <Text style={styles.pageSubtitle}>Security Deposit Law - Key Points</Text>
         </View>
 
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>83.49(3)(a) - Return of Deposit</Text>
-          <Text style={[styles.paragraph, { fontStyle: "italic", fontSize: 10 }]}>
-            "Upon the vacating of the premises for termination of the lease, if the landlord does not intend to impose a claim on the security deposit, the landlord shall have 15 days to return the security deposit together with interest if otherwise required, or the landlord shall have 30 days to give the tenant written notice by certified mail to the tenant's last known mailing address of his or her intention to impose a claim on the deposit and the reason for imposing the claim."
+          <Text style={styles.sectionTitle}>Return of Deposit</Text>
+          <Text style={[styles.paragraph, { fontSize: 10 }]}>
+            Under {stateRules.name} law, if the landlord does not intend to impose a claim on the security deposit, they must return the deposit within {stateRules.returnDeadline} days of the tenant vacating the premises. If the landlord intends to claim deductions, they must provide written notice{stateRules.certifiedMailRequired ? " by certified mail" : ""} within {stateRules.claimDeadline} days specifying the reason for the claim.
           </Text>
         </View>
 
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>83.49(3)(b) - Notice Requirements</Text>
-          <Text style={[styles.paragraph, { fontStyle: "italic", fontSize: 10 }]}>
-            "Unless the tenant objects to the imposition of the landlord's claim or the amount thereof within 15 days after receipt of the landlord's notice of intention to impose a claim, the landlord may then deduct the amount of his or her claim and shall remit the balance of the deposit to the tenant within 30 days after the date of the notice of intention to impose a claim for damages."
+          <Text style={styles.sectionTitle}>Itemization Requirements</Text>
+          <Text style={[styles.paragraph, { fontSize: 10 }]}>
+            {stateRules.itemizedDeductionsRequired
+              ? `${stateRules.name} requires landlords to provide an itemized statement of all deductions, including specific amounts for each item claimed.`
+              : `${stateRules.name} law governs what deductions landlords may claim from security deposits.`
+            }
           </Text>
         </View>
 
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>83.49(3)(c) - Penalty for Noncompliance</Text>
-          <Text style={[styles.paragraph, { fontStyle: "italic", fontSize: 10 }]}>
-            "If the landlord fails to give the required notice within the 30-day period, he or she forfeits the right to impose a claim upon the security deposit and may not seek a setoff against the deposit but may file an action for damages after return of the deposit."
+          <Text style={styles.sectionTitle}>Penalty for Noncompliance</Text>
+          <Text style={[styles.paragraph, { fontSize: 10 }]}>
+            If the landlord fails to comply with {stateRules.name} security deposit law, they may forfeit the right to impose any claim on the deposit. The tenant may be entitled to recover the full deposit amount.
           </Text>
         </View>
 
         <View style={styles.alertBox}>
-          <Text style={styles.alertTitle}>Triple Damages for Bad Faith</Text>
+          <Text style={styles.alertTitle}>{stateRules.damagesDescription.charAt(0).toUpperCase() + stateRules.damagesDescription.slice(1)} for Bad Faith</Text>
           <Text style={styles.alertText}>
-            Florida courts have interpreted this statute to allow tenants to recover up to three times the deposit amount when landlords act in bad faith. Bad faith includes knowingly making false claims, refusing to return deposits without legitimate reason, or deliberately ignoring statutory requirements.
+            {stateRules.name} courts may allow tenants to recover {stateRules.damagesDescription} when landlords act in bad faith. Bad faith includes knowingly making false claims, refusing to return deposits without legitimate reason, or deliberately ignoring statutory requirements.
+            {stateRules.additionalDamages && ` Additional remedies: ${stateRules.additionalDamages}`}
           </Text>
         </View>
 
         <View style={styles.infoBox}>
           <Text style={styles.infoTitle}>Full Statute Reference</Text>
           <Text style={styles.infoText}>
-            For the complete text of Florida Statute 83.49, visit:{"\n"}
-            {FLORIDA_RULES.statuteUrl}
+            For the complete text of {stateRules.statuteTitle}, visit:{"\n"}
+            {stateRules.statuteUrl}
           </Text>
         </View>
 
