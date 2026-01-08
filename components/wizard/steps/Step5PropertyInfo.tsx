@@ -37,7 +37,7 @@ export function Step5PropertyInfo() {
             placeholder="456 Oak Avenue"
             value={data.property.address}
             onChange={(e) => updateField("address", e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black"
           />
         </div>
 
@@ -54,7 +54,7 @@ export function Step5PropertyInfo() {
             placeholder="Apt 2B"
             value={data.property.unit}
             onChange={(e) => updateField("unit", e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black"
           />
         </div>
 
@@ -72,7 +72,7 @@ export function Step5PropertyInfo() {
               placeholder="Orlando"
               value={data.property.city}
               onChange={(e) => updateField("city", e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black"
             />
           </div>
           <div className="col-span-1">
@@ -104,7 +104,7 @@ export function Step5PropertyInfo() {
               maxLength={10}
               value={data.property.zip}
               onChange={(e) => updateField("zip", e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black"
             />
           </div>
         </div>
@@ -124,7 +124,7 @@ export function Step5PropertyInfo() {
               onChange={(e) =>
                 updateField("leaseStartDate", e.target.value || "")
               }
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black"
             />
           </div>
           <div>
@@ -141,7 +141,7 @@ export function Step5PropertyInfo() {
               onChange={(e) =>
                 updateField("leaseEndDate", e.target.value || "")
               }
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black"
             />
           </div>
         </div>

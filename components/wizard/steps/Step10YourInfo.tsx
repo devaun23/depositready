@@ -42,7 +42,7 @@ export function Step10YourInfo() {
             placeholder="Jane Doe"
             value={data.tenant.name}
             onChange={(e) => updateField("name", e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black"
           />
           <p className="text-xs text-gray-500 mt-1">
             Use the name as it appears on your lease
@@ -62,7 +62,7 @@ export function Step10YourInfo() {
             placeholder="789 New Street, Apt 3"
             value={data.tenant.currentAddress}
             onChange={(e) => updateField("currentAddress", e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black"
           />
         </div>
 
@@ -80,7 +80,7 @@ export function Step10YourInfo() {
               placeholder="Tampa"
               value={data.tenant.city}
               onChange={(e) => updateField("city", e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black"
             />
           </div>
           <div className="col-span-1">
@@ -99,7 +99,7 @@ export function Step10YourInfo() {
               onChange={(e) =>
                 updateField("state", e.target.value.toUpperCase())
               }
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black"
             />
           </div>
           <div className="col-span-2">
@@ -116,7 +116,7 @@ export function Step10YourInfo() {
               maxLength={10}
               value={data.tenant.zip}
               onChange={(e) => updateField("zip", e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black"
             />
           </div>
         </div>
@@ -135,7 +135,7 @@ export function Step10YourInfo() {
               placeholder="you@email.com"
               value={data.tenant.email}
               onChange={(e) => updateField("email", e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black"
             />
           </div>
           <div>
@@ -151,14 +151,14 @@ export function Step10YourInfo() {
               placeholder="(555) 123-4567"
               value={data.tenant.phone}
               onChange={(e) => updateField("phone", e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black"
             />
           </div>
         </div>
       </div>
 
-      <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
-        <p className="text-sm text-green-800">
+      <div className="p-4 bg-gray-100 border border-gray-200 rounded-lg">
+        <p className="text-sm text-gray-700">
           <strong>Almost done!</strong> After this step, you will see a preview
           of your complete dispute packet before purchasing.
         </p>

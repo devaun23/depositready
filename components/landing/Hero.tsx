@@ -6,26 +6,18 @@ export function Hero() {
       <div className="max-w-3xl mx-auto text-center">
         {/* Headline */}
         <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl font-semibold text-black leading-tight mb-8">
-          Protect your security deposit with a landlord-proof move-out packet
+          Get your security deposit back with a professional dispute packet
         </h1>
 
         {/* Body Copy */}
         <div className="space-y-4 text-gray-600 text-lg mb-10 max-w-2xl mx-auto">
           <p>
-            Answer a few questions and upload your photos. Get a state-specific
-            documentation packet and ready-to-send notice template.
+            Answer a few questions and get a complete documentation packet with
+            a demand letter customized to your state&apos;s laws.
           </p>
           <p>
-            Landlords are far more likely to respond when disputes are organized,
-            documented, and tied to state deadlines.
-          </p>
-          <p>
-            Missed deadlines and unclear documentation are the most common
-            reasons tenants lose deposit disputes.
-          </p>
-          <p>
-            Designed for renters preparing to move out or disputing a withheld
-            deposit.
+            Landlords respond when disputes are organized, documented, and
+            reference legal deadlines.
           </p>
         </div>
 

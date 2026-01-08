@@ -70,7 +70,7 @@ export function Step8Evidence() {
             key={item.key}
             className={`flex items-start gap-3 p-4 rounded-lg border-2 cursor-pointer transition-all ${
               data.evidence[item.key as keyof typeof data.evidence]
-                ? "border-blue-600 bg-blue-50"
+                ? "border-black bg-gray-50"
                 : "border-gray-200 hover:border-gray-300"
             }`}
           >
@@ -80,7 +80,7 @@ export function Step8Evidence() {
                 data.evidence[item.key as keyof typeof data.evidence] as boolean
               }
               onChange={(e) => updateField(item.key, e.target.checked)}
-              className="w-5 h-5 mt-0.5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+              className="w-5 h-5 mt-0.5 rounded border-gray-300 text-black focus:ring-black accent-black"
             />
             <div>
               <div className="font-medium text-gray-900">{item.label}</div>
@@ -103,7 +103,7 @@ export function Step8Evidence() {
           placeholder="Describe any other evidence you have..."
           value={data.evidence.otherEvidence}
           onChange={(e) => updateField("otherEvidence", e.target.value)}
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black"
         />
       </div>
 

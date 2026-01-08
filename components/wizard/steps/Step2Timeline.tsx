@@ -35,7 +35,7 @@ export function Step2Timeline() {
             id="moveOutDate"
             value={data.moveOutDate || ""}
             onChange={(e) => updateData("moveOutDate", e.target.value || null)}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black"
           />
         </div>
 
@@ -53,7 +53,7 @@ export function Step2Timeline() {
             onChange={(e) =>
               updateData("depositPaidDate", e.target.value || null)
             }
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black"
           />
           <p className="text-xs text-gray-500 mt-1">
             Usually the same as your lease start date

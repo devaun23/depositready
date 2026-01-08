@@ -48,7 +48,7 @@ export function Step6WhatHappened() {
             onClick={() => updateData("issueType", option.value)}
             className={`w-full p-4 text-left rounded-lg border-2 transition-all ${
               data.issueType === option.value
-                ? "border-blue-600 bg-blue-50"
+                ? "border-black bg-gray-50"
                 : "border-gray-200 hover:border-gray-300"
             }`}
           >
@@ -56,12 +56,12 @@ export function Step6WhatHappened() {
               <div
                 className={`w-5 h-5 mt-0.5 rounded-full border-2 flex items-center justify-center ${
                   data.issueType === option.value
-                    ? "border-blue-600"
+                    ? "border-black"
                     : "border-gray-300"
                 }`}
               >
                 {data.issueType === option.value && (
-                  <div className="w-2.5 h-2.5 bg-blue-600 rounded-full" />
+                  <div className="w-2.5 h-2.5 bg-black rounded-full" />
                 )}
               </div>
               <div>
@@ -100,7 +100,7 @@ export function Step6WhatHappened() {
                   e.target.value ? parseFloat(e.target.value) : null
                 )
               }
-              className="w-full pl-8 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full pl-8 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black"
             />
           </div>
           {data.depositAmount && data.amountReceived !== null && (

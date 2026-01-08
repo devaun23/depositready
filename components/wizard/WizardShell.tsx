@@ -25,11 +25,11 @@ export function WizardShell({ children, onComplete }: WizardShellProps) {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-white">
       {/* Header */}
-      <header className="bg-white border-b border-gray-100">
+      <header className="bg-white border-b border-gray-200">
         <div className="max-w-3xl mx-auto px-4 py-4 flex items-center justify-between">
-          <Link href="/" className="text-xl font-bold text-gray-900">
+          <Link href="/" className="font-serif text-xl font-semibold text-black">
             DepositReady
           </Link>
           <div className="text-sm text-gray-500">
@@ -39,11 +39,11 @@ export function WizardShell({ children, onComplete }: WizardShellProps) {
       </header>
 
       {/* Progress Bar */}
-      <div className="bg-white border-b border-gray-100">
+      <div className="bg-white border-b border-gray-200">
         <div className="max-w-3xl mx-auto">
           <div className="h-1 bg-gray-100">
             <div
-              className="h-1 bg-blue-600 transition-all duration-300"
+              className="h-1 bg-black transition-all duration-300"
               style={{ width: `${progress}%` }}
             />
           </div>
@@ -51,7 +51,7 @@ export function WizardShell({ children, onComplete }: WizardShellProps) {
       </div>
 
       {/* Step Indicators (Desktop) */}
-      <div className="hidden md:block bg-white border-b border-gray-100">
+      <div className="hidden md:block bg-white border-b border-gray-200">
         <div className="max-w-3xl mx-auto px-4 py-3">
           <div className="flex justify-between">
             {WIZARD_STEPS.map((step) => (
@@ -59,7 +59,7 @@ export function WizardShell({ children, onComplete }: WizardShellProps) {
                 key={step.id}
                 className={`text-xs font-medium ${
                   step.id === currentStep
-                    ? "text-blue-600"
+                    ? "text-black"
                     : step.id < currentStep
                     ? "text-gray-500"
                     : "text-gray-300"
@@ -74,22 +74,22 @@ export function WizardShell({ children, onComplete }: WizardShellProps) {
 
       {/* Content */}
       <main className="max-w-3xl mx-auto px-4 py-8">
-        <div className="bg-white rounded-lg shadow-sm p-6 md:p-8">
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">
+        <div className="bg-white rounded-lg border border-gray-200 p-6 md:p-8">
+          <h1 className="font-serif text-2xl font-semibold text-black mb-2">
             {currentStepInfo.title}
           </h1>
 
           <div className="mt-6">{children}</div>
 
           {/* Navigation */}
-          <div className="flex justify-between mt-8 pt-6 border-t border-gray-100">
+          <div className="flex justify-between mt-8 pt-6 border-t border-gray-200">
             <button
               onClick={prevStep}
               disabled={currentStep === 1}
               className={`px-6 py-2 rounded-lg font-medium transition-colors ${
                 currentStep === 1
                   ? "text-gray-300 cursor-not-allowed"
-                  : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+                  : "text-gray-600 hover:text-black hover:bg-gray-100"
               }`}
             >
               Back
@@ -99,7 +99,7 @@ export function WizardShell({ children, onComplete }: WizardShellProps) {
               disabled={!canProceed}
               className={`px-6 py-2 rounded-lg font-medium transition-colors ${
                 canProceed
-                  ? "bg-blue-600 text-white hover:bg-blue-700"
+                  ? "bg-black text-white hover:bg-gray-800"
                   : "bg-gray-200 text-gray-400 cursor-not-allowed"
               }`}
             >

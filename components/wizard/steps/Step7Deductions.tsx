@@ -59,8 +59,8 @@ export function Step7Deductions() {
           demand letter on the failure to return your deposit within the legal
           deadline.
         </p>
-        <div className="p-4 bg-blue-50 rounded-lg">
-          <p className="text-sm text-blue-800">
+        <div className="p-4 bg-gray-100 rounded-lg border border-gray-200">
+          <p className="text-sm text-gray-700">
             Your landlord was required to either return your full deposit within
             15 days or send an itemized list of deductions within 30 days. Their
             failure to do so may entitle you to your full deposit plus damages.
@@ -137,7 +137,7 @@ export function Step7Deductions() {
 
       {/* Add Deduction Form */}
       {isAdding ? (
-        <div className="p-4 border-2 border-blue-200 bg-blue-50 rounded-lg space-y-4">
+        <div className="p-4 border-2 border-gray-300 bg-gray-50 rounded-lg space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               What did they charge for?
@@ -149,7 +149,7 @@ export function Step7Deductions() {
               onChange={(e) =>
                 setNewDeduction({ ...newDeduction, description: e.target.value })
               }
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black"
             />
           </div>
 
@@ -173,7 +173,7 @@ export function Step7Deductions() {
                       amount: parseFloat(e.target.value) || 0,
                     })
                   }
-                  className="w-full pl-8 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full pl-8 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black"
                 />
               </div>
             </div>
@@ -189,7 +189,7 @@ export function Step7Deductions() {
                     category: e.target.value as Deduction["category"],
                   })
                 }
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black"
               >
                 <option value="">Select...</option>
                 {categories.map((cat) => (
@@ -212,7 +212,7 @@ export function Step7Deductions() {
               onChange={(e) =>
                 setNewDeduction({ ...newDeduction, dispute: e.target.value })
               }
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black"
             />
           </div>
 
@@ -220,7 +220,7 @@ export function Step7Deductions() {
             <button
               onClick={handleAddDeduction}
               disabled={!newDeduction.description || !newDeduction.amount}
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Add Deduction
             </button>
@@ -235,7 +235,7 @@ export function Step7Deductions() {
       ) : (
         <button
           onClick={() => setIsAdding(true)}
-          className="w-full py-3 border-2 border-dashed border-gray-300 rounded-lg text-gray-600 hover:border-blue-400 hover:text-blue-600 transition-colors"
+          className="w-full py-3 border-2 border-dashed border-gray-300 rounded-lg text-gray-600 hover:border-gray-400 hover:text-black transition-colors"
         >
           + Add a Deduction
         </button>

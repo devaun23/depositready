@@ -38,7 +38,7 @@ export function Step9PriorContact() {
             onClick={() => updateField("hasContacted", true)}
             className={`flex-1 py-2 px-4 rounded-lg border-2 font-medium transition-all ${
               data.priorCommunication.hasContacted === true
-                ? "border-blue-600 bg-blue-50 text-blue-700"
+                ? "border-black bg-gray-50 text-black"
                 : "border-gray-200 hover:border-gray-300"
             }`}
           >
@@ -53,7 +53,7 @@ export function Step9PriorContact() {
             }}
             className={`flex-1 py-2 px-4 rounded-lg border-2 font-medium transition-all ${
               data.priorCommunication.hasContacted === false
-                ? "border-blue-600 bg-blue-50 text-blue-700"
+                ? "border-black bg-gray-50 text-black"
                 : "border-gray-200 hover:border-gray-300"
             }`}
           >
@@ -75,7 +75,7 @@ export function Step9PriorContact() {
                   onClick={() => updateField("contactMethod", method.value)}
                   className={`py-2 px-4 rounded-lg border-2 text-sm font-medium transition-all ${
                     data.priorCommunication.contactMethod === method.value
-                      ? "border-blue-600 bg-blue-50 text-blue-700"
+                      ? "border-black bg-gray-50 text-black"
                       : "border-gray-200 hover:border-gray-300"
                   }`}
                 >
@@ -99,7 +99,7 @@ export function Step9PriorContact() {
               onChange={(e) =>
                 updateField("contactDate", e.target.value || null)
               }
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black"
             />
           </div>
 
@@ -116,15 +116,15 @@ export function Step9PriorContact() {
               placeholder="Describe their response, or note if they didn't respond..."
               value={data.priorCommunication.response}
               onChange={(e) => updateField("response", e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black"
             />
           </div>
         </div>
       )}
 
       {data.priorCommunication.hasContacted === false && (
-        <div className="p-4 bg-blue-50 rounded-lg">
-          <p className="text-sm text-blue-800">
+        <div className="p-4 bg-gray-100 rounded-lg border border-gray-200">
+          <p className="text-sm text-gray-700">
             <strong>That is okay.</strong> A formal demand letter is often the
             first step. It puts your landlord on notice and creates a paper
             trail for any future legal action.

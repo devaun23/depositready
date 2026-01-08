@@ -42,7 +42,7 @@ export function Step4LandlordInfo() {
             placeholder="John Smith or ABC Property Management"
             value={data.landlord.name}
             onChange={(e) => updateField("name", e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black"
           />
         </div>
 
@@ -59,7 +59,7 @@ export function Step4LandlordInfo() {
             placeholder="123 Main Street"
             value={data.landlord.address}
             onChange={(e) => updateField("address", e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black"
           />
         </div>
 
@@ -77,7 +77,7 @@ export function Step4LandlordInfo() {
               placeholder="Miami"
               value={data.landlord.city}
               onChange={(e) => updateField("city", e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black"
             />
           </div>
           <div className="col-span-1">
@@ -109,7 +109,7 @@ export function Step4LandlordInfo() {
               maxLength={10}
               value={data.landlord.zip}
               onChange={(e) => updateField("zip", e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black"
             />
           </div>
         </div>
@@ -128,7 +128,7 @@ export function Step4LandlordInfo() {
               placeholder="landlord@email.com"
               value={data.landlord.email}
               onChange={(e) => updateField("email", e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black"
             />
           </div>
           <div>
@@ -144,7 +144,7 @@ export function Step4LandlordInfo() {
               placeholder="(555) 123-4567"
               value={data.landlord.phone}
               onChange={(e) => updateField("phone", e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black"
             />
           </div>
         </div>
