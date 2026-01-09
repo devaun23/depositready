@@ -57,6 +57,16 @@ function SuccessContent() {
             downloadToken: result.downloadToken,
           });
           setStatus("verified");
+
+          // Fire Google Ads conversion
+          if (typeof window !== "undefined" && (window as any).gtag) {
+            (window as any).gtag("event", "conversion", {
+              send_to: "AW-17859927660/jtPRCJKB9N4bEOy8o8RC",
+              value: result.amountTotal / 100,
+              currency: "USD",
+              transaction_id: sessionId,
+            });
+          }
         } else {
           setStatus("error");
         }
