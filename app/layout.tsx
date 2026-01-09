@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
+import Script from "next/script";
 import "./globals.css";
 
 const inter = Inter({
@@ -86,6 +87,18 @@ export default function RootLayout({
         </a>
         {children}
         <Analytics />
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=AW-17859927660"
+          strategy="afterInteractive"
+        />
+        <Script id="google-ads" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'AW-17859927660');
+          `}
+        </Script>
       </body>
     </html>
   );
