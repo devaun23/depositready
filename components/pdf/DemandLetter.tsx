@@ -6,7 +6,7 @@ import {
   StyleSheet,
 } from "@react-pdf/renderer";
 import { WizardData } from "@/types/dispute";
-import { DeadlineAnalysis, FLORIDA_RULES } from "@/lib/florida-rules";
+import type { StateRules, DeadlineAnalysis } from "@/lib/state-rules";
 
 const styles = StyleSheet.create({
   page: {
@@ -69,6 +69,7 @@ interface DemandLetterProps {
   data: WizardData;
   deadlines: DeadlineAnalysis;
   generatedDate: Date;
+  stateRules: StateRules;
 }
 
 function formatDate(date: Date): string {
@@ -86,24 +87,24 @@ function formatCurrency(amount: number): string {
   }).format(amount);
 }
 
-export function DemandLetter({ data, deadlines, generatedDate }: DemandLetterProps) {
+export function DemandLetter({ data, deadlines, generatedDate, stateRules }: DemandLetterProps) {
   const depositAmount = data.depositAmount || 0;
   const amountReceived = data.amountReceived || 0;
   const amountOwed = depositAmount - amountReceived;
   const totalDeductions = data.deductions.reduce((sum, d) => sum + d.amount, 0);
 
-  const propertyAddress = `${data.property.address}${data.property.unit ? `, ${data.property.unit}` : ""}, ${data.property.city}, FL ${data.property.zip}`;
+  const propertyAddress = `${data.property.address}${data.property.unit ? `, ${data.property.unit}` : ""}, ${data.property.city}, ${stateRules.code} ${data.property.zip}`;
   const landlordAddress = `${data.landlord.address}, ${data.landlord.city}, ${data.landlord.state} ${data.landlord.zip}`;
   const tenantAddress = `${data.tenant.currentAddress}, ${data.tenant.city}, ${data.tenant.state} ${data.tenant.zip}`;
 
   // Determine violation language
   let violationText = "";
   if (deadlines.violationType === "both") {
-    violationText = `You have failed to either return my security deposit within 15 days or provide written notice of your intent to impose a claim within 30 days of my vacating the premises on ${formatDate(deadlines.moveOutDate)}. Both deadlines have now passed.`;
+    violationText = `You have failed to either return my security deposit within ${stateRules.returnDeadline} days or provide written notice of your intent to impose a claim within ${stateRules.claimDeadline} days of my vacating the premises on ${formatDate(deadlines.moveOutDate)}. Both deadlines have now passed.`;
   } else if (deadlines.violationType === "claim") {
-    violationText = `You have failed to provide written notice of your intent to impose a claim on the security deposit within 30 days of my vacating the premises on ${formatDate(deadlines.moveOutDate)}.`;
+    violationText = `You have failed to provide written notice of your intent to impose a claim on the security deposit within ${stateRules.claimDeadline} days of my vacating the premises on ${formatDate(deadlines.moveOutDate)}.`;
   } else if (deadlines.violationType === "return") {
-    violationText = `You have failed to return my security deposit within 15 days of my vacating the premises on ${formatDate(deadlines.moveOutDate)}, despite making no claim for deductions.`;
+    violationText = `You have failed to return my security deposit within ${stateRules.returnDeadline} days of my vacating the premises on ${formatDate(deadlines.moveOutDate)}, despite making no claim for deductions.`;
   }
 
   return (
@@ -152,9 +153,9 @@ export function DemandLetter({ data, deadlines, generatedDate }: DemandLetterPro
         {/* Legal Basis */}
         <View style={styles.paragraph}>
           <Text>
-            Under <Text style={styles.bold}>Florida Statute {FLORIDA_RULES.statute}</Text>, a landlord must either return the tenant's security deposit within{" "}
-            <Text style={styles.bold}>15 days</Text> of the tenant vacating the premises, or, if the landlord intends to impose a claim on the deposit, provide the tenant with written notice by certified mail within{" "}
-            <Text style={styles.bold}>30 days</Text> stating the landlord's intention to impose a claim and the reason for imposing the claim.
+            Under <Text style={styles.bold}>{stateRules.statuteTitle}</Text>, a landlord must either return the tenant's security deposit within{" "}
+            <Text style={styles.bold}>{stateRules.returnDeadline} days</Text> of the tenant vacating the premises, or, if the landlord intends to impose a claim on the deposit, provide the tenant with written notice{stateRules.certifiedMailRequired ? " by certified mail" : ""} within{" "}
+            <Text style={styles.bold}>{stateRules.claimDeadline} days</Text> stating the landlord's intention to impose a claim and the reason for imposing the claim.
           </Text>
         </View>
 
@@ -208,8 +209,8 @@ export function DemandLetter({ data, deadlines, generatedDate }: DemandLetterPro
         {/* Legal Consequences */}
         <View style={styles.paragraph}>
           <Text>
-            Florida Statute {FLORIDA_RULES.statute}(3)(c) provides that if a landlord fails to comply with the requirements of this section, the landlord forfeits the right to impose a claim upon the security deposit. Furthermore, if the failure to return the deposit is found to be in bad faith, I may be entitled to{" "}
-            <Text style={styles.bold}>triple the amount</Text> of the deposit wrongfully withheld, plus court costs and reasonable attorney's fees.
+            {stateRules.statuteTitle} provides that if a landlord fails to comply with the requirements of this section, the landlord forfeits the right to impose a claim upon the security deposit. Furthermore, if the failure to return the deposit is found to be in bad faith, I may be entitled to{" "}
+            <Text style={styles.bold}>{stateRules.damagesDescription}</Text> of the deposit wrongfully withheld, plus court costs and reasonable attorney's fees.
           </Text>
         </View>
 
@@ -224,7 +225,7 @@ export function DemandLetter({ data, deadlines, generatedDate }: DemandLetterPro
         {/* Closing */}
         <View style={styles.paragraph}>
           <Text>
-            If I do not receive the full amount owed within the stated timeframe, I will have no choice but to pursue all available legal remedies, including but not limited to filing a claim in small claims court. Please be advised that Florida law allows for the recovery of court costs and attorney's fees in such actions.
+            If I do not receive the full amount owed within the stated timeframe, I will have no choice but to pursue all available legal remedies, including but not limited to filing a claim in small claims court. Please be advised that {stateRules.name} law allows for the recovery of court costs and attorney's fees in such actions.
           </Text>
         </View>
 

@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { useWizard } from "../WizardContext";
-import { analyzeDeadlines, formatLegalDate } from "@/lib/florida-rules";
+import { analyzeDeadlines, formatLegalDate, getStateRulesByCode } from "@/lib/state-rules";
 
 export function Step2Timeline() {
   const { data, updateData, setCanProceed } = useWizard();
@@ -11,15 +11,16 @@ export function Step2Timeline() {
     setCanProceed(data.moveOutDate !== null);
   }, [data.moveOutDate, setCanProceed]);
 
-  const deadlineAnalysis = data.moveOutDate
-    ? analyzeDeadlines(new Date(data.moveOutDate))
+  const stateRules = data.stateCode ? getStateRulesByCode(data.stateCode) : null;
+
+  const deadlineAnalysis = data.moveOutDate && stateRules
+    ? analyzeDeadlines(new Date(data.moveOutDate), stateRules)
     : null;
 
   return (
     <div className="space-y-6">
       <p className="text-gray-600">
-        These dates are critical for calculating legal deadlines under Florida
-        Statute 83.49.
+        These dates are critical for calculating legal deadlines under {stateRules?.statuteTitle || 'your state law'}.
       </p>
 
       <div className="space-y-4">
@@ -76,7 +77,7 @@ export function Step2Timeline() {
             </div>
             <div className="flex justify-between">
               <span className="text-gray-600">
-                15-day return deadline:
+                {stateRules?.returnDeadline}-day return deadline:
               </span>
               <span
                 className={`font-medium ${
@@ -91,7 +92,7 @@ export function Step2Timeline() {
             </div>
             <div className="flex justify-between">
               <span className="text-gray-600">
-                30-day claim deadline:
+                {stateRules?.claimDeadline}-day claim deadline:
               </span>
               <span
                 className={`font-medium ${
@@ -110,7 +111,7 @@ export function Step2Timeline() {
             <div className="mt-4 p-3 bg-green-50 border border-green-200 rounded-lg">
               <p className="text-sm text-green-800">
                 <strong>Good news:</strong> Your landlord has missed the legal
-                deadline. Under Florida law, they may have forfeited their right
+                deadline. Under {stateRules?.name} law, they may have forfeited their right
                 to claim deductions from your deposit.
               </p>
             </div>

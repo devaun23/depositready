@@ -6,7 +6,7 @@ import {
   StyleSheet,
 } from "@react-pdf/renderer";
 import { WizardData } from "@/types/dispute";
-import { DeadlineAnalysis, FLORIDA_RULES } from "@/lib/florida-rules";
+import type { StateRules, DeadlineAnalysis } from "@/lib/state-rules";
 
 const styles = StyleSheet.create({
   page: {
@@ -138,6 +138,7 @@ const styles = StyleSheet.create({
 interface TimelineProps {
   data: WizardData;
   deadlines: DeadlineAnalysis;
+  stateRules: StateRules;
 }
 
 function formatDate(date: Date): string {
@@ -157,16 +158,16 @@ function formatShortDate(date: Date): string {
   });
 }
 
-export function Timeline({ data, deadlines }: TimelineProps) {
-  const propertyAddress = `${data.property.address}${data.property.unit ? `, ${data.property.unit}` : ""}, ${data.property.city}, FL ${data.property.zip}`;
+export function Timeline({ data, deadlines, stateRules }: TimelineProps) {
+  const propertyAddress = `${data.property.address}${data.property.unit ? `, ${data.property.unit}` : ""}, ${data.property.city}, ${stateRules.code} ${data.property.zip}`;
 
   return (
     <Document>
       <Page size="LETTER" style={styles.page}>
         {/* Title */}
-        <Text style={styles.title}>Florida Security Deposit Timeline</Text>
+        <Text style={styles.title}>{stateRules.name} Security Deposit Timeline</Text>
         <Text style={styles.subtitle}>
-          Legal Deadlines Under Florida Statute {FLORIDA_RULES.statute}
+          Legal Deadlines Under {stateRules.statuteTitle}
         </Text>
 
         {/* Property Summary */}
@@ -200,7 +201,7 @@ export function Timeline({ data, deadlines }: TimelineProps) {
             </View>
           </View>
 
-          {/* 15-Day Deadline */}
+          {/* Return Deadline */}
           <View style={styles.timelineItem}>
             <View style={[
               styles.timelineDot,
@@ -209,7 +210,7 @@ export function Timeline({ data, deadlines }: TimelineProps) {
             <View style={styles.timelineContent}>
               <Text style={styles.timelineDate}>{formatShortDate(deadlines.returnDeadline)}</Text>
               <Text style={styles.timelineLabel}>
-                15-Day Return Deadline (No Deductions)
+                {stateRules.returnDeadline}-Day Return Deadline (No Deductions)
               </Text>
               {deadlines.returnDeadlinePassed ? (
                 <Text style={[styles.timelineStatus, styles.statusPassed]}>
@@ -223,7 +224,7 @@ export function Timeline({ data, deadlines }: TimelineProps) {
             </View>
           </View>
 
-          {/* 30-Day Deadline */}
+          {/* Claim Deadline */}
           <View style={styles.timelineItem}>
             <View style={[
               styles.timelineDot,
@@ -232,7 +233,7 @@ export function Timeline({ data, deadlines }: TimelineProps) {
             <View style={styles.timelineContent}>
               <Text style={styles.timelineDate}>{formatShortDate(deadlines.claimDeadline)}</Text>
               <Text style={styles.timelineLabel}>
-                30-Day Claim Deadline (With Deductions)
+                {stateRules.claimDeadline}-Day Claim Deadline (With Deductions)
               </Text>
               {deadlines.claimDeadlinePassed ? (
                 <Text style={[styles.timelineStatus, styles.statusPassed]}>
@@ -261,24 +262,24 @@ export function Timeline({ data, deadlines }: TimelineProps) {
           <View style={styles.violationBox}>
             <Text style={styles.violationTitle}>LANDLORD IN VIOLATION</Text>
             <Text style={styles.violationText}>
-              Based on the timeline above, your landlord has failed to comply with Florida Statute {FLORIDA_RULES.statute}.
-              {deadlines.violationType === "both" && " Both the 15-day return deadline and 30-day claim deadline have passed without proper action."}
-              {deadlines.violationType === "return" && " The 15-day deadline to return your deposit (when no deductions are claimed) has passed."}
-              {deadlines.violationType === "claim" && " The 30-day deadline to provide written notice of intent to claim deductions has passed."}
-              {"\n\n"}Under Florida law, this failure may result in your landlord forfeiting the right to impose any claim on your deposit.
+              Based on the timeline above, your landlord has failed to comply with {stateRules.statuteTitle}.
+              {deadlines.violationType === "both" && ` Both the ${stateRules.returnDeadline}-day return deadline and ${stateRules.claimDeadline}-day claim deadline have passed without proper action.`}
+              {deadlines.violationType === "return" && ` The ${stateRules.returnDeadline}-day deadline to return your deposit (when no deductions are claimed) has passed.`}
+              {deadlines.violationType === "claim" && ` The ${stateRules.claimDeadline}-day deadline to provide written notice of intent to claim deductions has passed.`}
+              {"\n\n"}Under {stateRules.name} law, this failure may result in your landlord forfeiting the right to impose any claim on your deposit.
             </Text>
           </View>
         )}
 
         {/* Legal Reference */}
         <View style={styles.infoBox}>
-          <Text style={styles.infoTitle}>Florida Statute {FLORIDA_RULES.statute} Requirements</Text>
+          <Text style={styles.infoTitle}>{stateRules.statuteTitle} Requirements</Text>
           <Text style={styles.infoText}>
-            • If NO deductions: Landlord must return full deposit within 15 days{"\n"}
-            • If claiming deductions: Landlord must send certified mail notice within 30 days{"\n"}
+            • If NO deductions: Landlord must return full deposit within {stateRules.returnDeadline} days{"\n"}
+            • If claiming deductions: Landlord must send {stateRules.certifiedMailRequired ? "certified mail " : ""}notice within {stateRules.claimDeadline} days{"\n"}
             • Notice must itemize each deduction with specific amounts{"\n"}
             • Failure to comply: Landlord forfeits right to claim any deductions{"\n"}
-            • Bad faith retention: Tenant may recover triple the deposit amount
+            • Bad faith retention: Tenant may recover {stateRules.damagesDescription}
           </Text>
         </View>
 

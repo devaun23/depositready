@@ -6,7 +6,7 @@ import {
   StyleSheet,
 } from "@react-pdf/renderer";
 import { WizardData } from "@/types/dispute";
-import { FLORIDA_RULES } from "@/lib/florida-rules";
+import type { StateRules } from "@/lib/state-rules";
 
 const styles = StyleSheet.create({
   page: {
@@ -155,6 +155,7 @@ const styles = StyleSheet.create({
 
 interface SmallClaimsGuideProps {
   data: WizardData;
+  stateRules: StateRules;
 }
 
 function formatCurrency(amount: number): string {
@@ -164,11 +165,11 @@ function formatCurrency(amount: number): string {
   }).format(amount);
 }
 
-export function SmallClaimsGuide({ data }: SmallClaimsGuideProps) {
+export function SmallClaimsGuide({ data, stateRules }: SmallClaimsGuideProps) {
   const depositAmount = data.depositAmount || 0;
   const amountOwed = depositAmount - (data.amountReceived || 0);
-  const isEligible = amountOwed <= FLORIDA_RULES.maxSmallClaims;
-  const tripleAmount = depositAmount * 3;
+  const isEligible = amountOwed <= stateRules.maxSmallClaims;
+  const maxDamagesAmount = depositAmount * stateRules.damagesMultiplier;
 
   // Determine county from property address
   const county = data.property.city; // Would need proper county lookup in production
@@ -177,7 +178,7 @@ export function SmallClaimsGuide({ data }: SmallClaimsGuideProps) {
     <Document>
       <Page size="LETTER" style={styles.page}>
         {/* Title */}
-        <Text style={styles.title}>Florida Small Claims Court Guide</Text>
+        <Text style={styles.title}>{stateRules.name} Small Claims Court Guide</Text>
         <Text style={styles.subtitle}>
           Step-by-Step Instructions for Filing Your Security Deposit Claim
         </Text>
@@ -189,11 +190,12 @@ export function SmallClaimsGuide({ data }: SmallClaimsGuideProps) {
           </Text>
           <Text style={styles.introText}>
             {isEligible
-              ? `Your claim of ${formatCurrency(amountOwed)} is within Florida's small claims limit of ${formatCurrency(FLORIDA_RULES.maxSmallClaims)}. You can represent yourself without an attorney.`
-              : `Your claim exceeds the ${formatCurrency(FLORIDA_RULES.maxSmallClaims)} small claims limit. Consider consulting an attorney or reducing your claim to fit within the limit.`
+              ? `Your claim of ${formatCurrency(amountOwed)} is within ${stateRules.name}'s small claims limit of ${formatCurrency(stateRules.maxSmallClaims)}. You can represent yourself without an attorney.`
+              : `Your claim exceeds the ${formatCurrency(stateRules.maxSmallClaims)} small claims limit. Consider consulting an attorney or reducing your claim to fit within the limit.`
             }
+            {stateRules.smallClaimsNote && `\n\nNote: ${stateRules.smallClaimsNote}`}
             {"\n\n"}
-            Note: If claiming triple damages for bad faith (up to {formatCurrency(tripleAmount)}), this may exceed the small claims limit.
+            Note: If claiming {stateRules.damagesDescription} for bad faith (up to {formatCurrency(maxDamagesAmount)}), this may exceed the small claims limit.
           </Text>
         </View>
 
@@ -298,7 +300,7 @@ export function SmallClaimsGuide({ data }: SmallClaimsGuideProps) {
               <Text style={styles.bullet}>• Arrive early and dress professionally</Text>
               <Text style={styles.bullet}>• Bring 3 copies of all evidence</Text>
               <Text style={styles.bullet}>• Be prepared to explain your case in 5-10 minutes</Text>
-              <Text style={styles.bullet}>• Cite Florida Statute 83.49 and the deadlines</Text>
+              <Text style={styles.bullet}>• Cite {stateRules.statuteTitle} and the deadlines</Text>
             </View>
           </View>
         </View>
@@ -352,8 +354,8 @@ export function SmallClaimsGuide({ data }: SmallClaimsGuideProps) {
         <View style={styles.importantBox}>
           <Text style={styles.importantTitle}>Important: You Can Recover Costs</Text>
           <Text style={styles.importantText}>
-            If you win, Florida law allows you to recover your filing fees and court costs
-            from the landlord. Keep all receipts. Additionally, under FL Statute 83.49,
+            If you win, {stateRules.name} law allows you to recover your filing fees and court costs
+            from the landlord. Keep all receipts. Additionally, under {stateRules.statuteTitle},
             you may be entitled to attorney's fees if you choose to hire one.
           </Text>
         </View>
