@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Button, Logo } from "@/components/ui";
+import { Logo } from "@/components/ui";
 
 export function Navbar() {
   return (
@@ -31,9 +31,12 @@ export function Navbar() {
           </div>
 
           {/* CTA */}
-          <Button href="#how-it-works" variant="outline" size="sm">
-            Learn more
-          </Button>
+          <a
+            href="#testimonials"
+            className="px-3 py-1.5 text-sm font-medium border border-black rounded hover:bg-gray-50 transition-colors"
+          >
+            What renters say
+          </a>
         </div>
       </nav>
     </header>
