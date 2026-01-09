@@ -54,7 +54,7 @@ export function Step3DepositDetails() {
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            Did you receive an itemized list of deductions?{" "}
+            Did your landlord give you a written breakdown of what they kept from your deposit?{" "}
             <span className="text-red-500">*</span>
           </label>
           <div className="flex gap-3">
