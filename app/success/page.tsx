@@ -3,6 +3,7 @@
 import { useEffect, useState, useCallback, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
+import { Logo } from "@/components/ui";
 import { WizardData } from "@/types/dispute";
 
 type PaymentStatus = "loading" | "verified" | "error" | "no_data";
@@ -247,7 +248,8 @@ function SuccessContent() {
     <div className="min-h-screen bg-gray-50">
       <header className="bg-white border-b border-gray-100">
         <div className="max-w-4xl mx-auto px-4 py-4">
-          <Link href="/" className="text-xl font-bold text-gray-900">
+          <Link href="/" className="flex items-center gap-2 text-xl font-bold text-gray-900">
+            <Logo size="md" />
             DepositReady
           </Link>
         </div>

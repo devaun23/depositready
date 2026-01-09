@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Logo } from "@/components/ui";
 
 export function Footer() {
   return (
@@ -7,7 +8,10 @@ export function Footer() {
         <div className="grid md:grid-cols-3 gap-8">
           {/* Brand */}
           <div>
-            <h3 className="font-semibold text-black mb-3">DepositReady</h3>
+            <div className="flex items-center gap-2 mb-3">
+              <Logo size="sm" />
+              <h3 className="font-semibold text-black">DepositReady</h3>
+            </div>
             <p className="text-gray-500 text-sm">
               Build a landlord-proof move-out packet with state-specific
               documentation and ready-to-send notice templates.
