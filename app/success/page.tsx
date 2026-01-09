@@ -26,6 +26,23 @@ function SuccessContent() {
   const [downloadError, setDownloadError] = useState<string | null>(null);
   const [hasDownloaded, setHasDownloaded] = useState(false);
 
+  // Helper function to wait for gtag to be ready
+  const waitForGtag = (timeout = 5000): Promise<void> => {
+    return new Promise((resolve, reject) => {
+      const start = Date.now();
+      const check = () => {
+        if (typeof window !== "undefined" && (window as any).gtag) {
+          resolve();
+        } else if (Date.now() - start > timeout) {
+          reject(new Error("gtag not available"));
+        } else {
+          setTimeout(check, 100);
+        }
+      };
+      check();
+    });
+  };
+
   useEffect(() => {
     async function verifyPayment() {
       if (!sessionId) {
@@ -59,14 +76,26 @@ function SuccessContent() {
           setStatus("verified");
 
           // Fire Google Ads conversion
-          if (typeof window !== "undefined" && (window as any).gtag) {
-            (window as any).gtag("event", "conversion", {
-              send_to: "AW-17859927660/jtPRCJKB9N4bEOy8o8RC",
-              value: result.amountTotal / 100,
-              currency: "USD",
-              transaction_id: sessionId,
-            });
-          }
+          const fireConversion = async () => {
+            try {
+              console.log("[Conversion] Waiting for gtag to be ready...");
+              await waitForGtag();
+              console.log("[Conversion] gtag ready, firing conversion event");
+              (window as any).gtag("event", "conversion", {
+                send_to: "AW-17859927660/jtPRCJKB9N4bEOy8o8RC",
+                value: result.amountTotal / 100,
+                currency: "USD",
+                transaction_id: sessionId,
+              });
+              console.log("[Conversion] Google Ads conversion fired successfully", {
+                value: result.amountTotal / 100,
+                transaction_id: sessionId,
+              });
+            } catch (error) {
+              console.error("[Conversion] Failed to fire Google Ads conversion:", error);
+            }
+          };
+          fireConversion();
         } else {
           setStatus("error");
         }

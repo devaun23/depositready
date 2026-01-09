@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
 import Script from "next/script";
+import { ExitIntentPopup } from "@/components/common/ExitIntentPopup";
 import "./globals.css";
 
 const inter = Inter({
@@ -86,6 +87,7 @@ export default function RootLayout({
           Skip to main content
         </a>
         {children}
+        <ExitIntentPopup />
         <Analytics />
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=AW-17859927660"
@@ -96,7 +98,10 @@ export default function RootLayout({
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
-            gtag('config', 'AW-17859927660');
+            gtag('config', 'AW-17859927660', {
+              'allow_google_signals': true,
+              'allow_ad_personalization_signals': true
+            });
           `}
         </Script>
         <Script id="microsoft-clarity" strategy="afterInteractive">

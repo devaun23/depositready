@@ -18,7 +18,17 @@ function PreviewContent() {
   useEffect(() => {
     const stored = localStorage.getItem("disputeData");
     if (stored) {
-      setData(JSON.parse(stored));
+      const parsedData = JSON.parse(stored);
+      setData(parsedData);
+
+      // Track preview view for retargeting
+      if (typeof window !== "undefined" && "gtag" in window) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (window as any).gtag("event", "preview_view", {
+          event_category: "engagement",
+          value: parsedData.depositAmount || 0,
+        });
+      }
     }
   }, []);
 

@@ -77,6 +77,15 @@ export default function StateWizardPage() {
     const code = getStateCodeFromSlug(stateSlug);
     if (code) {
       setStateCode(code);
+
+      // Track wizard start for retargeting
+      if (typeof window !== "undefined" && "gtag" in window) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (window as any).gtag("event", "wizard_start", {
+          event_category: "engagement",
+          state: code,
+        });
+      }
     }
     setIsLoading(false);
   }, [params.state, router]);

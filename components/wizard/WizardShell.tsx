@@ -52,16 +52,16 @@ export function WizardShell({ children, onComplete }: WizardShellProps) {
         </div>
       </div>
 
-      {/* Step Indicators (Desktop) */}
-      <div className="hidden md:block bg-white border-b border-gray-200">
-        <div className="max-w-3xl mx-auto px-4 py-3">
-          <div className="flex justify-between">
+      {/* Step Indicators (Mobile + Desktop) */}
+      <div className="bg-white border-b border-gray-200">
+        <div className="max-w-3xl mx-auto px-4 py-2 md:py-3">
+          <div className="flex gap-1 md:gap-0 md:justify-between overflow-x-auto scrollbar-hide">
             {WIZARD_STEPS.map((step) => (
               <div
                 key={step.id}
-                className={`text-xs font-medium ${
+                className={`text-[10px] md:text-xs font-medium whitespace-nowrap px-1.5 py-0.5 md:px-0 md:py-0 rounded ${
                   step.id === currentStep
-                    ? "text-black"
+                    ? "text-white bg-black md:bg-transparent md:text-black"
                     : step.id < currentStep
                     ? "text-gray-500"
                     : "text-gray-300"
