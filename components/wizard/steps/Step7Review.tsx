@@ -207,7 +207,7 @@ export function Step7Review() {
         ) : (
           <p className="text-sm text-gray-600">
             {data.issueType === "no_refund"
-              ? "No itemized deductions received"
+              ? "No written breakdown received"
               : "No deductions added"}
           </p>
         )}

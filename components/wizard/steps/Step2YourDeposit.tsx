@@ -36,7 +36,7 @@ export function Step2YourDeposit() {
       value: "unfair_deductions" as const,
       title: "Unfair deductions",
       description:
-        "You received an itemized list of deductions, but you disagree with some or all of them.",
+        "You received a document listing charges, but you disagree with some or all of them.",
     },
     {
       value: "partial_refund" as const,

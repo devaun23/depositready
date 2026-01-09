@@ -55,14 +55,14 @@ export function Step7Deductions() {
     return (
       <div className="space-y-6">
         <p className="text-gray-600">
-          Since you did not receive any itemized deductions, we will focus your
+          Since you did not receive a written breakdown of charges, we will focus your
           demand letter on the failure to return your deposit within the legal
           deadline.
         </p>
         <div className="p-4 bg-gray-100 rounded-lg border border-gray-200">
           <p className="text-sm text-gray-700">
             Your landlord was required to either return your full deposit within
-            15 days or send an itemized list of deductions within 30 days. Their
+            15 days or send a written breakdown of charges within 30 days. Their
             failure to do so may entitle you to your full deposit plus damages.
           </p>
         </div>

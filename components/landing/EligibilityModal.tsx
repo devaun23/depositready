@@ -28,7 +28,7 @@ interface FormData {
   stateCode: StateCode | "";
   moveOutDate: string;
   forwardingAddress: ForwardingAddressStatus | "";
-  receivedItemized: "yes" | "no" | "";
+  receivedItemized: "yes" | "no" | "not_sure" | "";
   noticeDate: string;
 }
 
@@ -59,8 +59,9 @@ export function EligibilityModal({ isOpen, onClose }: EligibilityModalProps) {
   ];
 
   const itemizedOptions = [
-    { value: "yes", label: "Yes" },
-    { value: "no", label: "No" },
+    { value: "yes", label: "Yes, I received a document with charges and amounts" },
+    { value: "no", label: "No, I did not receive anything like that" },
+    { value: "not_sure", label: "I'm not sure" },
   ];
 
   const canSubmit =
@@ -249,14 +250,14 @@ export function EligibilityModal({ isOpen, onClose }: EligibilityModalProps) {
 
               {/* Received itemized */}
               <Select
-                label="Did you receive itemized deductions?"
+                label="Did your landlord send you a document listing specific charges and amounts taken from your deposit?"
                 options={itemizedOptions}
                 placeholder="Select an option"
                 value={formData.receivedItemized}
                 onChange={(e) =>
                   setFormData({
                     ...formData,
-                    receivedItemized: e.target.value as "yes" | "no" | "",
+                    receivedItemized: e.target.value as "yes" | "no" | "not_sure" | "",
                   })
                 }
                 required
@@ -265,7 +266,7 @@ export function EligibilityModal({ isOpen, onClose }: EligibilityModalProps) {
               {/* Notice date (conditional) */}
               {formData.receivedItemized === "yes" && (
                 <Input
-                  label="When did you receive the itemized notice?"
+                  label="When did you receive this document?"
                   type="date"
                   value={formData.noticeDate}
                   onChange={(e) =>
