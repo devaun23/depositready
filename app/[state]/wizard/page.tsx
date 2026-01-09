@@ -6,16 +6,13 @@ import {
   WizardProvider,
   WizardShell,
   useWizard,
-  Step1Situation,
-  Step2Timeline,
-  Step3DepositDetails,
-  Step4LandlordInfo,
-  Step5PropertyInfo,
-  Step6WhatHappened,
-  Step7Deductions,
-  Step8Evidence,
-  Step9PriorContact,
-  Step10YourInfo,
+  Step1GettingStarted,
+  Step2YourDeposit,
+  Step3Addresses,
+  Step4Deductions,
+  Step5EvidenceContact,
+  Step6YourInfo,
+  Step7Review,
 } from "@/components/wizard";
 import { getStateRules, isValidStateSlug, getStateCodeFromSlug } from "@/lib/state-rules";
 import type { StateCode } from "@/lib/state-rules/types";
@@ -33,27 +30,21 @@ function WizardContent() {
   const renderStep = () => {
     switch (currentStep) {
       case 1:
-        return <Step1Situation />;
+        return <Step1GettingStarted />;
       case 2:
-        return <Step2Timeline />;
+        return <Step2YourDeposit />;
       case 3:
-        return <Step3DepositDetails />;
+        return <Step3Addresses />;
       case 4:
-        return <Step4LandlordInfo />;
+        return <Step4Deductions />;
       case 5:
-        return <Step5PropertyInfo />;
+        return <Step5EvidenceContact />;
       case 6:
-        return <Step6WhatHappened />;
+        return <Step6YourInfo />;
       case 7:
-        return <Step7Deductions />;
-      case 8:
-        return <Step8Evidence />;
-      case 9:
-        return <Step9PriorContact />;
-      case 10:
-        return <Step10YourInfo />;
+        return <Step7Review />;
       default:
-        return <Step1Situation />;
+        return <Step1GettingStarted />;
     }
   };
 

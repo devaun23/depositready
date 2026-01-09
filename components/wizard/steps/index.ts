@@ -1,3 +1,13 @@
+// New streamlined 7-step wizard components
+export { Step1GettingStarted } from "./Step1GettingStarted";
+export { Step2YourDeposit } from "./Step2YourDeposit";
+export { Step3Addresses } from "./Step3Addresses";
+export { Step7Deductions as Step4Deductions } from "./Step7Deductions"; // Reuse existing deductions component
+export { Step5EvidenceContact } from "./Step5EvidenceContact";
+export { Step10YourInfo as Step6YourInfo } from "./Step10YourInfo"; // Reuse existing your info component
+export { Step7Review } from "./Step7Review";
+
+// Legacy exports for backwards compatibility (can be removed later)
 export { Step1Situation } from "./Step1Situation";
 export { Step2Timeline } from "./Step2Timeline";
 export { Step3DepositDetails } from "./Step3DepositDetails";

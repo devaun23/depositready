@@ -36,16 +36,13 @@ interface WizardContextType {
 const WizardContext = createContext<WizardContextType | null>(null);
 
 export const WIZARD_STEPS = [
-  { id: 1, title: "Situation", shortTitle: "Situation" },
-  { id: 2, title: "Timeline", shortTitle: "Timeline" },
-  { id: 3, title: "Deposit Details", shortTitle: "Deposit" },
-  { id: 4, title: "Landlord Info", shortTitle: "Landlord" },
-  { id: 5, title: "Property Info", shortTitle: "Property" },
-  { id: 6, title: "What Happened", shortTitle: "Issue" },
-  { id: 7, title: "Deductions", shortTitle: "Deductions" },
-  { id: 8, title: "Evidence", shortTitle: "Evidence" },
-  { id: 9, title: "Prior Contact", shortTitle: "Contact" },
-  { id: 10, title: "Your Info", shortTitle: "You" },
+  { id: 1, title: "Getting Started", shortTitle: "Start" },
+  { id: 2, title: "Your Deposit", shortTitle: "Deposit" },
+  { id: 3, title: "Addresses", shortTitle: "Addresses" },
+  { id: 4, title: "Deductions", shortTitle: "Deductions" },
+  { id: 5, title: "Evidence & Contact", shortTitle: "Evidence" },
+  { id: 6, title: "Your Information", shortTitle: "You" },
+  { id: 7, title: "Review", shortTitle: "Review" },
 ] as const;
 
 interface WizardProviderProps {
