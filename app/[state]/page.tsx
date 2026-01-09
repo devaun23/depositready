@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { getStateRules, getAllStateSlugs } from "@/lib/state-rules";
 import { Navbar, Footer } from "@/components/landing";
 import { Button, Card, CardContent, CardTitle } from "@/components/ui";
+import { ViewLandingTracker } from "@/components/tracking";
 
 // Generate static params for all supported states
 export function generateStaticParams() {
@@ -38,6 +39,7 @@ export default async function StateLandingPage({
 
   return (
     <div className="min-h-screen bg-white">
+      <ViewLandingTracker state={rules.code} />
       <Navbar />
 
       <main id="main-content">

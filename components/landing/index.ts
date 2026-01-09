@@ -5,3 +5,4 @@ export { WhatsIncluded } from "./WhatsIncluded";
 export { HowItWorks } from "./HowItWorks";
 export { Testimonials } from "./Testimonials";
 export { Footer } from "./Footer";
+export { EligibilityModal } from "./EligibilityModal";

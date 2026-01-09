@@ -48,7 +48,7 @@ export function PacketPreviewSection({
               Processing...
             </span>
           ) : (
-            "Get My Packet — $39"
+            "Download My Demand Letter — $39"
           )}
         </button>
 

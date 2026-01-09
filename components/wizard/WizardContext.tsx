@@ -48,19 +48,27 @@ export const WIZARD_STEPS = [
 interface WizardProviderProps {
   children: ReactNode;
   initialStateCode?: StateCode;
+  initialMoveOutDate?: string;
+  initialStep?: number;
 }
 
-export function WizardProvider({ children, initialStateCode }: WizardProviderProps) {
+export function WizardProvider({
+  children,
+  initialStateCode,
+  initialMoveOutDate,
+  initialStep = 1,
+}: WizardProviderProps) {
   const [data, setData] = useState<WizardData>(() => ({
     ...EMPTY_WIZARD_DATA,
     stateCode: initialStateCode || null,
+    moveOutDate: initialMoveOutDate || null,
     // Pre-fill property state to match stateCode
     property: {
       ...EMPTY_WIZARD_DATA.property,
       state: initialStateCode || '',
     },
   }));
-  const [currentStep, setCurrentStep] = useState(1);
+  const [currentStep, setCurrentStep] = useState(initialStep);
   const [canProceed, setCanProceed] = useState(false);
 
   const updateData = useCallback(
