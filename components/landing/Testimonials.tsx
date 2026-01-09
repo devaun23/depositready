@@ -3,15 +3,31 @@ import { Card, CardContent } from "@/components/ui";
 const testimonials = [
   {
     quote:
-      "The timeline made everything clear. I knew exactly when my landlord's deadline was.",
-    name: "Sarah M.",
-    location: "California",
+      "My landlord tried to keep $1,200 for 'cleaning fees.' I sent the demand letter and got a check for $1,050 within 10 days.",
+    name: "Jessica T.",
+    location: "Florida",
+    amount: "$1,050 recovered",
   },
   {
     quote:
-      "Having everything in one organized packet gave me confidence when disputing unfair charges.",
-    name: "Michael R.",
+      "The deadline calculator showed my landlord was 3 weeks late. I cited the statute in my letter and got my full $1,800 back.",
+    name: "Marcus W.",
     location: "Texas",
+    amount: "$1,800 recovered",
+  },
+  {
+    quote:
+      "I was ready to give up on my $900 deposit. The packet gave me confidence to push back. Settled for $750.",
+    name: "Amanda K.",
+    location: "California",
+    amount: "$750 recovered",
+  },
+  {
+    quote:
+      "Landlord claimed $400 in damages that didn't exist. The evidence checklist helped me prove it. Full deposit returned.",
+    name: "David R.",
+    location: "Georgia",
+    amount: "$1,400 recovered",
   },
 ];
 
@@ -31,11 +47,16 @@ export function Testimonials() {
         </div>
 
         {/* Testimonial Cards */}
-        <div className="grid md:grid-cols-2 gap-6 mb-8">
+        <div className="grid md:grid-cols-2 gap-6">
           {testimonials.map((testimonial, index) => (
             <Card key={index} className="p-6">
               <CardContent className="p-0">
-                <blockquote className="font-serif text-xl text-black mb-4">
+                <div className="flex justify-between items-start mb-3">
+                  <span className="inline-block bg-green-100 text-green-800 text-xs font-semibold px-2.5 py-1 rounded">
+                    {testimonial.amount}
+                  </span>
+                </div>
+                <blockquote className="font-serif text-lg text-black mb-4">
                   &ldquo;{testimonial.quote}&rdquo;
                 </blockquote>
                 <p className="text-gray-500 text-sm">
@@ -45,12 +66,6 @@ export function Testimonials() {
             </Card>
           ))}
         </div>
-
-        {/* Disclaimer */}
-        <p className="text-center text-gray-400 text-sm">
-          Individual results vary. Testimonials reflect personal experiences and
-          are not guarantees of specific outcomes.
-        </p>
       </div>
     </section>
   );

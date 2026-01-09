@@ -294,11 +294,15 @@ function PreviewContent() {
                 Redirecting to checkout...
               </span>
             ) : (
-              "Get Your Dispute Packet — $39"
+              "Get My Packet — $39"
             )}
           </button>
 
-          <p className="text-xs text-gray-500 mt-4">
+          <p className="text-xs text-green-600 mt-2 font-medium">
+            Not satisfied? Full refund within 7 days, no questions asked.
+          </p>
+
+          <p className="text-xs text-gray-500 mt-2">
             Secure payment via Stripe. You will receive a download link
             immediately after purchase.
           </p>

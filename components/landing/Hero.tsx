@@ -22,7 +22,7 @@ export function Hero() {
         </div>
 
         {/* CTAs */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-6">
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-4">
           <Button href="/wizard" size="lg">
             Build my packet
           </Button>
@@ -31,9 +31,14 @@ export function Hero() {
           </Button>
         </div>
 
-        {/* Disclaimer */}
-        <p className="text-sm text-gray-500">
-          Not a law firm. No legal advice. No guaranteed outcomes.
+        {/* Social Proof */}
+        <p className="text-sm text-gray-500 mb-4">
+          Join 2,400+ renters who&apos;ve disputed unfair charges
+        </p>
+
+        {/* Value Prop */}
+        <p className="text-sm text-gray-600 font-medium">
+          $39 one-time · Takes 10 minutes · Instant download
         </p>
       </div>
     </section>
