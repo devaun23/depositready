@@ -35,6 +35,22 @@ export function Footer() {
                 </Link>
               </li>
               <li>
+                <Link
+                  href="/landlord-kept-security-deposit"
+                  className="text-gray-500 hover:text-black text-sm transition-colors"
+                >
+                  Landlord kept deposit?
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/security-deposit-deadline"
+                  className="text-gray-500 hover:text-black text-sm transition-colors"
+                >
+                  Deposit deadlines
+                </Link>
+              </li>
+              <li>
                 <a
                   href="#whats-included"
                   className="text-gray-500 hover:text-black text-sm transition-colors"
