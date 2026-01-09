@@ -12,7 +12,7 @@ export function Hero() {
       <div className="max-w-3xl mx-auto text-center">
         {/* Headline */}
         <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl font-semibold text-black leading-tight mb-8">
-          Get your security deposit back with a state-law-backed demand letter
+          Get your security deposit back by checking your landlord&apos;s deadline
         </h1>
 
         {/* Body Copy */}
@@ -24,14 +24,14 @@ export function Hero() {
           <p>See your deadline first. Pay only to unlock the full packet.</p>
         </div>
 
-        {/* CTAs */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-4">
+        {/* CTA */}
+        <div className="flex flex-col items-center justify-center gap-4 mb-4">
           <Button onClick={() => setIsModalOpen(true)} size="lg">
             Check My Deadline
           </Button>
-          <Button href="#whats-included" variant="outline" size="lg">
-            See what&apos;s included
-          </Button>
+          <p className="text-sm text-gray-600 max-w-md">
+            Most renters don&apos;t lose disputes because of photos — they lose them because of missed deadlines.
+          </p>
         </div>
 
         {/* Social Proof */}

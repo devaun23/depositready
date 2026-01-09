@@ -31,8 +31,8 @@ export function Navbar() {
           </div>
 
           {/* CTA */}
-          <Button href="/wizard" size="sm">
-            Build my packet
+          <Button href="#how-it-works" variant="outline" size="sm">
+            Learn more
           </Button>
         </div>
       </nav>
