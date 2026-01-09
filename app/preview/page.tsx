@@ -6,6 +6,7 @@ import Link from "next/link";
 import { WizardData } from "@/types/dispute";
 import { analyzeDeadlines } from "@/lib/state-rules/deadlines";
 import { getStateRulesByCode, FLORIDA, formatLegalDate } from "@/lib/state-rules";
+import { PacketPreviewSection } from "@/components/preview/PacketPreviewSection";
 
 function PreviewContent() {
   const [data, setData] = useState<WizardData | null>(null);
@@ -167,6 +168,19 @@ function PreviewContent() {
           )}
         </div>
 
+        {/* PDF Preview Section */}
+        <div className="mb-6">
+          <PacketPreviewSection
+            onPurchaseClick={handlePurchase}
+            isLoading={isLoading}
+          />
+          {error && (
+            <div className="bg-red-50 border border-red-200 text-red-700 rounded-lg p-3 mt-4 text-sm">
+              {error}
+            </div>
+          )}
+        </div>
+
         {/* Packet Contents */}
         <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
           <h2 className="text-lg font-semibold text-gray-900 mb-4">
@@ -254,16 +268,10 @@ function PreviewContent() {
             One-time purchase. Instant download. No subscription.
           </p>
 
-          {error && (
-            <div className="bg-red-50 border border-red-200 text-red-700 rounded-lg p-3 mb-4 text-sm">
-              {error}
-            </div>
-          )}
-
           <button
             onClick={handlePurchase}
             disabled={isLoading}
-            className="w-full md:w-auto px-8 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 disabled:bg-blue-400 disabled:cursor-not-allowed transition-colors"
+            className="w-full md:w-auto px-8 py-3 bg-black text-white font-semibold rounded-lg hover:bg-gray-800 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
           >
             {isLoading ? (
               <span className="flex items-center justify-center gap-2">
@@ -286,7 +294,7 @@ function PreviewContent() {
                 Redirecting to checkout...
               </span>
             ) : (
-              "Get Your Dispute Packet"
+              "Get Your Dispute Packet — $39"
             )}
           </button>
 
