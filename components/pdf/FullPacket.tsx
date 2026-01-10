@@ -6,7 +6,7 @@ import {
   StyleSheet,
 } from "@react-pdf/renderer";
 import { WizardData } from "@/types/dispute";
-import type { StateRules, DeadlineAnalysis } from "@/lib/state-rules";
+import type { StateRules } from "@/lib/state-rules";
 import { analyzeDeadlines } from "@/lib/state-rules";
 
 // Lawyer-grade styling: Times-Roman throughout, minimal colors, professional layout
@@ -276,7 +276,7 @@ export function FullPacket({ data, stateRules, generatedDate = new Date() }: Ful
         {/* Plain English Legal Summary */}
         <View style={styles.box}>
           <Text style={styles.boxText}>
-            Under {stateRules.name} law ({stateRules.statuteTitle}), landlords must return a tenant's security deposit or send written notice of intent to impose a claim within {stateRules.claimDeadline} days.
+            Under {stateRules.name} law ({stateRules.statuteTitle}), landlords must return the security deposit or send written notice of intent to impose a claim within {stateRules.claimDeadline} days.
             {deadlines?.landlordInViolation && ` That deadline passed on ${formatDate(deadlines.claimDeadline)}.`}
           </Text>
         </View>
@@ -390,7 +390,7 @@ export function FullPacket({ data, stateRules, generatedDate = new Date() }: Ful
           </View>
           <View style={styles.tableRow}>
             <Text style={[styles.tableCell, { width: "15%" }]}>E</Text>
-            <Text style={[styles.tableCell, { width: "45%" }]}>Landlord's Deduction Notice</Text>
+            <Text style={[styles.tableCell, { width: "45%" }]}>Deduction Notice from Landlord</Text>
             <Text style={[styles.tableCell, { width: "40%" }]}>{data.deductions.length > 0 ? "Received" : "Not received"}</Text>
           </View>
           <View style={styles.tableRowLast}>
@@ -629,7 +629,7 @@ export function FullPacket({ data, stateRules, generatedDate = new Date() }: Ful
         <Text style={styles.sectionHeader}>Step 5: Escalate if Necessary</Text>
         <Text style={styles.paragraph}>
           If no satisfactory response is received, you may file in small claims court.
-          Your claim of {formatCurrency(amountOwed)} is {amountOwed <= stateRules.maxSmallClaims ? "within" : "may exceed"} {stateRules.name}'s small claims limit of {formatCurrency(stateRules.maxSmallClaims)}.
+          Your claim of {formatCurrency(amountOwed)} is {amountOwed <= stateRules.maxSmallClaims ? "within" : "may exceed"} the {stateRules.name} small claims limit of {formatCurrency(stateRules.maxSmallClaims)}.
           {stateRules.smallClaimsNote && ` ${stateRules.smallClaimsNote}`}
         </Text>
 
