@@ -23,6 +23,22 @@ export interface StateRules {
   statuteTitle: string;        // "Florida Statute 83.49"
   statuteUrl: string;
 
+  // Detailed statute section citations (for attorney-quality documents)
+  statuteSections: {
+    returnDeadline: string;      // "F.S. 83.49(3)(a)"
+    claimDeadline: string;       // "F.S. 83.49(3)(b)"
+    itemizationRequirement: string;
+    forfeitureProvision: string;
+    damagesProvision: string;
+  };
+
+  // Exact statutory language quotes
+  statutoryLanguage: {
+    forfeitureClause: string;    // Exact quote from statute about forfeiture
+    damagesClause: string;       // Exact quote about damages/penalties
+    deadlineClause: string;      // Exact quote about return deadline
+  };
+
   // Requirements
   certifiedMailRequired: boolean;
   itemizedDeductionsRequired: boolean;
@@ -31,6 +47,7 @@ export interface StateRules {
   maxSmallClaims: number;
   smallClaimsNote?: string;    // For NY: "NYC: $10,000, rest of state: $5,000"
   filingFee: { min: number; max: number };
+  courtName: string;           // "County Court, Small Claims Division"
 
   // Damages
   damagesMultiplier: number;   // 2 for 2x, 3 for 3x
