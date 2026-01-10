@@ -1,8 +1,14 @@
 "use client";
 
 import { useState } from "react";
+import dynamic from "next/dynamic";
 import { Button } from "@/components/ui";
-import { EligibilityModal } from "./EligibilityModal";
+
+// Lazy load modal - only needed when user clicks CTA
+const EligibilityModal = dynamic(
+  () => import("./EligibilityModal").then(mod => mod.EligibilityModal),
+  { ssr: false, loading: () => null }
+);
 
 export function Hero() {
   const [isModalOpen, setIsModalOpen] = useState(false);

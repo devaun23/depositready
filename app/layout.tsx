@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
 import Script from "next/script";
-import { ExitIntentPopup } from "@/components/common/ExitIntentPopup";
+import { LazyExitIntentPopup } from "@/components/common/LazyExitIntentPopup";
 import "./globals.css";
 
 export const viewport: Viewport = {
@@ -92,12 +92,19 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        {/* Preconnect to third-party origins for faster resource loading */}
+        <link rel="preconnect" href="https://www.googletagmanager.com" />
+        <link rel="preconnect" href="https://www.clarity.ms" />
+        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+        <link rel="dns-prefetch" href="https://www.clarity.ms" />
+      </head>
       <body className={`${inter.variable} ${playfair.variable} font-sans antialiased`}>
         <a href="#main-content" className="skip-link">
           Skip to main content
         </a>
         {children}
-        <ExitIntentPopup />
+        <LazyExitIntentPopup />
         <Analytics />
         {/* Changed to lazyOnload to defer loading until after page interactivity */}
         <Script
