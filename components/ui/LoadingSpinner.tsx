@@ -9,6 +9,12 @@ const sizeClasses = {
   lg: "w-12 h-12",
 };
 
+const sizePx = {
+  sm: 16,
+  md: 32,
+  lg: 48,
+};
+
 export default function LoadingSpinner({
   size = "md",
   className = "",
@@ -16,6 +22,8 @@ export default function LoadingSpinner({
   return (
     <svg
       className={`animate-spin text-black ${sizeClasses[size]} ${className}`}
+      width={sizePx[size]}
+      height={sizePx[size]}
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
       viewBox="0 0 24 24"

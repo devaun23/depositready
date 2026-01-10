@@ -31,6 +31,8 @@ export function SEOCTA({ title, description, primaryButton, secondaryButtons }: 
             {primaryButton.text}
             <svg
               className="w-4 h-4"
+              width="16"
+              height="16"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"

@@ -110,6 +110,8 @@ export function Step7Deductions() {
                 >
                   <svg
                     className="w-5 h-5"
+                    width="20"
+                    height="20"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"

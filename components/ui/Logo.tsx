@@ -9,11 +9,19 @@ const sizeClasses = {
   lg: "w-8 h-8",
 };
 
+const sizePx = {
+  sm: 20,
+  md: 24,
+  lg: 32,
+};
+
 export function Logo({ size = "md", className = "" }: LogoProps) {
   return (
     <svg
       viewBox="0 0 32 32"
       className={`${sizeClasses[size]} ${className}`}
+      width={sizePx[size]}
+      height={sizePx[size]}
       xmlns="http://www.w3.org/2000/svg"
       aria-hidden="true"
     >
