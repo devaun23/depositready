@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import {
   SEOPageLayout,
   SEOHero,
@@ -9,7 +10,7 @@ import {
   SEODisclaimer,
 } from "@/components/seo";
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "Landlord Kept My Security Deposit? What to Do Next | DepositReady",
   description:
     "If your landlord kept your security deposit or charged unfair deductions, learn what to do next and how renters resolve deposit disputes fast.",

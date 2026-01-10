@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import {
   SEOPageLayout,
   SEOHero,
@@ -8,10 +9,11 @@ import {
   SEODeadlineBox,
   SEOComparisonGrid,
   SEOInfoList,
+  SEORelatedResources,
   SEODisclaimer,
 } from "@/components/seo";
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "Florida Security Deposit Law (Statute 83.49) | DepositReady",
   description:
     "Plain-English explanation of Florida security deposit law, deadlines, tenant rights, and what to do if your landlord keeps your deposit.",
@@ -203,6 +205,26 @@ export default function FloridaRulesPage() {
           text: "Start Your Dispute Packet",
           href: "/wizard",
         }}
+      />
+
+      <SEORelatedResources
+        links={[
+          {
+            title: "Florida Security Deposit Deadline",
+            href: "/security-deposit-deadline-florida",
+            description: "Check your deadline and build your dispute packet",
+          },
+          {
+            title: "Write a Demand Letter",
+            href: "/security-deposit-demand-letter",
+            description: "Create a formal request that gets results",
+          },
+          {
+            title: "How to Dispute Unfair Deductions",
+            href: "/security-deposit-dispute",
+            description: "Challenge charges that don't make sense",
+          },
+        ]}
       />
 
       <SEODisclaimer />

@@ -1,6 +1,15 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-import { Navbar, Footer } from "@/components/landing";
+import {
+  SEOPageLayout,
+  SEOHeroWithCTA,
+  SEOSection,
+  SEOCheckList,
+  SEODeadlineBox,
+  SEOFAQ,
+  SEOCTA,
+  SEORelatedResources,
+  SEODisclaimer,
+} from "@/components/seo";
 
 export const metadata: Metadata = {
   title: "Texas Security Deposit Deadline for Renters",
@@ -10,271 +19,186 @@ export const metadata: Metadata = {
 
 export default function TexasSecurityDepositDeadlinePage() {
   return (
-    <div className="min-h-screen bg-white">
-      <Navbar />
-      <main id="main-content" className="mx-auto max-w-3xl px-4 py-16">
-        {/* Hero Section */}
-        <h1 className="text-3xl font-bold mb-2">
-          Texas Security Deposit Deadlines
-        </h1>
-        <p className="text-xl text-gray-600 mb-6">
-          What the Law Requires After You Move Out
-        </p>
+    <SEOPageLayout>
+      <SEOHeroWithCTA
+        title="Texas Security Deposit Deadlines"
+        subtitle="What the Law Requires After You Move Out"
+        intro="Texas law gives landlords a short window to return your deposit or explain deductions. If they miss it, you may have leverage to recover your money."
+        primaryButton={{ text: "Check My Texas Deadline", href: "/wizard" }}
+        secondaryButton={{
+          text: "See how Texas deposit disputes work",
+          href: "/security-deposit-dispute",
+        }}
+        tagline="Used by renters across Texas · Secure checkout · Not legal advice"
+      />
 
-        <p className="mb-6">
-          Texas law gives landlords a short window to return your deposit or
-          explain deductions. If they miss it, you may have leverage to recover
-          your money.
-        </p>
-
-        <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap mb-12">
-          <Link
-            href="/build"
-            className="inline-block rounded-md bg-black px-6 py-3 text-white font-semibold hover:bg-gray-800 transition text-center"
-          >
-            Check My Texas Deadline
-          </Link>
-          <Link
-            href="/security-deposit-dispute"
-            className="inline-block rounded-md border border-gray-300 px-6 py-3 font-semibold hover:bg-gray-50 transition text-center"
-          >
-            See how Texas deposit disputes work
-          </Link>
-        </div>
-
-        <p className="text-sm text-gray-500 mb-12">
-          Used by renters across Texas. Secure checkout. Not legal advice.
-        </p>
-
-        {/* Section 1: Why Texas Deadlines Matter */}
-        <h2 className="text-2xl font-semibold mt-10 mb-4">
-          In Texas, Speed Matters
-        </h2>
-
-        <p className="mb-6">
+      <SEOSection title="In Texas, Speed Matters">
+        <p>
           Texas gives landlords less time than many states to act after move
           out.
         </p>
-
-        <p className="mb-4">If a landlord:</p>
-
-        <ul className="list-disc pl-6 mb-6">
-          <li>Misses the deadline</li>
-          <li>Sends notice late</li>
-          <li>Fails to properly itemize deductions</li>
-        </ul>
-
-        <p className="mb-6">They may be acting outside Texas law.</p>
-
-        <p className="mb-6">
+        <p>If a landlord:</p>
+        <SEOCheckList
+          variant="bullet"
+          items={[
+            "Misses the deadline",
+            "Sends notice late",
+            "Fails to properly itemize deductions",
+          ]}
+        />
+        <p>They may be acting outside Texas law.</p>
+        <p>
           Many Texas disputes turn on whether the landlord acted on time, not
           whether damage existed.
         </p>
+      </SEOSection>
 
-        {/* Section 2: Texas Security Deposit Timeline */}
-        <h2 className="text-2xl font-semibold mt-10 mb-4">
-          Texas Security Deposit Deadlines Explained
-        </h2>
-
-        <p className="mb-6">
-          After you move out and provide a forwarding address:
-        </p>
-
-        <div className="bg-gray-50 rounded-lg p-6 mb-6">
-          <p className="font-semibold mb-2">Within 30 days</p>
-          <p className="mb-2">The landlord must:</p>
-          <ul className="list-disc pl-6">
-            <li>Return your deposit, or</li>
-            <li>Send a written, itemized list of deductions</li>
-          </ul>
-        </div>
-
-        <p className="mb-6">
-          There is no separate grace period for &quot;no deductions&quot; versus
-          &quot;with deductions&quot; in Texas. Thirty days is the deadline.
-        </p>
-
-        <p className="mb-6 text-sm text-gray-600">
+      <SEOSection title="Texas Security Deposit Deadlines Explained" variant="gray">
+        <p>After you move out and provide a forwarding address:</p>
+        <SEODeadlineBox
+          title="Texas Deadline"
+          items={[
+            {
+              days: "30 days",
+              description:
+                "The landlord must return your deposit or send a written, itemized list of deductions",
+            },
+          ]}
+          note="There is no separate grace period for 'no deductions' versus 'with deductions' in Texas. Thirty days is the deadline."
+        />
+        <p className="text-sm text-gray-500">
           Texas security deposits are governed by Texas Property Code
           §92.103–§92.109.
         </p>
+      </SEOSection>
 
-        {/* Section 3: What Counts as Proper Notice */}
-        <h2 className="text-2xl font-semibold mt-10 mb-4">
-          This Is Where Many Landlords Slip Up
-        </h2>
+      <SEOSection title="This Is Where Many Landlords Slip Up">
+        <p>In Texas, a valid deduction notice must:</p>
+        <SEOCheckList
+          variant="bullet"
+          items={[
+            "Be in writing",
+            "Be sent within 30 days",
+            "Clearly itemize each deduction and amount",
+            "Be delivered to your forwarding address",
+          ]}
+        />
+        <p>Common Texas landlord mistakes:</p>
+        <SEOCheckList
+          variant="bullet"
+          items={[
+            "Missing the 30 day deadline",
+            "Sending vague or lump sum deductions",
+            "Failing to explain charges clearly",
+            "Sending notice without itemization",
+          ]}
+        />
+        <p>Improper notice weakens the claim against your deposit.</p>
+      </SEOSection>
 
-        <p className="mb-4">In Texas, a valid deduction notice must:</p>
-
-        <ul className="list-disc pl-6 mb-6">
-          <li>Be in writing</li>
-          <li>Be sent within 30 days</li>
-          <li>Clearly itemize each deduction and amount</li>
-          <li>Be delivered to your forwarding address</li>
-        </ul>
-
-        <p className="mb-4">Common Texas landlord mistakes:</p>
-
-        <ul className="list-disc pl-6 mb-6">
-          <li>Missing the 30 day deadline</li>
-          <li>Sending vague or lump sum deductions</li>
-          <li>Failing to explain charges clearly</li>
-          <li>Sending notice without itemization</li>
-        </ul>
-
-        <p className="mb-6">
-          Improper notice weakens the landlord&apos;s position.
-        </p>
-
-        {/* Section 4: What Happens If Landlord Is Late */}
-        <h2 className="text-2xl font-semibold mt-10 mb-4">
-          If the Texas Deadline Was Missed
-        </h2>
-
-        <p className="mb-4">If the landlord fails to comply:</p>
-
-        <ul className="list-disc pl-6 mb-6">
-          <li>You may be entitled to your full deposit</li>
-          <li>Texas law allows penalties for bad faith withholding</li>
-          <li>Your leverage increases significantly</li>
-        </ul>
-
-        <p className="mb-6">
+      <SEOSection title="If the Texas Deadline Was Missed" variant="gray">
+        <p>If the landlord fails to comply:</p>
+        <SEOCheckList
+          variant="bullet"
+          items={[
+            "You may be entitled to your full deposit",
+            "Texas law allows penalties for bad faith withholding",
+            "Your leverage increases significantly",
+          ]}
+        />
+        <p>
           Many Texas renters recover deposits once deadlines are cited
           professionally and accurately.
         </p>
+      </SEOSection>
 
-        {/* Section 5: How Texas Renters Dispute Deposits */}
-        <h2 className="text-2xl font-semibold mt-10 mb-4">
-          What Works in Practice
-        </h2>
-
-        <p className="mb-4">Successful Texas disputes usually include:</p>
-
-        <ol className="list-decimal pl-6 mb-6">
+      <SEOSection title="What Works in Practice">
+        <p>Successful Texas disputes usually include:</p>
+        <ol className="list-decimal pl-6 space-y-2 text-gray-600">
           <li>Confirming the 30 day deadline</li>
           <li>Organizing move out photos by room and date</li>
           <li>Keeping communications documented</li>
           <li>Sending a clear, professional demand letter</li>
           <li>Escalating only if needed</li>
         </ol>
+        <p>Emotion does not help. Clear documentation does.</p>
+      </SEOSection>
 
-        <p className="mb-6">Emotion does not help. Clear documentation does.</p>
+      <SEOSection title="Built for Texas Security Deposit Disputes" variant="gray">
+        <p>DepositReady helps you:</p>
+        <SEOCheckList
+          items={[
+            "Calculate your exact Texas deadline",
+            "Understand whether the landlord complied",
+            "Organize evidence properly",
+            "Generate a Texas compliant demand letter",
+            "Create a reusable dispute packet",
+          ]}
+        />
+        <p>You see your deadline before paying.</p>
+      </SEOSection>
 
-        {/* Section 6: How DepositReady Helps */}
-        <h2 className="text-2xl font-semibold mt-10 mb-4">
-          Built for Texas Security Deposit Disputes
-        </h2>
+      <SEOFAQ
+        title="Texas Security Deposit FAQ"
+        items={[
+          {
+            question: "Do I need a lawyer in Texas to dispute a deposit?",
+            answer:
+              "Often no. Many disputes resolve with proper documentation and notice.",
+          },
+          {
+            question: "What if I didn't give a forwarding address?",
+            answer:
+              "Texas deadlines depend on whether a forwarding address was provided.",
+          },
+          {
+            question: "Can Texas landlords charge for normal wear and tear?",
+            answer:
+              "No. Only actual damages beyond normal wear and tear may be deducted.",
+          },
+          {
+            question: "Is this legal advice?",
+            answer:
+              "No. DepositReady provides documentation tools and state specific information.",
+          },
+        ]}
+      />
 
-        <p className="mb-4">DepositReady helps you:</p>
+      <SEOCTA
+        title="Check Your Texas Security Deposit Deadline in 30 Seconds"
+        description="Know where you stand before taking action. $39 one time · Takes about 10 minutes · Instant download. Typical Texas deposits range from $1,000–$3,000."
+        primaryButton={{
+          text: "Check My Texas Deadline",
+          href: "/wizard",
+        }}
+        secondaryButtons={[
+          { text: "Write a demand letter", href: "/security-deposit-demand-letter" },
+          { text: "My landlord kept my deposit", href: "/landlord-kept-security-deposit" },
+          { text: "How to dispute a deposit", href: "/security-deposit-dispute" },
+        ]}
+      />
 
-        <ul className="list-disc pl-6 mb-6">
-          <li>Calculate your exact Texas deadline</li>
-          <li>Understand whether the landlord complied</li>
-          <li>Organize evidence properly</li>
-          <li>Generate a Texas compliant demand letter</li>
-          <li>Create a reusable dispute packet</li>
-        </ul>
+      <SEORelatedResources
+        links={[
+          {
+            title: "How to Dispute Unfair Deductions",
+            href: "/security-deposit-dispute",
+            description: "Challenge charges that don't make sense",
+          },
+          {
+            title: "California Security Deposit Deadline",
+            href: "/security-deposit-deadline-california",
+            description: "California has a strict 21-day deadline",
+          },
+          {
+            title: "Florida Security Deposit Deadline",
+            href: "/security-deposit-deadline-florida",
+            description: "Florida requires certified mail for deduction notices",
+          },
+        ]}
+      />
 
-        <p className="mb-6">
-          You see your deadline before paying.
-        </p>
-
-        {/* Section 7: FAQ */}
-        <h2 className="text-2xl font-semibold mt-10 mb-4">
-          Texas Security Deposit FAQ
-        </h2>
-
-        <div className="space-y-6 mb-12">
-          <div>
-            <p className="font-semibold mb-2">
-              Do I need a lawyer in Texas to dispute a deposit?
-            </p>
-            <p className="text-gray-600">
-              Often no. Many disputes resolve with proper documentation and
-              notice.
-            </p>
-          </div>
-
-          <div>
-            <p className="font-semibold mb-2">
-              What if I didn&apos;t give a forwarding address?
-            </p>
-            <p className="text-gray-600">
-              Texas deadlines depend on whether a forwarding address was
-              provided.
-            </p>
-          </div>
-
-          <div>
-            <p className="font-semibold mb-2">
-              Can Texas landlords charge for normal wear and tear?
-            </p>
-            <p className="text-gray-600">
-              No. Only actual damages beyond normal wear and tear may be
-              deducted.
-            </p>
-          </div>
-
-          <div>
-            <p className="font-semibold mb-2">Is this legal advice?</p>
-            <p className="text-gray-600">
-              No. DepositReady provides documentation tools and state specific
-              information.
-            </p>
-          </div>
-        </div>
-
-        {/* Final CTA */}
-        <div className="bg-gray-50 rounded-lg p-6 text-center mt-12">
-          <h2 className="text-xl font-semibold mb-2">
-            Check Your Texas Security Deposit Deadline in 30 Seconds
-          </h2>
-          <p className="text-gray-600 mb-6">
-            Know where you stand before taking action.
-          </p>
-          <Link
-            href="/build"
-            className="inline-block rounded-md bg-black px-6 py-3 text-white font-semibold hover:bg-gray-800 transition"
-          >
-            Check My Texas Deadline
-          </Link>
-          <p className="text-sm text-gray-500 mt-4">
-            $39 one time. Takes about 10 minutes. Instant download.
-          </p>
-          <p className="text-sm text-gray-500">
-            Typical Texas deposits range from $1,000–$3,000
-          </p>
-        </div>
-
-        {/* Internal Links */}
-        <div className="mt-12 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-          <Link
-            href="/security-deposit-demand-letter"
-            className="inline-block rounded-md border border-gray-300 px-6 py-3 font-semibold hover:bg-gray-50 transition text-center"
-          >
-            Write a demand letter
-          </Link>
-          <Link
-            href="/landlord-kept-security-deposit"
-            className="inline-block rounded-md border border-gray-300 px-6 py-3 font-semibold hover:bg-gray-50 transition text-center"
-          >
-            My landlord kept my deposit
-          </Link>
-          <Link
-            href="/security-deposit-dispute"
-            className="inline-block rounded-md border border-gray-300 px-6 py-3 font-semibold hover:bg-gray-50 transition text-center"
-          >
-            How to dispute a deposit
-          </Link>
-        </div>
-
-        <p className="text-sm text-gray-500 mt-12">
-          DepositReady is not a law firm and does not provide legal advice. No
-          outcomes are guaranteed.
-        </p>
-      </main>
-      <Footer />
-    </div>
+      <SEODisclaimer />
+    </SEOPageLayout>
   );
 }
