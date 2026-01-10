@@ -106,29 +106,33 @@ export default function RootLayout({
         {children}
         <LazyExitIntentPopup />
         <Analytics />
-        {/* Changed to lazyOnload to defer loading until after page interactivity */}
-        <Script
-          src="https://www.googletagmanager.com/gtag/js?id=AW-17859927660"
-          strategy="lazyOnload"
-        />
-        <Script id="google-ads" strategy="lazyOnload">
+        {/* Delay analytics by 5s to reduce TBT - most real users stay longer */}
+        <Script id="delayed-analytics" strategy="lazyOnload">
           {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'AW-17859927660', {
-              'allow_google_signals': true,
-              'allow_ad_personalization_signals': true
-            });
-          `}
-        </Script>
-        <Script id="microsoft-clarity" strategy="lazyOnload">
-          {`
-            (function(c,l,a,r,i,t,y){
-              c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-              t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-              y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-            })(window, document, "clarity", "script", "uyvwb6yez0");
+            setTimeout(function() {
+              // Load Google Tag Manager
+              var gtagScript = document.createElement('script');
+              gtagScript.src = 'https://www.googletagmanager.com/gtag/js?id=AW-17859927660';
+              gtagScript.async = true;
+              document.head.appendChild(gtagScript);
+
+              // Initialize gtag
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              window.gtag = gtag;
+              gtag('js', new Date());
+              gtag('config', 'AW-17859927660', {
+                'allow_google_signals': true,
+                'allow_ad_personalization_signals': true
+              });
+
+              // Load Microsoft Clarity
+              (function(c,l,a,r,i,t,y){
+                c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+                t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+                y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+              })(window, document, "clarity", "script", "uyvwb6yez0");
+            }, 5000);
           `}
         </Script>
       </body>
