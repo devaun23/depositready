@@ -18,6 +18,7 @@ export function ExitIntentPopup() {
     "/security-deposit-deadline",
     "/security-deposit-demand-letter",
     "/security-deposit-dispute",
+    "/security-deposit-deadline-florida",
   ];
   const isExcludedPage = excludedPaths.some((path) => pathname?.startsWith(path));
 
