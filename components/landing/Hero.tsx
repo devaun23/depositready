@@ -12,16 +12,14 @@ export function Hero() {
       <div className="max-w-3xl mx-auto text-center">
         {/* Headline */}
         <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl font-semibold text-black leading-tight mb-8">
-          Get your security deposit back by checking your landlord&apos;s deadline
+          Your landlord missed a deadline.<br />
+          That&apos;s not your problem.
         </h1>
 
         {/* Body Copy */}
         <div className="space-y-4 text-gray-600 text-lg mb-10 max-w-2xl mx-auto">
-          <p>
-            Check your deadline in 30 seconds. If your landlord missed it, you
-            may have leverage to recover your full deposit—and potentially more.
-          </p>
-          <p>See your deadline first. Pay only to unlock the full packet.</p>
+          <p>Check your state law in 30 seconds.</p>
+          <p>Generate the letter renters use instead of hiring a lawyer.</p>
         </div>
 
         {/* CTA - Desktop only (mobile uses sticky bottom CTA) */}
@@ -71,7 +69,7 @@ export function Hero() {
         {/* Value Prop with Anchoring */}
         <div className="text-sm text-gray-600">
           <p className="font-medium">
-            $39 one-time · Takes 10 minutes · Instant download
+            $39 · One-time · Instant
           </p>
           <p className="text-xs text-gray-500 mt-1">
             Typical deposit: $1,000–$3,000. One letter can recover hundreds to
