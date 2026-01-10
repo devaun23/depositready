@@ -37,7 +37,7 @@ export function HowItWorks() {
               <div className="font-serif text-3xl md:text-5xl font-semibold text-gray-200 mb-3 md:mb-4 select-none">
                 {step.number}
               </div>
-              <h3 className="text-lg font-semibold text-black mb-2">
+              <h3 className="text-lg font-medium text-black mb-2">
                 {step.title}
               </h3>
               <p className="text-gray-600">{step.description}</p>

@@ -52,7 +52,7 @@ export function Testimonials() {
             <Card key={index} className="p-6 cursor-default">
               <CardContent className="p-0">
                 <div className="flex justify-between items-start mb-3">
-                  <span className="inline-block bg-green-100 text-green-800 text-xs font-semibold px-2.5 py-1 rounded">
+                  <span className="text-sm font-medium text-gray-600">
                     {testimonial.amount}
                   </span>
                 </div>
