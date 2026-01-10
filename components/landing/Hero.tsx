@@ -8,16 +8,16 @@ export function Hero() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
-    <section className="py-16 md:py-24 px-4 sm:px-6">
+    <section className="py-10 md:py-20 px-4 sm:px-6">
       <div className="max-w-3xl mx-auto text-center">
         {/* Headline */}
-        <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl font-semibold text-black leading-tight mb-8">
+        <h1 className="font-serif text-3xl md:text-5xl lg:text-6xl font-semibold text-black leading-tight mb-6 md:mb-8">
           Your landlord missed a deadline.<br />
           That&apos;s not your problem.
         </h1>
 
         {/* Body Copy */}
-        <div className="space-y-4 text-gray-600 text-lg mb-10 max-w-2xl mx-auto">
+        <div className="space-y-3 text-gray-600 text-base md:text-lg mb-8 md:mb-10 max-w-2xl mx-auto">
           <p>Check your state law in 30 seconds.</p>
           <p>Generate the letter renters use instead of hiring a lawyer.</p>
         </div>

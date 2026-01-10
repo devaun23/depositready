@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Logo } from "@/components/ui";
+import { Logo, Button } from "@/components/ui";
 import { useWizard, WIZARD_STEPS } from "./WizardContext";
 
 interface WizardShellProps {
@@ -74,8 +74,8 @@ export function WizardShell({ children, onComplete }: WizardShellProps) {
         </div>
       </div>
 
-      {/* Content */}
-      <main className="max-w-3xl mx-auto px-4 py-8">
+      {/* Content - add bottom padding on mobile for sticky button */}
+      <main className="max-w-3xl mx-auto px-4 py-8 pb-24 sm:pb-8">
         <div className="bg-white rounded-lg border border-gray-200 p-6 md:p-8">
           <h1 className="font-serif text-2xl font-semibold text-black mb-2">
             {currentStepInfo.title}
@@ -110,6 +110,15 @@ export function WizardShell({ children, onComplete }: WizardShellProps) {
           </div>
         </div>
       </main>
+
+      {/* Sticky Mobile Check Deadline Button */}
+      <div className="fixed bottom-0 left-0 right-0 p-4 bg-white border-t border-gray-200 sm:hidden z-40">
+        <Link href="/#deadline-checker">
+          <Button className="w-full" size="lg">
+            Check My Deadline
+          </Button>
+        </Link>
+      </div>
     </div>
   );
 }

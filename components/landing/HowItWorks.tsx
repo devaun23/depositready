@@ -21,20 +21,20 @@ const steps = [
 
 export function HowItWorks() {
   return (
-    <section id="how-it-works" className="py-16 px-4 sm:px-6 bg-gray-50">
+    <section id="how-it-works" className="py-10 md:py-16 px-4 sm:px-6 bg-gray-50">
       <div className="max-w-5xl mx-auto">
         {/* Header */}
-        <div className="text-center mb-12">
-          <h2 className="font-serif text-3xl md:text-4xl font-semibold text-black mb-4">
+        <div className="text-center mb-8 md:mb-12">
+          <h2 className="font-serif text-2xl md:text-4xl font-semibold text-black mb-4">
             How it works
           </h2>
         </div>
 
         {/* Steps */}
-        <div className="grid md:grid-cols-3 gap-8 md:gap-12">
+        <div className="grid md:grid-cols-3 gap-6 md:gap-12">
           {steps.map((step) => (
             <div key={step.number} className="text-center md:text-left cursor-default">
-              <div className="font-serif text-4xl md:text-5xl font-semibold text-gray-200 mb-4 select-none">
+              <div className="font-serif text-3xl md:text-5xl font-semibold text-gray-200 mb-3 md:mb-4 select-none">
                 {step.number}
               </div>
               <h3 className="text-lg font-semibold text-black mb-2">
@@ -46,7 +46,7 @@ export function HowItWorks() {
         </div>
 
         {/* Supporting Line */}
-        <p className="text-center text-gray-500 mt-12">
+        <p className="text-center text-gray-500 mt-8 md:mt-12">
           Most renters complete their packet in under 10 minutes.
         </p>
       </div>

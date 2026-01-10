@@ -44,15 +44,15 @@ export default async function StateLandingPage({
 
       <main id="main-content">
         {/* Hero */}
-        <section className="py-16 md:py-24 px-4 sm:px-6">
+        <section className="py-10 md:py-20 px-4 sm:px-6">
           <div className="max-w-3xl mx-auto text-center">
-            <div className="inline-block px-3 py-1 mb-6 text-sm font-medium text-gray-600 bg-gray-100 rounded-full">
+            <div className="inline-block px-3 py-1 mb-4 md:mb-6 text-sm font-medium text-gray-600 bg-gray-100 rounded-full">
               {rules.name} Tenants
             </div>
-            <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl font-semibold text-black leading-tight mb-6">
+            <h1 className="font-serif text-3xl md:text-5xl lg:text-6xl font-semibold text-black leading-tight mb-4 md:mb-6">
               {rules.headline}
             </h1>
-            <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+            <p className="text-base md:text-xl text-gray-600 mb-6 md:mb-8 max-w-2xl mx-auto">
               Generate a complete dispute packet in 10 minutes. Customized
               demand letter, legal deadlines, and small claims guidance based on{" "}
               {rules.statuteTitle}.
@@ -72,7 +72,7 @@ export default async function StateLandingPage({
         </section>
 
         {/* State Law Section */}
-        <section className="py-16 px-4 sm:px-6 bg-gray-50">
+        <section className="py-10 md:py-16 px-4 sm:px-6 bg-gray-50">
           <div className="max-w-4xl mx-auto">
             <Card className="p-8">
               <CardTitle className="text-2xl mb-4">
@@ -113,9 +113,9 @@ export default async function StateLandingPage({
         </section>
 
         {/* Key Stats */}
-        <section className="py-16 px-4 sm:px-6">
+        <section className="py-10 md:py-16 px-4 sm:px-6">
           <div className="max-w-5xl mx-auto">
-            <h2 className="font-serif text-3xl font-semibold text-black mb-8 text-center">
+            <h2 className="font-serif text-2xl md:text-3xl font-semibold text-black mb-6 md:mb-8 text-center">
               {rules.name} Security Deposit Rules
             </h2>
             <div className="grid md:grid-cols-3 gap-6">
@@ -159,9 +159,9 @@ export default async function StateLandingPage({
         </section>
 
         {/* What's Included */}
-        <section id="whats-included" className="py-16 px-4 sm:px-6 bg-gray-50">
+        <section id="whats-included" className="py-10 md:py-16 px-4 sm:px-6 bg-gray-50">
           <div className="max-w-5xl mx-auto">
-            <h2 className="font-serif text-3xl font-semibold text-black mb-8 text-center">
+            <h2 className="font-serif text-2xl md:text-3xl font-semibold text-black mb-6 md:mb-8 text-center">
               Your Complete Dispute Packet
             </h2>
             <div className="grid md:grid-cols-2 gap-6">
@@ -196,9 +196,9 @@ export default async function StateLandingPage({
         </section>
 
         {/* CTA */}
-        <section className="py-16 px-4 sm:px-6 text-center">
+        <section className="py-10 md:py-16 px-4 sm:px-6 text-center">
           <div className="max-w-2xl mx-auto">
-            <h2 className="font-serif text-3xl font-semibold text-black mb-4">
+            <h2 className="font-serif text-2xl md:text-3xl font-semibold text-black mb-4">
               Ready to Get Your Money Back?
             </h2>
             <p className="text-gray-600 mb-8">

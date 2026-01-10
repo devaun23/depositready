@@ -31,14 +31,14 @@ const features = [
 
 export function WhatsIncluded() {
   return (
-    <section id="whats-included" className="py-16 px-4 sm:px-6">
+    <section id="whats-included" className="py-10 md:py-16 px-4 sm:px-6">
       <div className="max-w-5xl mx-auto">
         {/* Header */}
-        <div className="text-center mb-12">
-          <h2 className="font-serif text-3xl md:text-4xl font-semibold text-black mb-4">
+        <div className="text-center mb-8 md:mb-12">
+          <h2 className="font-serif text-2xl md:text-4xl font-semibold text-black mb-4">
             What&apos;s included
           </h2>
-          <p className="text-gray-600 text-lg max-w-2xl mx-auto">
+          <p className="text-gray-600 text-base md:text-lg max-w-2xl mx-auto">
             Everything you need to document your move-out and protect your
             deposit.
           </p>

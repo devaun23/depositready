@@ -2,7 +2,7 @@ import { Card, CardContent, CardTitle } from "@/components/ui";
 
 export function WhatWeDo() {
   return (
-    <section className="py-16 px-4 sm:px-6 bg-gray-50">
+    <section className="py-10 md:py-16 px-4 sm:px-6 bg-gray-50">
       <div className="max-w-5xl mx-auto">
         <div className="grid md:grid-cols-2 gap-6">
           {/* What we do */}

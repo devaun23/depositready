@@ -6,7 +6,7 @@ import { AddressAutocomplete } from "@/components/ui/AddressAutocomplete";
 import { ParsedAddress } from "@/types/google-places";
 
 export function Step3Addresses() {
-  const { data, updateNestedData, setCanProceed } = useWizard();
+  const { data, updateNestedData, updateNestedBatch, setCanProceed } = useWizard();
 
   useEffect(() => {
     const landlordValid =
@@ -31,26 +31,28 @@ export function Step3Addresses() {
     updateNestedData("property", field, value);
   };
 
-  // Handler for landlord address autocomplete
+  // Handler for landlord address autocomplete - uses batch update for speed
   const handleLandlordAddressSelect = useCallback(
     (address: ParsedAddress) => {
-      updateNestedData("landlord", "address", address.streetAddress);
-      updateNestedData("landlord", "city", address.city);
-      updateNestedData("landlord", "zip", address.zip);
-      // Note: state is controlled by stateCode, so we don't update it
+      updateNestedBatch("landlord", {
+        address: address.streetAddress,
+        city: address.city,
+        zip: address.zip,
+      });
     },
-    [updateNestedData]
+    [updateNestedBatch]
   );
 
-  // Handler for property address autocomplete
+  // Handler for property address autocomplete - uses batch update for speed
   const handlePropertyAddressSelect = useCallback(
     (address: ParsedAddress) => {
-      updateNestedData("property", "address", address.streetAddress);
-      updateNestedData("property", "city", address.city);
-      updateNestedData("property", "zip", address.zip);
-      // Note: state is controlled by stateCode, so we don't update it
+      updateNestedBatch("property", {
+        address: address.streetAddress,
+        city: address.city,
+        zip: address.zip,
+      });
     },
-    [updateNestedData]
+    [updateNestedBatch]
   );
 
   return (

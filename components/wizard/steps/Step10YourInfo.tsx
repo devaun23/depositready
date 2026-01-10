@@ -6,16 +6,17 @@ import { AddressAutocomplete } from "@/components/ui/AddressAutocomplete";
 import { ParsedAddress } from "@/types/google-places";
 
 export function Step10YourInfo() {
-  const { data, updateNestedData, setCanProceed } = useWizard();
+  const { data, updateNestedData, updateNestedBatch, setCanProceed } = useWizard();
 
   useEffect(() => {
-    const { name, currentAddress, city, state, zip } = data.tenant;
+    const { name, currentAddress, city, state, zip, phone } = data.tenant;
     setCanProceed(
       name.trim() !== "" &&
         currentAddress.trim() !== "" &&
         city.trim() !== "" &&
         state.trim() !== "" &&
-        zip.trim() !== ""
+        zip.trim() !== "" &&
+        phone.trim() !== ""
     );
   }, [data.tenant, setCanProceed]);
 
@@ -23,15 +24,17 @@ export function Step10YourInfo() {
     updateNestedData("tenant", field, value);
   };
 
-  // Handler for tenant address autocomplete
+  // Handler for tenant address autocomplete - uses batch update for speed
   const handleTenantAddressSelect = useCallback(
     (address: ParsedAddress) => {
-      updateNestedData("tenant", "currentAddress", address.streetAddress);
-      updateNestedData("tenant", "city", address.city);
-      updateNestedData("tenant", "state", address.state);
-      updateNestedData("tenant", "zip", address.zip);
+      updateNestedBatch("tenant", {
+        currentAddress: address.streetAddress,
+        city: address.city,
+        state: address.state,
+        zip: address.zip,
+      });
     },
-    [updateNestedData]
+    [updateNestedBatch]
   );
 
   return (
@@ -149,7 +152,7 @@ export function Step10YourInfo() {
               htmlFor="tenantPhone"
               className="block text-sm font-medium text-gray-700 mb-1"
             >
-              Phone (optional)
+              Phone <span className="text-red-500">*</span>
             </label>
             <input
               type="tel"

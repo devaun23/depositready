@@ -23,6 +23,10 @@ interface WizardContextType {
     nestedKey: string,
     value: unknown
   ) => void;
+  updateNestedBatch: <K extends keyof WizardData>(
+    key: K,
+    updates: Record<string, unknown>
+  ) => void;
   addDeduction: (deduction: Deduction) => void;
   updateDeduction: (id: string, updates: Partial<Deduction>) => void;
   removeDeduction: (id: string) => void;
@@ -91,6 +95,19 @@ export function WizardProvider({
     []
   );
 
+  const updateNestedBatch = useCallback(
+    <K extends keyof WizardData>(key: K, updates: Record<string, unknown>) => {
+      setData((prev) => ({
+        ...prev,
+        [key]: {
+          ...(prev[key] as Record<string, unknown>),
+          ...updates,
+        },
+      }));
+    },
+    []
+  );
+
   const addDeduction = useCallback((deduction: Deduction) => {
     setData((prev) => ({
       ...prev,
@@ -140,6 +157,7 @@ export function WizardProvider({
         totalSteps: WIZARD_STEPS.length,
         updateData,
         updateNestedData,
+        updateNestedBatch,
         addDeduction,
         updateDeduction,
         removeDeduction,

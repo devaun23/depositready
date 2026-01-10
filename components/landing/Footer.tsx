@@ -9,7 +9,7 @@ export function Footer() {
   const isHomepage = pathname === "/";
 
   return (
-    <footer className="py-12 px-4 sm:px-6 border-t border-gray-100">
+    <footer className="py-8 md:py-12 px-4 sm:px-6 border-t border-gray-100">
       <div className="max-w-5xl mx-auto">
         <div className="grid md:grid-cols-3 gap-8">
           {/* Brand */}
