@@ -20,12 +20,19 @@
     "react-dom": "19.2.3",
     "stripe": "^20.1.1"
   },
+  "browserslist": [
+    ">0.3%",
+    "not dead",
+    "iOS >= 12",
+    "Safari >= 12"
+  ],
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
     "@types/google.maps": "^3.58.1",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "autoprefixer": "^10.4.23",
     "eslint": "^9",
     "eslint-config-next": "16.1.1",
     "tailwindcss": "^4",
