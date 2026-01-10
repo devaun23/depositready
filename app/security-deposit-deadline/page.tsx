@@ -86,40 +86,40 @@ export default function SecurityDepositDeadlinePage() {
           Security deposit deadlines vary by state. Select your state for
           specific deadlines, requirements, and penalties:
         </p>
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mt-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 mt-4">
           <Link
             href="/security-deposit-deadline-california"
             className="block p-4 border border-gray-200 rounded-lg hover:border-black hover:bg-gray-50 transition-colors"
           >
-            <span className="font-medium">California</span>
+            <span className="font-medium block">California</span>
             <span className="block text-sm text-gray-500">21-day deadline</span>
           </Link>
           <Link
             href="/security-deposit-deadline-florida"
             className="block p-4 border border-gray-200 rounded-lg hover:border-black hover:bg-gray-50 transition-colors"
           >
-            <span className="font-medium">Florida</span>
+            <span className="font-medium block">Florida</span>
             <span className="block text-sm text-gray-500">15/30-day deadline</span>
           </Link>
           <Link
             href="/security-deposit-deadline-georgia"
             className="block p-4 border border-gray-200 rounded-lg hover:border-black hover:bg-gray-50 transition-colors"
           >
-            <span className="font-medium">Georgia</span>
+            <span className="font-medium block">Georgia</span>
             <span className="block text-sm text-gray-500">30-day deadline</span>
           </Link>
           <Link
             href="/security-deposit-deadline-illinois"
             className="block p-4 border border-gray-200 rounded-lg hover:border-black hover:bg-gray-50 transition-colors"
           >
-            <span className="font-medium">Illinois</span>
+            <span className="font-medium block">Illinois</span>
             <span className="block text-sm text-gray-500">30/45-day deadline</span>
           </Link>
           <Link
             href="/security-deposit-deadline-texas"
             className="block p-4 border border-gray-200 rounded-lg hover:border-black hover:bg-gray-50 transition-colors"
           >
-            <span className="font-medium">Texas</span>
+            <span className="font-medium block">Texas</span>
             <span className="block text-sm text-gray-500">30-day deadline</span>
           </Link>
         </div>
@@ -129,7 +129,7 @@ export default function SecurityDepositDeadlinePage() {
         title="Check Your Deadline Now"
         description="See if your landlord missed the deadline and get your dispute packet ready."
         primaryButton={{
-          text: "Check my deadline and build my packet",
+          text: "Start My Dispute Packet",
           href: "/wizard",
         }}
         secondaryButtons={[

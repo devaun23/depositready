@@ -105,7 +105,7 @@ export default function LandlordKeptDepositPage() {
         title="Ready to Get Your Deposit Back?"
         description="Build a professional dispute packet customized to your state in minutes."
         primaryButton={{
-          text: "Build my dispute packet",
+          text: "Start My Dispute Packet",
           href: "/wizard",
         }}
         secondaryButtons={[

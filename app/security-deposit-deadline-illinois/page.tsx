@@ -25,7 +25,7 @@ export default function IllinoisSecurityDepositDeadlinePage() {
         title="Illinois Security Deposit Deadlines"
         subtitle="What the Law Requires After You Move Out"
         intro="Illinois law sets clear deadlines and documentation rules for returning security deposits. If your landlord misses a deadline or fails to itemize properly, you may have leverage to recover your money."
-        primaryButton={{ text: "Check My Illinois Deadline", href: "/wizard" }}
+        primaryButton={{ text: "Start My Dispute Packet", href: "/wizard" }}
         secondaryButton={{
           text: "See how Illinois deposit disputes work",
           href: "/security-deposit-dispute",
@@ -186,7 +186,7 @@ export default function IllinoisSecurityDepositDeadlinePage() {
         title="Check your Illinois security deposit deadline in 30 seconds"
         description="Know where you stand before taking action. $39 one time · Takes about 10 minutes · Instant download. Typical Illinois deposits range from $1,000–$2,500."
         primaryButton={{
-          text: "Check My Illinois Deadline",
+          text: "Start My Dispute Packet",
           href: "/wizard",
         }}
         secondaryButtons={[

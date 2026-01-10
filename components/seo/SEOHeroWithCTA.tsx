@@ -26,7 +26,7 @@ export function SEOHeroWithCTA({
       <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap mb-8">
         <Link
           href={primaryButton.href}
-          className="inline-block rounded-md bg-black px-6 py-3 text-white font-semibold hover:bg-gray-800 transition text-center"
+          className="inline-block rounded-md bg-black px-8 py-4 text-white font-semibold hover:bg-gray-800 transition text-center shadow-lg text-lg btn-touch"
         >
           {primaryButton.text}
         </Link>

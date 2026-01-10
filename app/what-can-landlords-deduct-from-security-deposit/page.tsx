@@ -25,7 +25,7 @@ export default function WhatCanLandlordsDeductPage() {
         title="What Can Landlords Deduct From a Security Deposit?"
         subtitle="And What They're Not Allowed to Charge You For"
         intro="Landlords can only deduct certain costs from a security deposit. Many charges renters accept are actually improper, exaggerated, or illegal under state law."
-        primaryButton={{ text: "Check My Deposit Situation", href: "/wizard" }}
+        primaryButton={{ text: "Start My Dispute Packet", href: "/wizard" }}
         secondaryButton={{
           text: "See common illegal deductions",
           href: "#cannot-deduct",
@@ -213,7 +213,7 @@ export default function WhatCanLandlordsDeductPage() {
         title="Unsure if your landlord's deductions are valid?"
         description="Check where you stand before escalating. $39 one-time · Takes about 10 minutes · Instant download. Typical deposits range from $1,000–$3,000."
         primaryButton={{
-          text: "Check My Deposit Situation",
+          text: "Start My Dispute Packet",
           href: "/wizard",
         }}
         secondaryButtons={[

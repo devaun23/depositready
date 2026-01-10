@@ -19,14 +19,14 @@ export function SEORelatedResources({ links }: SEORelatedResourcesProps) {
           <Link
             key={index}
             href={link.href}
-            className="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50 hover:border-gray-300 transition-colors group"
+            className="flex items-center justify-between gap-3 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 hover:border-gray-300 transition-colors group"
           >
-            <div>
-              <div className="font-medium text-gray-900 group-hover:text-black">
+            <div className="min-w-0 flex-1">
+              <div className="font-medium text-gray-900 group-hover:text-black truncate">
                 {link.title}
               </div>
               {link.description && (
-                <div className="text-sm text-gray-500 mt-0.5">
+                <div className="text-sm text-gray-500 mt-0.5 truncate">
                   {link.description}
                 </div>
               )}

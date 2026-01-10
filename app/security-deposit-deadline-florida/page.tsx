@@ -25,7 +25,7 @@ export default function FloridaSecurityDepositDeadlinePage() {
         title="Florida Security Deposit Deadlines"
         subtitle="What the Law Requires After You Move Out"
         intro="Florida law sets strict deadlines landlords must follow after you move out. If they miss one, you may have leverage to recover your full deposit."
-        primaryButton={{ text: "Check My Florida Deadline", href: "/wizard" }}
+        primaryButton={{ text: "Start My Dispute Packet", href: "/wizard" }}
         secondaryButton={{
           text: "See how Florida deposit disputes work",
           href: "/security-deposit-dispute",
@@ -188,7 +188,7 @@ export default function FloridaSecurityDepositDeadlinePage() {
         title="Check your Florida security deposit deadline in 30 seconds"
         description="Know where you stand before taking action. $39 one time · Takes about 10 minutes · Instant download. Typical Florida deposits range from $1,000–$3,000."
         primaryButton={{
-          text: "Check My Florida Deadline",
+          text: "Start My Dispute Packet",
           href: "/wizard",
         }}
         secondaryButtons={[

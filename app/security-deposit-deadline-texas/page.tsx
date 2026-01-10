@@ -24,7 +24,7 @@ export default function TexasSecurityDepositDeadlinePage() {
         title="Texas Security Deposit Deadlines"
         subtitle="What the Law Requires After You Move Out"
         intro="Texas law gives landlords a short window to return your deposit or explain deductions. If they miss it, you may have leverage to recover your money."
-        primaryButton={{ text: "Check My Texas Deadline", href: "/wizard" }}
+        primaryButton={{ text: "Start My Dispute Packet", href: "/wizard" }}
         secondaryButton={{
           text: "See how Texas deposit disputes work",
           href: "/security-deposit-dispute",
@@ -168,7 +168,7 @@ export default function TexasSecurityDepositDeadlinePage() {
         title="Check Your Texas Security Deposit Deadline in 30 Seconds"
         description="Know where you stand before taking action. $39 one time · Takes about 10 minutes · Instant download. Typical Texas deposits range from $1,000–$3,000."
         primaryButton={{
-          text: "Check My Texas Deadline",
+          text: "Start My Dispute Packet",
           href: "/wizard",
         }}
         secondaryButtons={[
