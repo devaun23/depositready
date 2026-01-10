@@ -58,6 +58,8 @@ function CheckIcon() {
   return (
     <svg
       className="w-5 h-5 text-black flex-shrink-0 mt-0.5"
+      width="20"
+      height="20"
       fill="none"
       stroke="currentColor"
       viewBox="0 0 24 24"
@@ -76,6 +78,8 @@ function XIcon() {
   return (
     <svg
       className="w-5 h-5 text-gray-400 flex-shrink-0 mt-0.5"
+      width="20"
+      height="20"
       fill="none"
       stroke="currentColor"
       viewBox="0 0 24 24"

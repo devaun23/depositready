@@ -44,6 +44,8 @@ export function Hero() {
           <span className="flex items-center gap-1">
             <svg
               className="w-3 h-3"
+              width="12"
+              height="12"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
