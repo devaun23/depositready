@@ -8,6 +8,12 @@ import { analyzeDeadlines } from "@/lib/state-rules/deadlines";
 import { getStateRulesByCode, FLORIDA, formatLegalDate } from "@/lib/state-rules";
 import { PacketPreviewSection } from "@/components/preview/PacketPreviewSection";
 
+declare global {
+  interface Window {
+    gtag?: (...args: unknown[]) => void;
+  }
+}
+
 function PreviewContent() {
   const [data, setData] = useState<WizardData | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -61,6 +67,13 @@ function PreviewContent() {
       const { url } = await response.json();
 
       if (url) {
+        // Fire Google Ads conversion for checkout initiation
+        window.gtag?.("event", "conversion", {
+          send_to: "AW-17859927660/jtPRCJKB9N4bEOy8o8RC",
+          value: 39.0,
+          currency: "USD",
+        });
+
         window.location.href = url;
       }
     } catch (err) {
