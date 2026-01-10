@@ -40,6 +40,9 @@ export interface StateRules {
   // Marketing/SEO
   headline: string;
   description: string;
+
+  // Demand letter state-specific insert
+  demandLetterInsert: string;
 }
 
 export interface DeadlineAnalysis {

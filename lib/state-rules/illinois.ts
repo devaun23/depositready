@@ -45,4 +45,7 @@ export const ILLINOIS: StateRules = {
   // Marketing
   headline: 'Get Your Security Deposit Back in Illinois',
   description: 'Generate a professional dispute packet under 765 ILCS 710. Illinois landlords must provide an itemized statement within 30 days and return your deposit within 45 days.',
+
+  // Demand letter insert
+  demandLetterInsert: 'Illinois requirements (765 ILCS 710) include deadlines for an itemized statement within 30 days and return of the remaining balance within 45 days. Local ordinances may impose stricter requirements.',
 };

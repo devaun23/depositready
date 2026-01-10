@@ -43,4 +43,7 @@ export const CALIFORNIA: StateRules = {
   // Marketing
   headline: 'Get Your Security Deposit Back in California',
   description: 'Generate a professional dispute packet under California Civil Code 1950.5. California landlords must return your deposit or provide itemized deductions within 21 days.',
+
+  // Demand letter insert
+  demandLetterInsert: 'California law (Civil Code 1950.5) requires the landlord to mail either the full deposit or an itemized statement with any remaining balance within 21 days after move-out.',
 };

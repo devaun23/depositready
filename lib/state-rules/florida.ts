@@ -42,4 +42,7 @@ export const FLORIDA: StateRules = {
   // Marketing
   headline: 'Get Your Security Deposit Back in Florida',
   description: 'Generate a professional dispute packet under Florida Statute 83.49. Florida landlords must return your deposit within 15 days or provide itemized deductions within 30 days.',
+
+  // Demand letter insert
+  demandLetterInsert: 'Under Florida law (F.S. 83.49), if a landlord does not intend to impose a claim, the deposit is due within 15 days. If imposing a claim, the landlord must send notice by certified mail within 30 days, and the tenant has 15 days to object after receiving that notice.',
 };

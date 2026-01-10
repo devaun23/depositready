@@ -43,4 +43,7 @@ export const NEW_YORK: StateRules = {
   // Marketing
   headline: 'Get Your Security Deposit Back in New York',
   description: 'Generate a professional dispute packet under NY General Obligations Law 7-108. New York landlords must return your deposit within 14 days with an itemized statement.',
+
+  // Demand letter insert
+  demandLetterInsert: 'New York law (GOL 7-108) requires the landlord to provide an itemized statement of any deductions and return any remaining portion of the deposit within 14 days after the tenant vacates.',
 };

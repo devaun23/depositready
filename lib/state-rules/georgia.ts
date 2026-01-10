@@ -44,4 +44,7 @@ export const GEORGIA: StateRules = {
   // Marketing
   headline: 'Get Your Security Deposit Back in Georgia',
   description: 'Generate a professional dispute packet under Georgia Code 44-7-34. Georgia landlords must return your deposit within 30 days with an itemized list of deductions.',
+
+  // Demand letter insert
+  demandLetterInsert: 'Georgia law (O.C.G.A. 44-7-34) requires return of the deposit or delivery of a written itemized list of deductions within 30 days after termination and delivery of possession.',
 };

@@ -43,4 +43,7 @@ export const TEXAS: StateRules = {
   // Marketing
   headline: 'Get Your Security Deposit Back in Texas',
   description: 'Generate a professional dispute packet under Texas Property Code 92.103. Texas landlords must return your deposit within 30 days of receiving your forwarding address.',
+
+  // Demand letter insert
+  demandLetterInsert: 'Under Texas law (Property Code 92.103), a landlord must refund the security deposit on or before the 30th day after the tenant surrenders the premises, subject to the forwarding address requirement.',
 };

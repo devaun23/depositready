@@ -9,225 +9,110 @@ import { WizardData } from "@/types/dispute";
 import type { StateRules, DeadlineAnalysis } from "@/lib/state-rules";
 import { analyzeDeadlines } from "@/lib/state-rules";
 
-// Note: React-PDF doesn't support combining multiple Documents.
-// This creates a single comprehensive document with all sections.
-
+// Lawyer-grade styling: Times-Roman throughout, minimal colors, professional layout
 const styles = StyleSheet.create({
-  // Cover Page
-  coverPage: {
-    padding: 50,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  coverTitle: {
-    fontSize: 32,
-    fontFamily: "Helvetica-Bold",
-    textAlign: "center",
-    marginBottom: 20,
+  // Page setup - 0.9 inch margins
+  page: {
+    padding: 65,
+    fontSize: 11,
+    fontFamily: "Times-Roman",
+    lineHeight: 1.4,
     color: "#1f2937",
   },
-  coverSubtitle: {
-    fontSize: 14,
-    textAlign: "center",
-    color: "#6b7280",
-    marginBottom: 60,
-  },
-  coverProperty: {
+
+  // Typography
+  title: {
     fontSize: 16,
+    fontFamily: "Times-Bold",
+    marginBottom: 20,
     textAlign: "center",
-    marginBottom: 10,
-    fontFamily: "Helvetica-Bold",
   },
-  coverInfo: {
-    fontSize: 12,
-    textAlign: "center",
-    color: "#374151",
-    marginBottom: 5,
-  },
-  coverBox: {
-    marginTop: 60,
-    padding: 20,
-    backgroundColor: "#f3f4f6",
-    width: "80%",
-  },
-  coverBoxRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginBottom: 8,
-  },
-  coverBoxLabel: {
+  subtitle: {
     fontSize: 11,
-    color: "#6b7280",
-  },
-  coverBoxValue: {
-    fontSize: 11,
-    fontFamily: "Helvetica-Bold",
-  },
-  coverDisclaimer: {
-    position: "absolute",
-    bottom: 50,
-    left: 50,
-    right: 50,
-    fontSize: 9,
+    fontFamily: "Times-Italic",
+    color: "#4b5563",
     textAlign: "center",
-    color: "#9ca3af",
-  },
-
-  // Table of Contents
-  tocPage: {
-    padding: 50,
-  },
-  tocTitle: {
-    fontSize: 24,
-    fontFamily: "Helvetica-Bold",
     marginBottom: 30,
-    textAlign: "center",
   },
-  tocItem: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    paddingVertical: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: "#e5e7eb",
-  },
-  tocNumber: {
-    width: 30,
-    fontFamily: "Helvetica-Bold",
-    color: "#3b82f6",
-  },
-  tocLabel: {
-    flex: 1,
+  sectionHeader: {
     fontSize: 12,
-  },
-  tocPageNumber: {
-    width: 40,
-    textAlign: "right",
-    color: "#6b7280",
-  },
-
-  // Standard page
-  page: {
-    padding: 50,
-    fontSize: 11,
-    fontFamily: "Helvetica",
-  },
-  pageHeader: {
-    borderBottomWidth: 1,
-    borderBottomColor: "#e5e7eb",
-    paddingBottom: 10,
-    marginBottom: 20,
-  },
-  pageTitle: {
-    fontSize: 18,
-    fontFamily: "Helvetica-Bold",
-    marginBottom: 5,
-  },
-  pageSubtitle: {
-    fontSize: 10,
-    color: "#6b7280",
-  },
-
-  // Content styles
-  section: {
-    marginBottom: 20,
-  },
-  sectionTitle: {
-    fontSize: 13,
-    fontFamily: "Helvetica-Bold",
-    backgroundColor: "#f3f4f6",
-    padding: 8,
+    fontFamily: "Times-Bold",
+    marginTop: 20,
     marginBottom: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: "#d1d5db",
+    paddingBottom: 5,
   },
+  bold: {
+    fontFamily: "Times-Bold",
+  },
+  italic: {
+    fontFamily: "Times-Italic",
+  },
+
+  // Paragraphs
   paragraph: {
     marginBottom: 12,
     lineHeight: 1.5,
-    textAlign: "justify",
-  },
-  bold: {
-    fontFamily: "Helvetica-Bold",
-  },
-  list: {
-    marginLeft: 15,
-    marginBottom: 12,
-  },
-  listItem: {
-    marginBottom: 6,
-    lineHeight: 1.4,
+    textAlign: "left",
   },
 
   // Tables
   table: {
-    marginVertical: 10,
+    marginVertical: 15,
+    borderWidth: 1,
+    borderColor: "#d1d5db",
   },
   tableRow: {
     flexDirection: "row",
     borderBottomWidth: 1,
-    borderBottomColor: "#e5e7eb",
+    borderBottomColor: "#d1d5db",
   },
-  tableHeader: {
-    backgroundColor: "#1f2937",
-  },
-  tableHeaderText: {
-    color: "white",
-    fontFamily: "Helvetica-Bold",
-    fontSize: 9,
-    padding: 8,
+  tableRowLast: {
+    flexDirection: "row",
   },
   tableCell: {
-    fontSize: 9,
     padding: 8,
-    lineHeight: 1.3,
+    fontSize: 10,
+  },
+  tableCellLabel: {
+    width: "40%",
+    padding: 8,
+    fontSize: 10,
+    backgroundColor: "#f9fafb",
+    fontFamily: "Times-Bold",
+  },
+  tableCellValue: {
+    width: "60%",
+    padding: 8,
+    fontSize: 10,
   },
 
-  // Boxes
-  alertBox: {
-    backgroundColor: "#fef2f2",
+  // Simple bordered box (replaces colored boxes)
+  box: {
     borderWidth: 1,
-    borderColor: "#dc2626",
+    borderColor: "#d1d5db",
     padding: 12,
-    marginVertical: 10,
+    marginVertical: 15,
+    backgroundColor: "#f9fafb",
   },
-  alertTitle: {
-    fontFamily: "Helvetica-Bold",
-    color: "#dc2626",
-    marginBottom: 5,
+  boxTitle: {
+    fontFamily: "Times-Bold",
+    fontSize: 11,
+    marginBottom: 8,
   },
-  alertText: {
-    color: "#991b1b",
+  boxText: {
     fontSize: 10,
     lineHeight: 1.4,
   },
-  infoBox: {
-    backgroundColor: "#eff6ff",
-    borderWidth: 1,
-    borderColor: "#3b82f6",
-    padding: 12,
+
+  // Lists
+  list: {
+    marginLeft: 15,
     marginVertical: 10,
   },
-  infoTitle: {
-    fontFamily: "Helvetica-Bold",
-    color: "#1d4ed8",
-    marginBottom: 5,
-  },
-  infoText: {
-    color: "#1e40af",
-    fontSize: 10,
-    lineHeight: 1.4,
-  },
-  successBox: {
-    backgroundColor: "#f0fdf4",
-    borderWidth: 1,
-    borderColor: "#22c55e",
-    padding: 12,
-    marginVertical: 10,
-  },
-  successTitle: {
-    fontFamily: "Helvetica-Bold",
-    color: "#15803d",
-    marginBottom: 5,
-  },
-  successText: {
-    color: "#166534",
+  listItem: {
+    marginBottom: 6,
     fontSize: 10,
     lineHeight: 1.4,
   },
@@ -236,19 +121,54 @@ const styles = StyleSheet.create({
   footer: {
     position: "absolute",
     bottom: 30,
-    left: 50,
-    right: 50,
-    fontSize: 8,
-    color: "#9ca3af",
-    textAlign: "center",
+    left: 65,
+    right: 65,
+    fontSize: 9,
+    color: "#6b7280",
     flexDirection: "row",
     justifyContent: "space-between",
   },
-  footerLeft: {
-    textAlign: "left",
+
+  // Cover page specific
+  coverPage: {
+    padding: 65,
+    justifyContent: "center",
+    alignItems: "center",
   },
-  footerRight: {
-    textAlign: "right",
+  coverTitle: {
+    fontSize: 24,
+    fontFamily: "Times-Bold",
+    textAlign: "center",
+    marginBottom: 10,
+    color: "#1f2937",
+  },
+  coverSubtitle: {
+    fontSize: 12,
+    fontFamily: "Times-Italic",
+    textAlign: "center",
+    color: "#4b5563",
+    marginBottom: 40,
+  },
+  coverProperty: {
+    fontSize: 14,
+    textAlign: "center",
+    marginBottom: 8,
+    fontFamily: "Times-Bold",
+  },
+  coverInfo: {
+    fontSize: 11,
+    textAlign: "center",
+    color: "#4b5563",
+    marginBottom: 4,
+  },
+  coverDisclaimer: {
+    position: "absolute",
+    bottom: 50,
+    left: 65,
+    right: 65,
+    fontSize: 9,
+    textAlign: "center",
+    color: "#6b7280",
   },
 });
 
@@ -273,6 +193,11 @@ function formatCurrency(amount: number): string {
   }).format(amount);
 }
 
+function getTenantLastName(name: string): string {
+  const parts = name.trim().split(" ");
+  return parts[parts.length - 1];
+}
+
 export function FullPacket({ data, stateRules, generatedDate = new Date() }: FullPacketProps) {
   const deadlines = data.moveOutDate
     ? analyzeDeadlines(new Date(data.moveOutDate), stateRules)
@@ -282,141 +207,282 @@ export function FullPacket({ data, stateRules, generatedDate = new Date() }: Ful
   const amountReceived = data.amountReceived || 0;
   const amountOwed = depositAmount - amountReceived;
   const totalDeductions = data.deductions.reduce((sum, d) => sum + d.amount, 0);
+  const tenantLastName = getTenantLastName(data.tenant.name);
 
   const propertyAddress = `${data.property.address}${data.property.unit ? `, ${data.property.unit}` : ""}, ${data.property.city}, ${stateRules.code} ${data.property.zip}`;
   const landlordAddress = `${data.landlord.address}, ${data.landlord.city}, ${data.landlord.state} ${data.landlord.zip}`;
   const tenantAddress = `${data.tenant.currentAddress}, ${data.tenant.city}, ${data.tenant.state} ${data.tenant.zip}`;
 
+  // Calculate response deadline (14 days from generated date)
+  const responseDeadline = new Date(generatedDate);
+  responseDeadline.setDate(responseDeadline.getDate() + 14);
+
   return (
     <Document>
-      {/* COVER PAGE */}
-      <Page size="LETTER" style={styles.coverPage}>
-        <Text style={styles.coverTitle}>Security Deposit{"\n"}Dispute Packet</Text>
-        <Text style={styles.coverSubtitle}>Prepared Under {stateRules.statuteTitle}</Text>
+      {/* PAGE 1: CASE SUMMARY */}
+      <Page size="LETTER" style={styles.page}>
+        <Text style={styles.title}>CASE SUMMARY</Text>
+        <Text style={styles.subtitle}>Security Deposit Dispute</Text>
 
-        <Text style={styles.coverProperty}>{propertyAddress}</Text>
-        <Text style={styles.coverInfo}>{data.tenant.name} vs. {data.landlord.name}</Text>
-        <Text style={styles.coverInfo}>Generated: {formatDate(generatedDate)}</Text>
+        {/* Key Facts Table */}
+        <View style={styles.table}>
+          <View style={styles.tableRow}>
+            <Text style={styles.tableCellLabel}>Tenant</Text>
+            <Text style={styles.tableCellValue}>{data.tenant.name}</Text>
+          </View>
+          <View style={styles.tableRow}>
+            <Text style={styles.tableCellLabel}>Rental Property</Text>
+            <Text style={styles.tableCellValue}>{propertyAddress}</Text>
+          </View>
+          <View style={styles.tableRow}>
+            <Text style={styles.tableCellLabel}>Landlord</Text>
+            <Text style={styles.tableCellValue}>{data.landlord.name}</Text>
+          </View>
+          <View style={styles.tableRow}>
+            <Text style={styles.tableCellLabel}>Move-Out Date</Text>
+            <Text style={styles.tableCellValue}>{deadlines ? formatDate(deadlines.moveOutDate) : "Not specified"}</Text>
+          </View>
+          <View style={styles.tableRow}>
+            <Text style={styles.tableCellLabel}>Security Deposit Paid</Text>
+            <Text style={styles.tableCellValue}>{formatCurrency(depositAmount)}</Text>
+          </View>
+          <View style={styles.tableRow}>
+            <Text style={styles.tableCellLabel}>Deposit Deadline ({stateRules.code})</Text>
+            <Text style={styles.tableCellValue}>{deadlines ? formatDate(deadlines.claimDeadline) : "Not calculated"}</Text>
+          </View>
+          <View style={styles.tableRow}>
+            <Text style={styles.tableCellLabel}>Deductions Received</Text>
+            <Text style={styles.tableCellValue}>{data.deductions.length > 0 ? `Yes (${formatCurrency(totalDeductions)})` : "None"}</Text>
+          </View>
+          <View style={styles.tableRowLast}>
+            <Text style={styles.tableCellLabel}>Status</Text>
+            <Text style={[styles.tableCellValue, { fontFamily: "Times-Bold" }]}>
+              {deadlines?.landlordInViolation ? "DEADLINE MISSED" : "Within Deadlines"}
+            </Text>
+          </View>
+        </View>
 
-        <View style={styles.coverBox}>
-          <View style={styles.coverBoxRow}>
-            <Text style={styles.coverBoxLabel}>Deposit Amount:</Text>
-            <Text style={styles.coverBoxValue}>{formatCurrency(depositAmount)}</Text>
+        {/* What Happened */}
+        <Text style={styles.sectionHeader}>WHAT HAPPENED</Text>
+        <Text style={styles.paragraph}>
+          On {deadlines ? formatDate(deadlines.moveOutDate) : "[move-out date]"}, tenant surrendered the premises at {propertyAddress}.
+          The unit was left in good condition, documented with photographs.
+          {data.deductions.length > 0
+            ? ` Landlord has claimed ${formatCurrency(totalDeductions)} in deductions. Tenant disputes any deductions not supported by the lease, evidence, or exceeding ordinary wear and tear.`
+            : " No itemized deductions have been received from the landlord."
+          }
+        </Text>
+
+        {/* Plain English Legal Summary */}
+        <View style={styles.box}>
+          <Text style={styles.boxText}>
+            Under {stateRules.name} law ({stateRules.statuteTitle}), landlords must return a tenant's security deposit or send written notice of intent to impose a claim within {stateRules.claimDeadline} days.
+            {deadlines?.landlordInViolation && ` That deadline passed on ${formatDate(deadlines.claimDeadline)}.`}
+          </Text>
+        </View>
+
+        {/* Request */}
+        <Text style={styles.sectionHeader}>REQUEST</Text>
+        <Text style={styles.paragraph}>
+          <Text style={styles.bold}>Tenant demands return of {formatCurrency(amountOwed)}</Text> no later than {formatDate(responseDeadline)}.
+        </Text>
+
+        <View style={styles.footer}>
+          <Text>Deposit dispute file - {tenantLastName}</Text>
+          <Text>Page 1</Text>
+        </View>
+      </Page>
+
+      {/* PAGE 2: TIMELINE */}
+      {deadlines && (
+        <Page size="LETTER" style={styles.page}>
+          <Text style={styles.title}>TIMELINE</Text>
+          <Text style={styles.subtitle}>{stateRules.statuteTitle} Deadline Analysis</Text>
+
+          <View style={styles.table}>
+            <View style={styles.tableRow}>
+              <Text style={[styles.tableCell, { width: "50%", fontFamily: "Times-Bold" }]}>Event</Text>
+              <Text style={[styles.tableCell, { width: "30%", fontFamily: "Times-Bold" }]}>Date</Text>
+              <Text style={[styles.tableCell, { width: "20%", fontFamily: "Times-Bold" }]}>Status</Text>
+            </View>
+            <View style={styles.tableRow}>
+              <Text style={[styles.tableCell, { width: "50%" }]}>Move-Out Date</Text>
+              <Text style={[styles.tableCell, { width: "30%" }]}>{formatDate(deadlines.moveOutDate)}</Text>
+              <Text style={[styles.tableCell, { width: "20%" }]}>Day 0</Text>
+            </View>
+            <View style={styles.tableRow}>
+              <Text style={[styles.tableCell, { width: "50%" }]}>{stateRules.returnDeadline}-Day Return Deadline</Text>
+              <Text style={[styles.tableCell, { width: "30%" }]}>{formatDate(deadlines.returnDeadline)}</Text>
+              <Text style={[styles.tableCell, { width: "20%" }]}>{deadlines.returnDeadlinePassed ? "PASSED" : `${deadlines.daysUntilReturnDeadline} days`}</Text>
+            </View>
+            <View style={styles.tableRow}>
+              <Text style={[styles.tableCell, { width: "50%" }]}>{stateRules.claimDeadline}-Day Claim Deadline</Text>
+              <Text style={[styles.tableCell, { width: "30%" }]}>{formatDate(deadlines.claimDeadline)}</Text>
+              <Text style={[styles.tableCell, { width: "20%" }]}>{deadlines.claimDeadlinePassed ? "PASSED" : `${deadlines.daysUntilClaimDeadline} days`}</Text>
+            </View>
+            <View style={styles.tableRowLast}>
+              <Text style={[styles.tableCell, { width: "50%" }]}>Today</Text>
+              <Text style={[styles.tableCell, { width: "30%" }]}>{formatDate(deadlines.today)}</Text>
+              <Text style={[styles.tableCell, { width: "20%" }]}>Day {deadlines.daysSinceMoveOut}</Text>
+            </View>
           </View>
-          <View style={styles.coverBoxRow}>
-            <Text style={styles.coverBoxLabel}>Amount Owed:</Text>
-            <Text style={[styles.coverBoxValue, { color: "#15803d" }]}>{formatCurrency(amountOwed)}</Text>
-          </View>
-          {deadlines && (
-            <View style={styles.coverBoxRow}>
-              <Text style={styles.coverBoxLabel}>Landlord Status:</Text>
-              <Text style={[styles.coverBoxValue, { color: deadlines.landlordInViolation ? "#dc2626" : "#6b7280" }]}>
-                {deadlines.landlordInViolation ? "IN VIOLATION" : "Within Deadlines"}
+
+          {deadlines.landlordInViolation && (
+            <View style={styles.box}>
+              <Text style={styles.boxTitle}>DEADLINE VIOLATION</Text>
+              <Text style={styles.boxText}>
+                Based on the timeline above, the landlord has failed to comply with {stateRules.statuteTitle}.
+                Under {stateRules.name} law, this failure may result in the landlord forfeiting the right to impose any claim on the deposit.
               </Text>
             </View>
           )}
-        </View>
 
-        <Text style={styles.coverDisclaimer}>
-          This packet was prepared using DepositReady.co and does not constitute legal advice.
-          Consult a licensed attorney for complex legal matters.
-        </Text>
-      </Page>
-
-      {/* TABLE OF CONTENTS */}
-      <Page size="LETTER" style={styles.page}>
-        <Text style={styles.tocTitle}>Table of Contents</Text>
-
-        {[
-          { num: "1", label: "Demand Letter", desc: "Formal demand for deposit return" },
-          { num: "2", label: "Legal Timeline", desc: `${stateRules.name} deadline analysis` },
-          { num: "3", label: "Deductions Summary", desc: "Line-by-line dispute table" },
-          { num: "4", label: "Evidence Checklist", desc: "Documentation to gather" },
-          { num: "5", label: "Small Claims Guide", desc: "Court filing instructions" },
-          { num: "6", label: stateRules.statuteTitle, desc: "Full legal reference" },
-        ].map((item, i) => (
-          <View key={i} style={styles.tocItem}>
-            <Text style={styles.tocNumber}>{item.num}</Text>
-            <View style={{ flex: 1 }}>
-              <Text style={[styles.tocLabel, styles.bold]}>{item.label}</Text>
-              <Text style={[styles.tocLabel, { color: "#6b7280", fontSize: 10 }]}>{item.desc}</Text>
-            </View>
+          <Text style={styles.sectionHeader}>{stateRules.name} Requirements</Text>
+          <View style={styles.list}>
+            <Text style={styles.listItem}>1. If NO deductions: Landlord must return full deposit within {stateRules.returnDeadline} days</Text>
+            <Text style={styles.listItem}>2. If claiming deductions: Landlord must send {stateRules.certifiedMailRequired ? "certified mail " : ""}notice within {stateRules.claimDeadline} days</Text>
+            <Text style={styles.listItem}>3. Notice must itemize each deduction with specific amounts</Text>
+            <Text style={styles.listItem}>4. Failure to comply: Landlord may forfeit right to claim any deductions</Text>
+            <Text style={styles.listItem}>5. Bad faith retention: Tenant may recover {stateRules.damagesDescription}</Text>
           </View>
-        ))}
+
+          <View style={styles.footer}>
+            <Text>Deposit dispute file - {tenantLastName}</Text>
+            <Text>Page 2</Text>
+          </View>
+        </Page>
+      )}
+
+      {/* PAGE 3: EVIDENCE INDEX */}
+      <Page size="LETTER" style={styles.page}>
+        <Text style={styles.title}>EVIDENCE INDEX</Text>
+        <Text style={styles.subtitle}>Supporting Documentation</Text>
+
+        <Text style={styles.paragraph}>
+          The following exhibits support this dispute. Gather available documentation before sending the demand letter or filing in court.
+        </Text>
+
+        <View style={styles.table}>
+          <View style={styles.tableRow}>
+            <Text style={[styles.tableCell, { width: "15%", fontFamily: "Times-Bold" }]}>Exhibit</Text>
+            <Text style={[styles.tableCell, { width: "45%", fontFamily: "Times-Bold" }]}>Description</Text>
+            <Text style={[styles.tableCell, { width: "40%", fontFamily: "Times-Bold" }]}>Status</Text>
+          </View>
+          <View style={styles.tableRow}>
+            <Text style={[styles.tableCell, { width: "15%" }]}>A</Text>
+            <Text style={[styles.tableCell, { width: "45%" }]}>Lease Agreement</Text>
+            <Text style={[styles.tableCell, { width: "40%" }]}>Shows deposit amount and terms</Text>
+          </View>
+          <View style={styles.tableRow}>
+            <Text style={[styles.tableCell, { width: "15%" }]}>B</Text>
+            <Text style={[styles.tableCell, { width: "45%" }]}>Security Deposit Receipt</Text>
+            <Text style={[styles.tableCell, { width: "40%" }]}>Proof of payment</Text>
+          </View>
+          <View style={styles.tableRow}>
+            <Text style={[styles.tableCell, { width: "15%" }]}>C</Text>
+            <Text style={[styles.tableCell, { width: "45%" }]}>Move-Out Photos/Videos</Text>
+            <Text style={[styles.tableCell, { width: "40%" }]}>Dated condition documentation</Text>
+          </View>
+          <View style={styles.tableRow}>
+            <Text style={[styles.tableCell, { width: "15%" }]}>D</Text>
+            <Text style={[styles.tableCell, { width: "45%" }]}>Communication Records</Text>
+            <Text style={[styles.tableCell, { width: "40%" }]}>Emails, texts, letters</Text>
+          </View>
+          <View style={styles.tableRow}>
+            <Text style={[styles.tableCell, { width: "15%" }]}>E</Text>
+            <Text style={[styles.tableCell, { width: "45%" }]}>Landlord's Deduction Notice</Text>
+            <Text style={[styles.tableCell, { width: "40%" }]}>{data.deductions.length > 0 ? "Received" : "Not received"}</Text>
+          </View>
+          <View style={styles.tableRowLast}>
+            <Text style={[styles.tableCell, { width: "15%" }]}>F</Text>
+            <Text style={[styles.tableCell, { width: "45%" }]}>Move-In Inspection Report</Text>
+            <Text style={[styles.tableCell, { width: "40%" }]}>Original condition baseline</Text>
+          </View>
+        </View>
+
+        <View style={styles.box}>
+          <Text style={styles.boxTitle}>DOCUMENTATION TIPS</Text>
+          <Text style={styles.boxText}>
+            - Make copies of everything before submitting{"\n"}
+            - Photos should have visible dates/timestamps{"\n"}
+            - Organize evidence chronologically{"\n"}
+            - Keep originals safe; submit copies to court
+          </Text>
+        </View>
+
+        <View style={styles.footer}>
+          <Text>Deposit dispute file - {tenantLastName}</Text>
+          <Text>Page 3</Text>
+        </View>
       </Page>
 
-      {/* DEMAND LETTER */}
+      {/* PAGE 4: DEMAND LETTER */}
       <Page size="LETTER" style={styles.page}>
-        <View style={styles.pageHeader}>
-          <Text style={styles.pageTitle}>Section 1: Demand Letter</Text>
-          <Text style={styles.pageSubtitle}>Send via certified mail with return receipt requested</Text>
-        </View>
+        <Text style={styles.title}>DEMAND LETTER</Text>
+        <Text style={styles.subtitle}>Send via certified mail with return receipt requested</Text>
 
         {/* Sender Info */}
-        <View style={{ marginBottom: 15 }}>
+        <View style={{ marginBottom: 20 }}>
           <Text>{data.tenant.name}</Text>
           <Text>{tenantAddress}</Text>
           {data.tenant.email && <Text>{data.tenant.email}</Text>}
         </View>
 
-        <Text style={{ marginBottom: 15 }}>{formatDate(generatedDate)}</Text>
+        <Text style={{ marginBottom: 20 }}>{formatDate(generatedDate)}</Text>
 
         {/* Recipient */}
-        <View style={{ marginBottom: 15 }}>
+        <View style={{ marginBottom: 20 }}>
           <Text>{data.landlord.name}</Text>
           <Text>{landlordAddress}</Text>
         </View>
 
-        <Text style={[styles.bold, { marginBottom: 15 }]}>
-          RE: DEMAND FOR RETURN OF SECURITY DEPOSIT - {propertyAddress}
+        <Text style={[styles.bold, { marginBottom: 20 }]}>
+          Re: Security deposit return for {propertyAddress}
         </Text>
 
-        <Text style={{ marginBottom: 10 }}>Dear {data.landlord.name},</Text>
+        <Text style={{ marginBottom: 15 }}>Dear {data.landlord.name},</Text>
 
         <Text style={styles.paragraph}>
-          This letter serves as formal demand for the return of my security deposit in the amount of{" "}
-          <Text style={styles.bold}>{formatCurrency(depositAmount)}</Text>, which I paid at the commencement of my tenancy at the above-referenced property.
-          {deadlines && ` I vacated the premises on ${formatDate(deadlines.moveOutDate)}.`}
+          I am writing regarding the security deposit for {propertyAddress}, which I vacated on {deadlines ? formatDate(deadlines.moveOutDate) : "[move-out date]"}.
+          The security deposit paid was {formatCurrency(depositAmount)}.
         </Text>
 
         <Text style={styles.paragraph}>
-          Under <Text style={styles.bold}>{stateRules.statuteTitle}</Text>, a landlord must either return the tenant's security deposit within{" "}
-          <Text style={styles.bold}>{stateRules.returnDeadline} days</Text> of the tenant vacating the premises, or, if the landlord intends to impose a claim on the deposit, provide the tenant with written notice{stateRules.certifiedMailRequired ? " by certified mail" : ""} within{" "}
-          <Text style={styles.bold}>{stateRules.claimDeadline} days</Text> stating the landlord's intention to impose a claim and the reason for imposing the claim.
+          This letter serves two purposes: (1) to request prompt return of the amount owed, and (2) to create a written record of the facts, timeline, and documentation supporting my position.
         </Text>
 
-        {deadlines?.landlordInViolation && (
-          <View style={styles.alertBox}>
-            <Text style={styles.alertTitle}>DEADLINE VIOLATION</Text>
-            <Text style={styles.alertText}>
-              {deadlines.violationType === "both" && `Both the ${stateRules.returnDeadline}-day return deadline and ${stateRules.claimDeadline}-day claim deadline have passed without proper action.`}
-              {deadlines.violationType === "return" && `The ${stateRules.returnDeadline}-day deadline to return the deposit (when no deductions are claimed) has passed.`}
-              {deadlines.violationType === "claim" && `The ${stateRules.claimDeadline}-day deadline to provide written notice of intent to claim deductions has passed.`}
-            </Text>
-          </View>
-        )}
+        <Text style={styles.paragraph}>
+          <Text style={styles.bold}>Enclosed please find a summary of facts and supporting documentation.</Text>
+        </Text>
+
+        <Text style={styles.sectionHeader}>FACTS AND DOCUMENTATION</Text>
+        <Text style={styles.paragraph}>
+          The unit was surrendered on {deadlines ? formatDate(deadlines.moveOutDate) : "[move-out date]"}. I documented the condition with dated photographs and a room-by-room evidence log, included in this packet.
+          Any deduction must be supported by an itemized statement and documentation connecting claimed damage beyond ordinary wear and tear.
+        </Text>
+
+        {/* State-specific insert */}
+        <Text style={styles.paragraph}>
+          <Text style={styles.italic}>{stateRules.demandLetterInsert}</Text>
+        </Text>
 
         {data.deductions.length > 0 && (
           <Text style={styles.paragraph}>
-            I have received notice of deductions totaling <Text style={styles.bold}>{formatCurrency(totalDeductions)}</Text>.
-            I dispute these deductions as detailed in the attached Deductions Summary.
+            I have received notice of deductions totaling {formatCurrency(totalDeductions)}. I dispute these deductions as detailed in the attached Deductions Summary.
           </Text>
         )}
 
+        <Text style={styles.sectionHeader}>REQUEST</Text>
         <Text style={styles.paragraph}>
-          {stateRules.statuteTitle} provides that if a landlord fails to comply with the requirements of this section, the landlord forfeits the right to impose a claim upon the security deposit. Furthermore, if the failure to return the deposit is found to be in bad faith, I may be entitled to{" "}
-          <Text style={styles.bold}>{stateRules.damagesDescription}</Text> of the deposit wrongfully withheld, plus court costs and reasonable attorney's fees.
+          Please return {formatCurrency(amountOwed)} no later than {formatDate(responseDeadline)}.
+        </Text>
+        <Text style={styles.paragraph}>
+          If you believe any deduction is appropriate, provide a corrected itemized statement with supporting documentation.
         </Text>
 
-        <View style={styles.infoBox}>
-          <Text style={styles.infoTitle}>DEMAND</Text>
-          <Text style={styles.infoText}>
-            I hereby demand that you return my security deposit in the amount of {formatCurrency(amountOwed)} within fourteen (14) days of the date of this letter.
-          </Text>
-        </View>
-
+        <Text style={styles.sectionHeader}>NEXT STEPS</Text>
         <Text style={styles.paragraph}>
-          If I do not receive the full amount owed within the stated timeframe, I will have no choice but to pursue all available legal remedies, including but not limited to filing a claim in small claims court.
+          If I do not receive a timely response, I will proceed with the next appropriate escalation step, which may include a formal complaint or small claims filing.
         </Text>
 
         <View style={{ marginTop: 30 }}>
@@ -424,335 +490,193 @@ export function FullPacket({ data, stateRules, generatedDate = new Date() }: Ful
           <Text style={{ marginTop: 40 }}>{data.tenant.name}</Text>
         </View>
 
+        <Text style={{ marginTop: 20, fontSize: 10, fontFamily: "Times-Italic" }}>
+          Enclosures: Dispute file and exhibits
+        </Text>
+
         <View style={styles.footer}>
-          <Text>DepositReady.co - Not legal advice</Text>
-          <Text>Page 3</Text>
+          <Text>Deposit dispute file - {tenantLastName}</Text>
+          <Text>Page 4</Text>
         </View>
       </Page>
 
-      {/* TIMELINE PAGE */}
-      {deadlines && (
-        <Page size="LETTER" style={styles.page}>
-          <View style={styles.pageHeader}>
-            <Text style={styles.pageTitle}>Section 2: Legal Timeline</Text>
-            <Text style={styles.pageSubtitle}>{stateRules.statuteTitle} Deadline Analysis</Text>
-          </View>
-
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Key Dates</Text>
-            <View style={styles.table}>
-              <View style={[styles.tableRow, styles.tableHeader]}>
-                <View style={{ width: "40%" }}><Text style={styles.tableHeaderText}>Event</Text></View>
-                <View style={{ width: "30%" }}><Text style={styles.tableHeaderText}>Date</Text></View>
-                <View style={{ width: "30%" }}><Text style={styles.tableHeaderText}>Status</Text></View>
-              </View>
-              <View style={styles.tableRow}>
-                <View style={{ width: "40%" }}><Text style={styles.tableCell}>Move-Out Date</Text></View>
-                <View style={{ width: "30%" }}><Text style={styles.tableCell}>{formatDate(deadlines.moveOutDate)}</Text></View>
-                <View style={{ width: "30%" }}><Text style={styles.tableCell}>Day 0</Text></View>
-              </View>
-              <View style={styles.tableRow}>
-                <View style={{ width: "40%" }}><Text style={styles.tableCell}>{stateRules.returnDeadline}-Day Return Deadline</Text></View>
-                <View style={{ width: "30%" }}><Text style={styles.tableCell}>{formatDate(deadlines.returnDeadline)}</Text></View>
-                <View style={{ width: "30%" }}>
-                  <Text style={[styles.tableCell, { color: deadlines.returnDeadlinePassed ? "#dc2626" : "#15803d" }]}>
-                    {deadlines.returnDeadlinePassed ? "PASSED" : `${deadlines.daysUntilReturnDeadline} days left`}
-                  </Text>
-                </View>
-              </View>
-              <View style={styles.tableRow}>
-                <View style={{ width: "40%" }}><Text style={styles.tableCell}>{stateRules.claimDeadline}-Day Claim Deadline</Text></View>
-                <View style={{ width: "30%" }}><Text style={styles.tableCell}>{formatDate(deadlines.claimDeadline)}</Text></View>
-                <View style={{ width: "30%" }}>
-                  <Text style={[styles.tableCell, { color: deadlines.claimDeadlinePassed ? "#dc2626" : "#15803d" }]}>
-                    {deadlines.claimDeadlinePassed ? "PASSED" : `${deadlines.daysUntilClaimDeadline} days left`}
-                  </Text>
-                </View>
-              </View>
-              <View style={styles.tableRow}>
-                <View style={{ width: "40%" }}><Text style={styles.tableCell}>Today</Text></View>
-                <View style={{ width: "30%" }}><Text style={styles.tableCell}>{formatDate(deadlines.today)}</Text></View>
-                <View style={{ width: "30%" }}><Text style={styles.tableCell}>Day {deadlines.daysSinceMoveOut}</Text></View>
-              </View>
-            </View>
-          </View>
-
-          {deadlines.landlordInViolation && (
-            <View style={styles.alertBox}>
-              <Text style={styles.alertTitle}>LANDLORD IN VIOLATION</Text>
-              <Text style={styles.alertText}>
-                Based on the timeline above, your landlord has failed to comply with {stateRules.statuteTitle}.
-                Under {stateRules.name} law, this failure may result in your landlord forfeiting the right to impose any claim on your deposit.
-              </Text>
-            </View>
-          )}
-
-          <View style={styles.infoBox}>
-            <Text style={styles.infoTitle}>{stateRules.statuteTitle} Requirements</Text>
-            <View style={styles.list}>
-              <Text style={styles.listItem}>• If NO deductions: Landlord must return full deposit within {stateRules.returnDeadline} days</Text>
-              <Text style={styles.listItem}>• If claiming deductions: Landlord must send {stateRules.certifiedMailRequired ? "certified mail " : ""}notice within {stateRules.claimDeadline} days</Text>
-              <Text style={styles.listItem}>• Notice must itemize each deduction with specific amounts</Text>
-              <Text style={styles.listItem}>• Failure to comply: Landlord forfeits right to claim any deductions</Text>
-              <Text style={styles.listItem}>• Bad faith retention: Tenant may recover {stateRules.damagesDescription}</Text>
-            </View>
-          </View>
-
-          <View style={styles.footer}>
-            <Text>DepositReady.co - Not legal advice</Text>
-            <Text>Page 4</Text>
-          </View>
-        </Page>
-      )}
-
-      {/* DEDUCTIONS TABLE */}
+      {/* PAGE 5: DEDUCTIONS SUMMARY */}
       <Page size="LETTER" style={styles.page}>
-        <View style={styles.pageHeader}>
-          <Text style={styles.pageTitle}>Section 3: Deductions Summary</Text>
-          <Text style={styles.pageSubtitle}>Line-by-Line Analysis of Claimed Deductions</Text>
-        </View>
+        <Text style={styles.title}>DEDUCTIONS SUMMARY</Text>
+        <Text style={styles.subtitle}>Line-by-Line Analysis of Claimed Deductions</Text>
 
         {data.deductions.length > 0 ? (
           <>
             <View style={styles.table}>
-              <View style={[styles.tableRow, styles.tableHeader]}>
-                <View style={{ width: "25%" }}><Text style={styles.tableHeaderText}>Deduction</Text></View>
-                <View style={{ width: "15%" }}><Text style={styles.tableHeaderText}>Amount</Text></View>
-                <View style={{ width: "60%" }}><Text style={styles.tableHeaderText}>Your Dispute</Text></View>
+              <View style={styles.tableRow}>
+                <Text style={[styles.tableCell, { width: "25%", fontFamily: "Times-Bold" }]}>Deduction</Text>
+                <Text style={[styles.tableCell, { width: "15%", fontFamily: "Times-Bold" }]}>Amount</Text>
+                <Text style={[styles.tableCell, { width: "60%", fontFamily: "Times-Bold" }]}>Dispute Reason</Text>
               </View>
               {data.deductions.map((d, i) => (
-                <View key={i} style={[styles.tableRow, i % 2 === 1 ? { backgroundColor: "#f9fafb" } : {}]}>
-                  <View style={{ width: "25%" }}><Text style={styles.tableCell}>{d.description}</Text></View>
-                  <View style={{ width: "15%" }}><Text style={[styles.tableCell, { color: "#dc2626" }]}>{formatCurrency(d.amount)}</Text></View>
-                  <View style={{ width: "60%" }}><Text style={styles.tableCell}>{d.dispute || "Disputed"}</Text></View>
+                <View key={i} style={i === data.deductions.length - 1 ? styles.tableRowLast : styles.tableRow}>
+                  <Text style={[styles.tableCell, { width: "25%" }]}>{d.description}</Text>
+                  <Text style={[styles.tableCell, { width: "15%" }]}>{formatCurrency(d.amount)}</Text>
+                  <Text style={[styles.tableCell, { width: "60%" }]}>{d.dispute || "Disputed"}</Text>
                 </View>
               ))}
-              <View style={[styles.tableRow, { backgroundColor: "#fef2f2" }]}>
-                <View style={{ width: "25%" }}><Text style={[styles.tableCell, styles.bold]}>TOTAL</Text></View>
-                <View style={{ width: "15%" }}><Text style={[styles.tableCell, styles.bold, { color: "#dc2626" }]}>{formatCurrency(totalDeductions)}</Text></View>
-                <View style={{ width: "60%" }}><Text style={styles.tableCell}></Text></View>
-              </View>
             </View>
 
-            <View style={styles.successBox}>
-              <Text style={styles.successTitle}>Financial Summary</Text>
-              <Text style={styles.successText}>
+            <View style={styles.box}>
+              <Text style={styles.boxTitle}>FINANCIAL SUMMARY</Text>
+              <Text style={styles.boxText}>
                 Original Deposit: {formatCurrency(depositAmount)}{"\n"}
                 Disputed Deductions: ({formatCurrency(totalDeductions)}){"\n"}
                 {amountReceived > 0 ? `Already Received: ${formatCurrency(amountReceived)}\n` : ""}
-                <Text style={styles.bold}>Amount Owed to You: {formatCurrency(amountOwed)}</Text>
+                <Text style={styles.bold}>Amount Owed: {formatCurrency(amountOwed)}</Text>
               </Text>
             </View>
           </>
         ) : (
-          <View style={styles.infoBox}>
-            <Text style={styles.infoTitle}>No Itemized Deductions Received</Text>
-            <Text style={styles.infoText}>
-              Your landlord did not provide itemized deductions. Under {stateRules.statuteTitle}, if the landlord intends to impose a claim on the security deposit, they must provide written notice{stateRules.certifiedMailRequired ? " by certified mail" : ""} within {stateRules.claimDeadline} days of the tenant vacating the premises, specifying the reason for imposing the claim.
+          <View style={styles.box}>
+            <Text style={styles.boxTitle}>NO ITEMIZED DEDUCTIONS RECEIVED</Text>
+            <Text style={styles.boxText}>
+              The landlord did not provide itemized deductions. Under {stateRules.statuteTitle}, if the landlord intends to impose a claim on the security deposit, they must provide written notice{stateRules.certifiedMailRequired ? " by certified mail" : ""} within {stateRules.claimDeadline} days of the tenant vacating, specifying the reason for imposing the claim.
               {"\n\n"}
-              Failure to provide this notice means the landlord forfeits any right to claim deductions from your deposit.
+              Failure to provide this notice means the landlord may forfeit any right to claim deductions from the deposit.
             </Text>
           </View>
         )}
 
         <View style={styles.footer}>
-          <Text>DepositReady.co - Not legal advice</Text>
+          <Text>Deposit dispute file - {tenantLastName}</Text>
           <Text>Page 5</Text>
         </View>
       </Page>
 
-      {/* EVIDENCE CHECKLIST */}
+      {/* PAGE 6: STATE LAW KEY POINTS */}
       <Page size="LETTER" style={styles.page}>
-        <View style={styles.pageHeader}>
-          <Text style={styles.pageTitle}>Section 4: Evidence Checklist</Text>
-          <Text style={styles.pageSubtitle}>Documents to Strengthen Your Claim</Text>
+        <Text style={styles.title}>{stateRules.statuteTitle}</Text>
+        <Text style={styles.subtitle}>Security Deposit Law - Key Points</Text>
+
+        <Text style={styles.sectionHeader}>Deadline Requirements</Text>
+        <View style={styles.list}>
+          <Text style={styles.listItem}>- Return deadline: {stateRules.returnDeadline} days after tenant vacates (if no deductions)</Text>
+          <Text style={styles.listItem}>- Claim deadline: {stateRules.claimDeadline} days to send written notice of deductions</Text>
+          {stateRules.certifiedMailRequired && <Text style={styles.listItem}>- Notice method: Certified mail required</Text>}
         </View>
 
+        <Text style={styles.sectionHeader}>Itemization Requirements</Text>
         <Text style={styles.paragraph}>
-          Gathering strong evidence is crucial for recovering your security deposit. Review this checklist and gather any documentation you have before sending your demand letter or filing in court.
+          {stateRules.itemizedDeductionsRequired
+            ? `${stateRules.name} requires landlords to provide an itemized statement of all deductions, including specific amounts for each item claimed.`
+            : `${stateRules.name} law governs what deductions landlords may claim from security deposits.`
+          }
         </Text>
 
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Essential Documents</Text>
-          <View style={styles.list}>
-            <Text style={styles.listItem}>☐ Lease Agreement (showing deposit amount and terms)</Text>
-            <Text style={styles.listItem}>☐ Proof of Deposit Payment (check, bank statement, receipt)</Text>
-            <Text style={styles.listItem}>☐ Move-In Inspection Report</Text>
-            <Text style={styles.listItem}>☐ Move-Out Inspection Report</Text>
-          </View>
-        </View>
+        <Text style={styles.sectionHeader}>Penalty for Noncompliance</Text>
+        <Text style={styles.paragraph}>
+          If the landlord fails to comply with {stateRules.name} security deposit law, they may forfeit the right to impose any claim on the deposit.
+          The tenant may be entitled to recover the full deposit amount.
+        </Text>
 
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Photo & Video Evidence</Text>
-          <View style={styles.list}>
-            <Text style={styles.listItem}>☐ Move-In Photos/Videos (dated)</Text>
-            <Text style={styles.listItem}>☐ Move-Out Photos/Videos (dated)</Text>
-          </View>
-        </View>
-
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Communication Records</Text>
-          <View style={styles.list}>
-            <Text style={styles.listItem}>☐ Landlord's Deduction Notice (if received)</Text>
-            <Text style={styles.listItem}>☐ Email/Text Communications</Text>
-            <Text style={styles.listItem}>☐ Certified Mail Records</Text>
-          </View>
-        </View>
-
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Supporting Documents</Text>
-          <View style={styles.list}>
-            <Text style={styles.listItem}>☐ Cleaning Receipts</Text>
-            <Text style={styles.listItem}>☐ Repair Receipts</Text>
-            <Text style={styles.listItem}>☐ Utility Final Bills</Text>
-            <Text style={styles.listItem}>☐ Witness Statements</Text>
-          </View>
-        </View>
-
-        <View style={styles.infoBox}>
-          <Text style={styles.infoTitle}>Tips</Text>
-          <Text style={styles.infoText}>
-            • Make copies of everything before submitting{"\n"}
-            • Photos should have visible dates/timestamps{"\n"}
-            • Organize evidence chronologically{"\n"}
-            • Keep originals safe; submit copies to court
+        <View style={styles.box}>
+          <Text style={styles.boxTitle}>BAD FAITH DAMAGES</Text>
+          <Text style={styles.boxText}>
+            {stateRules.name} courts may allow tenants to recover {stateRules.damagesDescription} when landlords act in bad faith.
+            Bad faith includes knowingly making false claims, refusing to return deposits without legitimate reason, or deliberately ignoring statutory requirements.
+            {stateRules.additionalDamages && `\n\nAdditional remedies: ${stateRules.additionalDamages}`}
           </Text>
         </View>
 
+        <Text style={styles.sectionHeader}>Full Statute Reference</Text>
+        <Text style={styles.paragraph}>
+          For the complete text of {stateRules.statuteTitle}, visit:{"\n"}
+          {stateRules.statuteUrl}
+        </Text>
+
         <View style={styles.footer}>
-          <Text>DepositReady.co - Not legal advice</Text>
+          <Text>Deposit dispute file - {tenantLastName}</Text>
           <Text>Page 6</Text>
         </View>
       </Page>
 
-      {/* SMALL CLAIMS GUIDE */}
+      {/* PAGE 7: MAILING & FOLLOW-UP PROTOCOL */}
       <Page size="LETTER" style={styles.page}>
-        <View style={styles.pageHeader}>
-          <Text style={styles.pageTitle}>Section 5: Small Claims Court Guide</Text>
-          <Text style={styles.pageSubtitle}>{stateRules.name} Filing Instructions</Text>
-        </View>
+        <Text style={styles.title}>MAILING & FOLLOW-UP PROTOCOL</Text>
+        <Text style={styles.subtitle}>Step-by-Step Instructions</Text>
 
-        <View style={amountOwed <= stateRules.maxSmallClaims ? styles.successBox : styles.alertBox}>
-          <Text style={amountOwed <= stateRules.maxSmallClaims ? styles.successTitle : styles.alertTitle}>
-            {amountOwed <= stateRules.maxSmallClaims ? "Eligible for Small Claims" : "May Exceed Limit"}
-          </Text>
-          <Text style={amountOwed <= stateRules.maxSmallClaims ? styles.successText : styles.alertText}>
-            Your claim of {formatCurrency(amountOwed)} is {amountOwed <= stateRules.maxSmallClaims ? "within" : "may exceed"} {stateRules.name}'s {formatCurrency(stateRules.maxSmallClaims)} small claims limit.
-            {stateRules.smallClaimsNote && ` Note: ${stateRules.smallClaimsNote}`}
-          </Text>
-        </View>
+        <Text style={styles.sectionHeader}>Step 1: Prepare Your Packet</Text>
+        <Text style={styles.paragraph}>
+          Print the demand letter and all supporting documentation. Make copies of everything for your records.
+          Organize documents in exhibit order (A, B, C, etc.).
+        </Text>
 
-        <View style={styles.section}>
-          <Text style={[styles.bold, { marginBottom: 10 }]}>Step 1: Send Demand Letter</Text>
-          <Text style={styles.paragraph}>
-            Send the demand letter in this packet via certified mail. Keep the receipt. Wait 14 days for response.
-          </Text>
-        </View>
+        <Text style={styles.sectionHeader}>Step 2: Send via Certified Mail</Text>
+        <Text style={styles.paragraph}>
+          Go to your local post office and send via certified mail with return receipt requested.
+          This provides proof of delivery that is admissible in court. Keep the tracking number and receipt.
+          {stateRules.certifiedMailRequired && ` Note: ${stateRules.name} law requires certified mail for deposit disputes.`}
+        </Text>
 
-        <View style={styles.section}>
-          <Text style={[styles.bold, { marginBottom: 10 }]}>Step 2: File Your Claim</Text>
-          <Text style={styles.paragraph}>
-            If no response, file a Statement of Claim (Form 7.340) at the county courthouse where the property is located. Pay the filing fee.
-          </Text>
-        </View>
+        <Text style={styles.sectionHeader}>Step 3: Save Proof of Mailing</Text>
+        <Text style={styles.paragraph}>
+          Take a photo of the envelope, the certified mail receipt, and the tracking number.
+          When the return receipt arrives, file it with your copies.
+        </Text>
 
-        <View style={styles.section}>
-          <Text style={[styles.bold, { marginBottom: 10 }]}>Step 3: Serve the Landlord</Text>
-          <Text style={styles.paragraph}>
-            Pay the service fee ($10-40). Sheriff or process server will deliver papers. Landlord has 5 days to respond.
-          </Text>
-        </View>
+        <Text style={styles.sectionHeader}>Step 4: Wait for Response</Text>
+        <Text style={styles.paragraph}>
+          Allow 14 days for the landlord to respond. If you receive a partial payment, document the amount and date.
+          If you receive a counteroffer, evaluate it against your documented damages.
+        </Text>
 
-        <View style={styles.section}>
-          <Text style={[styles.bold, { marginBottom: 10 }]}>Step 4: Mediation</Text>
-          <Text style={styles.paragraph}>
-            Many courts require mediation before trial. Bring all evidence. Many cases settle at this stage.
-          </Text>
-        </View>
+        <Text style={styles.sectionHeader}>Step 5: Escalate if Necessary</Text>
+        <Text style={styles.paragraph}>
+          If no satisfactory response is received, you may file in small claims court.
+          Your claim of {formatCurrency(amountOwed)} is {amountOwed <= stateRules.maxSmallClaims ? "within" : "may exceed"} {stateRules.name}'s small claims limit of {formatCurrency(stateRules.maxSmallClaims)}.
+          {stateRules.smallClaimsNote && ` ${stateRules.smallClaimsNote}`}
+        </Text>
 
-        <View style={styles.section}>
-          <Text style={[styles.bold, { marginBottom: 10 }]}>Step 5: Trial</Text>
-          <Text style={styles.paragraph}>
-            If mediation fails, present your case to a judge. Bring 3 copies of all evidence. Cite {stateRules.statuteTitle}.
+        <View style={styles.box}>
+          <Text style={styles.boxTitle}>FILING FEES ({stateRules.name.toUpperCase()})</Text>
+          <Text style={styles.boxText}>
+            Small claims filing fees typically range from {formatCurrency(stateRules.filingFee.min)} to {formatCurrency(stateRules.filingFee.max)}, depending on the claim amount.
+            You may recover these fees if you win your case.
           </Text>
-        </View>
-
-        <View style={styles.table}>
-          <View style={[styles.tableRow, styles.tableHeader]}>
-            <View style={{ width: "60%" }}><Text style={styles.tableHeaderText}>Filing Fees</Text></View>
-            <View style={{ width: "40%" }}><Text style={styles.tableHeaderText}>Cost</Text></View>
-          </View>
-          <View style={styles.tableRow}>
-            <View style={{ width: "60%" }}><Text style={styles.tableCell}>Claims up to $500</Text></View>
-            <View style={{ width: "40%" }}><Text style={styles.tableCell}>$55</Text></View>
-          </View>
-          <View style={styles.tableRow}>
-            <View style={{ width: "60%" }}><Text style={styles.tableCell}>Claims $501-$2,500</Text></View>
-            <View style={{ width: "40%" }}><Text style={styles.tableCell}>$175</Text></View>
-          </View>
-          <View style={styles.tableRow}>
-            <View style={{ width: "60%" }}><Text style={styles.tableCell}>Claims $2,501-$8,000</Text></View>
-            <View style={{ width: "40%" }}><Text style={styles.tableCell}>$300</Text></View>
-          </View>
         </View>
 
         <View style={styles.footer}>
-          <Text>DepositReady.co - Not legal advice</Text>
+          <Text>Deposit dispute file - {tenantLastName}</Text>
           <Text>Page 7</Text>
         </View>
       </Page>
 
-      {/* STATUTE REFERENCE */}
-      <Page size="LETTER" style={styles.page}>
-        <View style={styles.pageHeader}>
-          <Text style={styles.pageTitle}>Section 6: {stateRules.statuteTitle}</Text>
-          <Text style={styles.pageSubtitle}>Security Deposit Law - Key Points</Text>
+      {/* PAGE 8: COVER SHEET (END) */}
+      <Page size="LETTER" style={styles.coverPage}>
+        <Text style={styles.coverTitle}>Security Deposit{"\n"}Dispute File</Text>
+        <Text style={styles.coverSubtitle}>Prepared Under {stateRules.statuteTitle}</Text>
+
+        <Text style={styles.coverProperty}>{propertyAddress}</Text>
+        <Text style={styles.coverInfo}>{data.tenant.name} vs. {data.landlord.name}</Text>
+        <Text style={styles.coverInfo}>Generated: {formatDate(generatedDate)}</Text>
+
+        <View style={[styles.table, { marginTop: 40, width: "80%" }]}>
+          <View style={styles.tableRow}>
+            <Text style={styles.tableCellLabel}>Deposit Amount</Text>
+            <Text style={styles.tableCellValue}>{formatCurrency(depositAmount)}</Text>
+          </View>
+          <View style={styles.tableRow}>
+            <Text style={styles.tableCellLabel}>Amount Owed</Text>
+            <Text style={[styles.tableCellValue, { fontFamily: "Times-Bold" }]}>{formatCurrency(amountOwed)}</Text>
+          </View>
+          <View style={styles.tableRowLast}>
+            <Text style={styles.tableCellLabel}>Landlord Status</Text>
+            <Text style={[styles.tableCellValue, { fontFamily: "Times-Bold" }]}>
+              {deadlines?.landlordInViolation ? "IN VIOLATION" : "Within Deadlines"}
+            </Text>
+          </View>
         </View>
 
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Return of Deposit</Text>
-          <Text style={[styles.paragraph, { fontSize: 10 }]}>
-            Under {stateRules.name} law, if the landlord does not intend to impose a claim on the security deposit, they must return the deposit within {stateRules.returnDeadline} days of the tenant vacating the premises. If the landlord intends to claim deductions, they must provide written notice{stateRules.certifiedMailRequired ? " by certified mail" : ""} within {stateRules.claimDeadline} days specifying the reason for the claim.
-          </Text>
-        </View>
-
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Itemization Requirements</Text>
-          <Text style={[styles.paragraph, { fontSize: 10 }]}>
-            {stateRules.itemizedDeductionsRequired
-              ? `${stateRules.name} requires landlords to provide an itemized statement of all deductions, including specific amounts for each item claimed.`
-              : `${stateRules.name} law governs what deductions landlords may claim from security deposits.`
-            }
-          </Text>
-        </View>
-
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Penalty for Noncompliance</Text>
-          <Text style={[styles.paragraph, { fontSize: 10 }]}>
-            If the landlord fails to comply with {stateRules.name} security deposit law, they may forfeit the right to impose any claim on the deposit. The tenant may be entitled to recover the full deposit amount.
-          </Text>
-        </View>
-
-        <View style={styles.alertBox}>
-          <Text style={styles.alertTitle}>{stateRules.damagesDescription.charAt(0).toUpperCase() + stateRules.damagesDescription.slice(1)} for Bad Faith</Text>
-          <Text style={styles.alertText}>
-            {stateRules.name} courts may allow tenants to recover {stateRules.damagesDescription} when landlords act in bad faith. Bad faith includes knowingly making false claims, refusing to return deposits without legitimate reason, or deliberately ignoring statutory requirements.
-            {stateRules.additionalDamages && ` Additional remedies: ${stateRules.additionalDamages}`}
-          </Text>
-        </View>
-
-        <View style={styles.infoBox}>
-          <Text style={styles.infoTitle}>Full Statute Reference</Text>
-          <Text style={styles.infoText}>
-            For the complete text of {stateRules.statuteTitle}, visit:{"\n"}
-            {stateRules.statuteUrl}
-          </Text>
-        </View>
-
-        <View style={styles.footer}>
-          <Text>DepositReady.co - Not legal advice</Text>
-          <Text>Page 8</Text>
-        </View>
+        <Text style={styles.coverDisclaimer}>
+          This file was prepared using DepositReady.co and does not constitute legal advice.{"\n"}
+          Consult a licensed attorney for complex legal matters.
+        </Text>
       </Page>
     </Document>
   );
