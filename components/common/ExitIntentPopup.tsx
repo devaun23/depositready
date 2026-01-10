@@ -9,8 +9,16 @@ export function ExitIntentPopup() {
   const [dismissed, setDismissed] = useState(false);
   const pathname = usePathname();
 
-  // Don't show on preview, success, or checkout pages
-  const excludedPaths = ["/preview", "/success", "/download"];
+  // Don't show on preview, success, checkout, or SEO pages
+  const excludedPaths = [
+    "/preview",
+    "/success",
+    "/download",
+    "/landlord-kept-security-deposit",
+    "/security-deposit-deadline",
+    "/security-deposit-demand-letter",
+    "/security-deposit-dispute",
+  ];
   const isExcludedPage = excludedPaths.some((path) => pathname?.startsWith(path));
 
   useEffect(() => {
