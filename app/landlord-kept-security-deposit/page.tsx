@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Navbar, Footer } from "@/components/landing";
 
 export const metadata = {
   title: "Landlord Kept My Security Deposit? What to Do Next | DepositReady",
@@ -9,21 +10,8 @@ export const metadata = {
 export default function LandlordKeptDepositPage() {
   return (
     <div className="min-h-screen bg-white">
-      <header className="border-b border-gray-100">
-        <div className="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
-          <Link href="/" className="text-xl font-bold text-gray-900">
-            DepositReady
-          </Link>
-          <Link
-            href="/wizard"
-            className="text-sm font-medium text-gray-600 hover:text-black transition-colors"
-          >
-            Build my packet
-          </Link>
-        </div>
-      </header>
-
-      <main className="max-w-3xl mx-auto px-4 py-12">
+      <Navbar />
+      <main id="main-content" className="max-w-3xl mx-auto px-4 py-12">
         <h1 className="text-3xl font-bold text-gray-900 mb-4">
           My Landlord Kept My Security Deposit. What Can I Do?
         </h1>
@@ -137,7 +125,7 @@ export default function LandlordKeptDepositPage() {
             Build a professional dispute packet customized to your state in
             minutes.
           </p>
-          <div className="flex flex-col gap-3 sm:flex-row sm:justify-center">
+          <div className="flex flex-col gap-3 sm:flex-row sm:justify-center sm:flex-wrap">
             <Link
               href="/wizard"
               className="inline-block px-6 py-3 bg-black text-white font-semibold rounded-lg hover:bg-gray-800 transition-colors"
@@ -165,25 +153,7 @@ export default function LandlordKeptDepositPage() {
           </div>
         </div>
       </main>
-
-      <footer className="border-t border-gray-100 py-8 mt-12">
-        <div className="max-w-4xl mx-auto px-4 text-center text-sm text-gray-500">
-          <p className="mb-4">
-            DepositReady is not a law firm and does not provide legal advice. No
-            outcomes are guaranteed. This page provides general information and
-            is not legal advice.
-          </p>
-          <div className="flex justify-center gap-6 mb-4">
-            <Link href="/privacy" className="hover:text-gray-700">
-              Privacy Policy
-            </Link>
-            <Link href="/terms" className="hover:text-gray-700">
-              Terms of Service
-            </Link>
-          </div>
-          <p>&copy; {new Date().getFullYear()} DepositReady. All rights reserved.</p>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }
