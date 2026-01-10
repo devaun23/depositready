@@ -238,7 +238,7 @@ export function EligibilityModal({ isOpen, onClose }: EligibilityModalProps) {
 
               {/* Forwarding address */}
               <Select
-                label="Did you provide a forwarding address in writing?"
+                label="Did you give your landlord your new address via email, letter, or text?"
                 options={forwardingOptions}
                 placeholder="Select an option"
                 value={formData.forwardingAddress}
