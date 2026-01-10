@@ -114,6 +114,14 @@ export function Footer() {
                   Not legal advice
                 </span>
               </li>
+              <li>
+                <a
+                  href="mailto:devaun0506@gmail.com?subject=DepositReady%20Feedback"
+                  className="text-gray-500 hover:text-black text-sm transition-colors"
+                >
+                  Send Feedback
+                </a>
+              </li>
             </ul>
           </div>
         </div>

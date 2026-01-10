@@ -1,7 +1,9 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useCallback } from "react";
 import { useWizard } from "../WizardContext";
+import { AddressAutocomplete } from "@/components/ui/AddressAutocomplete";
+import { ParsedAddress } from "@/types/google-places";
 
 export function Step3Addresses() {
   const { data, updateNestedData, setCanProceed } = useWizard();
@@ -28,6 +30,28 @@ export function Step3Addresses() {
   const updateProperty = (field: string, value: string) => {
     updateNestedData("property", field, value);
   };
+
+  // Handler for landlord address autocomplete
+  const handleLandlordAddressSelect = useCallback(
+    (address: ParsedAddress) => {
+      updateNestedData("landlord", "address", address.streetAddress);
+      updateNestedData("landlord", "city", address.city);
+      updateNestedData("landlord", "zip", address.zip);
+      // Note: state is controlled by stateCode, so we don't update it
+    },
+    [updateNestedData]
+  );
+
+  // Handler for property address autocomplete
+  const handlePropertyAddressSelect = useCallback(
+    (address: ParsedAddress) => {
+      updateNestedData("property", "address", address.streetAddress);
+      updateNestedData("property", "city", address.city);
+      updateNestedData("property", "zip", address.zip);
+      // Note: state is controlled by stateCode, so we don't update it
+    },
+    [updateNestedData]
+  );
 
   return (
     <div className="space-y-8">
@@ -58,22 +82,15 @@ export function Step3Addresses() {
             />
           </div>
 
-          <div>
-            <label
-              htmlFor="landlordAddress"
-              className="block text-sm font-medium text-gray-700 mb-1"
-            >
-              Street Address <span className="text-red-500">*</span>
-            </label>
-            <input
-              type="text"
-              id="landlordAddress"
-              placeholder="123 Main Street"
-              value={data.landlord.address}
-              onChange={(e) => updateLandlord("address", e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black"
-            />
-          </div>
+          <AddressAutocomplete
+            id="landlordAddress"
+            label="Street Address"
+            placeholder="123 Main Street"
+            value={data.landlord.address}
+            required
+            onChange={(value) => updateLandlord("address", value)}
+            onAddressSelect={handleLandlordAddressSelect}
+          />
 
           <div className="grid grid-cols-6 gap-3">
             <div className="col-span-3">
@@ -169,22 +186,15 @@ export function Step3Addresses() {
           Rental Property
         </h3>
         <div className="space-y-4">
-          <div>
-            <label
-              htmlFor="propertyAddress"
-              className="block text-sm font-medium text-gray-700 mb-1"
-            >
-              Street Address <span className="text-red-500">*</span>
-            </label>
-            <input
-              type="text"
-              id="propertyAddress"
-              placeholder="456 Oak Avenue"
-              value={data.property.address}
-              onChange={(e) => updateProperty("address", e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black"
-            />
-          </div>
+          <AddressAutocomplete
+            id="propertyAddress"
+            label="Street Address"
+            placeholder="456 Oak Avenue"
+            value={data.property.address}
+            required
+            onChange={(value) => updateProperty("address", value)}
+            onAddressSelect={handlePropertyAddressSelect}
+          />
 
           <div>
             <label

@@ -1,7 +1,9 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useCallback } from "react";
 import { useWizard } from "../WizardContext";
+import { AddressAutocomplete } from "@/components/ui/AddressAutocomplete";
+import { ParsedAddress } from "@/types/google-places";
 
 export function Step10YourInfo() {
   const { data, updateNestedData, setCanProceed } = useWizard();
@@ -20,6 +22,17 @@ export function Step10YourInfo() {
   const updateField = (field: string, value: string) => {
     updateNestedData("tenant", field, value);
   };
+
+  // Handler for tenant address autocomplete
+  const handleTenantAddressSelect = useCallback(
+    (address: ParsedAddress) => {
+      updateNestedData("tenant", "currentAddress", address.streetAddress);
+      updateNestedData("tenant", "city", address.city);
+      updateNestedData("tenant", "state", address.state);
+      updateNestedData("tenant", "zip", address.zip);
+    },
+    [updateNestedData]
+  );
 
   return (
     <div className="space-y-6">
@@ -49,22 +62,15 @@ export function Step10YourInfo() {
           </p>
         </div>
 
-        <div>
-          <label
-            htmlFor="tenantAddress"
-            className="block text-sm font-medium text-gray-700 mb-1"
-          >
-            Current Street Address <span className="text-red-500">*</span>
-          </label>
-          <input
-            type="text"
-            id="tenantAddress"
-            placeholder="789 New Street, Apt 3"
-            value={data.tenant.currentAddress}
-            onChange={(e) => updateField("currentAddress", e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black"
-          />
-        </div>
+        <AddressAutocomplete
+          id="tenantAddress"
+          label="Current Street Address"
+          placeholder="789 New Street, Apt 3"
+          value={data.tenant.currentAddress}
+          required
+          onChange={(value) => updateField("currentAddress", value)}
+          onAddressSelect={handleTenantAddressSelect}
+        />
 
         <div className="grid grid-cols-6 gap-3">
           <div className="col-span-3">

@@ -3,6 +3,7 @@ import { Inter, Playfair_Display } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
 import Script from "next/script";
 import { ExitIntentPopup } from "@/components/common/ExitIntentPopup";
+import { GooglePlacesProvider } from "@/components/providers/GooglePlacesProvider";
 import "./globals.css";
 
 const inter = Inter({
@@ -88,7 +89,9 @@ export default function RootLayout({
         <a href="#main-content" className="skip-link">
           Skip to main content
         </a>
-        {children}
+        <GooglePlacesProvider>
+          {children}
+        </GooglePlacesProvider>
         <ExitIntentPopup />
         <Analytics />
         <Script
