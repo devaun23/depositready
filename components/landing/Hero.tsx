@@ -29,7 +29,7 @@ export function Hero() {
           <Button
             onClick={() => setIsModalOpen(true)}
             size="lg"
-            className="w-full sm:w-auto"
+            className="hidden sm:block"
           >
             Check My Deadline
           </Button>
