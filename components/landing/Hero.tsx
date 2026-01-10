@@ -24,12 +24,11 @@ export function Hero() {
           <p>See your deadline first. Pay only to unlock the full packet.</p>
         </div>
 
-        {/* CTA */}
-        <div className="flex flex-col items-center justify-center gap-4 mb-4">
+        {/* CTA - Desktop only (mobile uses sticky bottom CTA) */}
+        <div className="hidden sm:flex flex-col items-center justify-center gap-4 mb-4">
           <Button
             onClick={() => setIsModalOpen(true)}
             size="lg"
-            className="hidden sm:block"
           >
             Check My Deadline
           </Button>
