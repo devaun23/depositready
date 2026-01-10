@@ -1,20 +1,8 @@
-"use client";
-
-import { useState } from "react";
-import dynamic from "next/dynamic";
-import { Button } from "@/components/ui";
-
-// Lazy load modal - only needed when user clicks CTA
-const EligibilityModal = dynamic(
-  () => import("./EligibilityModal").then(mod => mod.EligibilityModal),
-  { ssr: false, loading: () => null }
-);
+import { HeroCTA } from "./HeroCTA";
 
 export function Hero() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
   return (
-    <section className="py-10 md:py-20 px-4 sm:px-6">
+    <section className="py-16 pb-24 sm:pb-16 md:py-20 px-4 sm:px-6">
       <div className="max-w-3xl mx-auto text-center">
         {/* Headline */}
         <h1 className="font-serif text-3xl md:text-5xl lg:text-6xl font-semibold text-black leading-tight mb-6 md:mb-8">
@@ -23,31 +11,21 @@ export function Hero() {
         </h1>
 
         {/* Body Copy */}
-        <div className="space-y-3 text-gray-600 text-base md:text-lg mb-8 md:mb-10 max-w-2xl mx-auto">
+        <div className="space-y-3 text-gray-600 text-base md:text-lg mb-10 md:mb-10 max-w-2xl mx-auto">
           <p>Check your state law in 30 seconds.</p>
           <p>Generate the letter renters use instead of hiring a lawyer.</p>
         </div>
 
-        {/* CTA - Desktop only (mobile uses sticky bottom CTA) */}
-        <div className="hidden sm:flex flex-col items-center justify-center gap-4 mb-4">
-          <Button
-            onClick={() => setIsModalOpen(true)}
-            size="lg"
-          >
-            Check My Deadline
-          </Button>
-          <p className="text-sm text-gray-600 max-w-md">
-            Most renters don&apos;t lose disputes because of photos — they lose them because of missed deadlines.
-          </p>
-        </div>
+        {/* Client component for interactive CTA */}
+        <HeroCTA />
 
         {/* Social Proof */}
-        <a href="#testimonials" className="text-sm text-gray-500 mb-2 underline hover:text-gray-700 block">
+        <a href="#testimonials" className="text-sm text-gray-500 mb-6 underline hover:text-gray-700 block">
           Join 2,400+ renters who&apos;ve disputed unfair charges →
         </a>
 
         {/* Trust Blocks */}
-        <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-xs text-gray-500 mb-4">
+        <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-xs text-gray-500 mb-8">
           <span className="flex items-center gap-1">
             <svg
               className="w-3 h-3"
@@ -82,23 +60,6 @@ export function Hero() {
             thousands.
           </p>
         </div>
-      </div>
-
-      {/* Eligibility Modal */}
-      <EligibilityModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-      />
-
-      {/* Sticky Mobile CTA */}
-      <div className="fixed bottom-0 left-0 right-0 p-4 bg-white border-t border-gray-200 sm:hidden z-40">
-        <Button
-          onClick={() => setIsModalOpen(true)}
-          className="w-full"
-          size="lg"
-        >
-          Check My Deadline
-        </Button>
       </div>
     </section>
   );
