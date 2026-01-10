@@ -1,5 +1,3 @@
-import { ReactNode } from "react";
-
 interface SEOHeroProps {
   title: string;
   intro: string;

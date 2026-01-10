@@ -12,11 +12,11 @@ async function generatePDF(data: WizardData, tenantName: string) {
     ? getStateRulesByCode(data.stateCode)
     : FLORIDA;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const pdfDocument = React.createElement(FullPacket, {
     data,
     stateRules,
     generatedDate: new Date(),
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   }) as any;
 
   const pdfBuffer = await renderToBuffer(pdfDocument);

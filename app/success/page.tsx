@@ -6,6 +6,12 @@ import Link from "next/link";
 import { Logo } from "@/components/ui";
 import { WizardData } from "@/types/dispute";
 
+declare global {
+  interface Window {
+    gtag?: (...args: unknown[]) => void;
+  }
+}
+
 type PaymentStatus = "loading" | "verified" | "error" | "no_data";
 
 interface PaymentDetails {
@@ -32,7 +38,7 @@ function SuccessContent() {
     return new Promise((resolve, reject) => {
       const start = Date.now();
       const check = () => {
-        if (typeof window !== "undefined" && (window as any).gtag) {
+        if (typeof window !== "undefined" && window.gtag) {
           resolve();
         } else if (Date.now() - start > timeout) {
           reject(new Error("gtag not available"));
@@ -82,7 +88,7 @@ function SuccessContent() {
               console.log("[Conversion] Waiting for gtag to be ready...");
               await waitForGtag();
               console.log("[Conversion] gtag ready, firing conversion event");
-              (window as any).gtag("event", "conversion", {
+              window.gtag?.("event", "conversion", {
                 send_to: "AW-17859927660/jtPRCJKB9N4bEOy8o8RC",
                 value: result.amountTotal / 100,
                 currency: "USD",

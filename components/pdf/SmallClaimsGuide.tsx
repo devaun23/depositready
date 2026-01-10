@@ -230,12 +230,12 @@ export function SmallClaimsGuide({ data, stateRules }: SmallClaimsGuideProps) {
           </View>
           <View style={styles.stepContent}>
             <Text>
-              If the landlord doesn't pay, file a Statement of Claim at the county courthouse
+              If the landlord doesn{"'"}t pay, file a Statement of Claim at the county courthouse
               where the rental property is located ({county} County).
             </Text>
             <View style={styles.bulletList}>
               <Text style={styles.bullet}>• Complete Form 7.340 (Statement of Claim)</Text>
-              <Text style={styles.bullet}>• Include landlord's full name and address</Text>
+              <Text style={styles.bullet}>• Include landlord{"'"}s full name and address</Text>
               <Text style={styles.bullet}>• State the amount claimed and why</Text>
               <Text style={styles.bullet}>• Pay the filing fee (see cost table below)</Text>
             </View>
@@ -294,7 +294,7 @@ export function SmallClaimsGuide({ data, stateRules }: SmallClaimsGuideProps) {
           </View>
           <View style={styles.stepContent}>
             <Text>
-              If mediation fails, you'll have a trial before a judge (no jury in small claims).
+              If mediation fails, you{"'"}ll have a trial before a judge (no jury in small claims).
             </Text>
             <View style={styles.bulletList}>
               <Text style={styles.bullet}>• Arrive early and dress professionally</Text>
@@ -356,7 +356,7 @@ export function SmallClaimsGuide({ data, stateRules }: SmallClaimsGuideProps) {
           <Text style={styles.importantText}>
             If you win, {stateRules.name} law allows you to recover your filing fees and court costs
             from the landlord. Keep all receipts. Additionally, under {stateRules.statuteTitle},
-            you may be entitled to attorney's fees if you choose to hire one.
+            you may be entitled to attorney{"'"}s fees if you choose to hire one.
           </Text>
         </View>
 

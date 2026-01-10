@@ -248,7 +248,7 @@ export function DeductionsTable({ data }: DeductionsTableProps) {
               <Text style={styles.headerText}>CATEGORY</Text>
             </View>
             <View style={styles.colDispute}>
-              <Text style={styles.headerText}>TENANT'S DISPUTE</Text>
+              <Text style={styles.headerText}>TENANT{"'"}S DISPUTE</Text>
             </View>
           </View>
 

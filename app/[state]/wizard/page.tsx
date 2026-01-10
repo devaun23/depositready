@@ -67,6 +67,7 @@ export default function StateWizardPage() {
 
     const code = getStateCodeFromSlug(stateSlug);
     if (code) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- initializing from URL params (external system)
       setStateCode(code);
 
       // Track wizard start for retargeting

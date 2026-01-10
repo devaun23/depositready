@@ -153,9 +153,9 @@ export function DemandLetter({ data, deadlines, generatedDate, stateRules }: Dem
         {/* Legal Basis */}
         <View style={styles.paragraph}>
           <Text>
-            Under <Text style={styles.bold}>{stateRules.statuteTitle}</Text>, a landlord must either return the tenant's security deposit within{" "}
+            Under <Text style={styles.bold}>{stateRules.statuteTitle}</Text>, a landlord must either return the tenant{"'"}s security deposit within{" "}
             <Text style={styles.bold}>{stateRules.returnDeadline} days</Text> of the tenant vacating the premises, or, if the landlord intends to impose a claim on the deposit, provide the tenant with written notice{stateRules.certifiedMailRequired ? " by certified mail" : ""} within{" "}
-            <Text style={styles.bold}>{stateRules.claimDeadline} days</Text> stating the landlord's intention to impose a claim and the reason for imposing the claim.
+            <Text style={styles.bold}>{stateRules.claimDeadline} days</Text> stating the landlord{"'"}s intention to impose a claim and the reason for imposing the claim.
           </Text>
         </View>
 
@@ -210,7 +210,7 @@ export function DemandLetter({ data, deadlines, generatedDate, stateRules }: Dem
         <View style={styles.paragraph}>
           <Text>
             {stateRules.statuteTitle} provides that if a landlord fails to comply with the requirements of this section, the landlord forfeits the right to impose a claim upon the security deposit. Furthermore, if the failure to return the deposit is found to be in bad faith, I may be entitled to{" "}
-            <Text style={styles.bold}>{stateRules.damagesDescription}</Text> of the deposit wrongfully withheld, plus court costs and reasonable attorney's fees.
+            <Text style={styles.bold}>{stateRules.damagesDescription}</Text> of the deposit wrongfully withheld, plus court costs and reasonable attorney{"'"}s fees.
           </Text>
         </View>
 
@@ -225,7 +225,7 @@ export function DemandLetter({ data, deadlines, generatedDate, stateRules }: Dem
         {/* Closing */}
         <View style={styles.paragraph}>
           <Text>
-            If I do not receive the full amount owed within the stated timeframe, I will have no choice but to pursue all available legal remedies, including but not limited to filing a claim in small claims court. Please be advised that {stateRules.name} law allows for the recovery of court costs and attorney's fees in such actions.
+            If I do not receive the full amount owed within the stated timeframe, I will have no choice but to pursue all available legal remedies, including but not limited to filing a claim in small claims court. Please be advised that {stateRules.name} law allows for the recovery of court costs and attorney{"'"}s fees in such actions.
           </Text>
         </View>
 

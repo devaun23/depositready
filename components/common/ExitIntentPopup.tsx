@@ -6,7 +6,13 @@ import Link from "next/link";
 
 export function ExitIntentPopup() {
   const [shown, setShown] = useState(false);
-  const [dismissed, setDismissed] = useState(false);
+  // Initialize dismissed state lazily from sessionStorage
+  const [dismissed, setDismissed] = useState(() => {
+    if (typeof window !== "undefined") {
+      return sessionStorage.getItem("exitIntentDismissed") === "true";
+    }
+    return false;
+  });
   const pathname = usePathname();
 
   // Don't show on preview, success, checkout, or SEO pages
@@ -24,13 +30,6 @@ export function ExitIntentPopup() {
   const isExcludedPage = excludedPaths.some((path) => pathname?.startsWith(path));
 
   useEffect(() => {
-    // Check if already dismissed this session
-    const wasDismissed = sessionStorage.getItem("exitIntentDismissed");
-    if (wasDismissed) {
-      setDismissed(true);
-      return;
-    }
-
     const handleMouseLeave = (e: MouseEvent) => {
       // Only trigger when mouse leaves top of viewport
       if (e.clientY < 10 && !shown && !dismissed && !isExcludedPage) {

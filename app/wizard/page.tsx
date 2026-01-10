@@ -100,6 +100,7 @@ function WizardPageContent() {
       }
     }
 
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- initializing from URL params and localStorage (external systems)
     setInitialData({ stateCode, moveOutDate, skipStep1 });
 
     // Track wizard start

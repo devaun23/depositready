@@ -134,9 +134,10 @@ export function EligibilityModal({ isOpen, onClose }: EligibilityModalProps) {
     router.push(`/wizard?${params.toString()}`);
   }, [formData, router]);
 
-  // Reset form when modal closes
+  // Reset form when modal closes - intentional sync with external prop state
   useEffect(() => {
     if (!isOpen) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- resetting form when modal closes
       setStep("form");
       setFormData({
         stateCode: "",

@@ -5,7 +5,7 @@ import { useWizard } from "../WizardContext";
 import { Deduction } from "@/types/dispute";
 
 export function Step7Deductions() {
-  const { data, addDeduction, updateDeduction, removeDeduction, setCanProceed } =
+  const { data, addDeduction, removeDeduction, setCanProceed } =
     useWizard();
   const [isAdding, setIsAdding] = useState(false);
   const [newDeduction, setNewDeduction] = useState<Partial<Deduction>>({

@@ -45,6 +45,7 @@ export default function GlobalError({
               >
                 Try Again
               </button>
+              {/* eslint-disable-next-line @next/next/no-html-link-for-pages -- global-error renders outside app context, can't use Link */}
               <a
                 href="/"
                 className="px-6 py-3 bg-white text-slate-700 font-medium rounded-lg border border-slate-300 hover:bg-slate-50 transition-colors"

@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { useWizard } from "../WizardContext";
-import { getStateRulesByCode, formatLegalDate } from "@/lib/state-rules";
+import { getStateRulesByCode } from "@/lib/state-rules";
 import { analyzeDeadlines } from "@/lib/state-rules/deadlines";
 
 export function Step7Review() {

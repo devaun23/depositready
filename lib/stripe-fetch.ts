@@ -3,6 +3,8 @@
  * Used as a workaround for Stripe SDK connection issues in Vercel serverless
  */
 
+import * as nodeCrypto from "crypto";
+
 const STRIPE_API_BASE = "https://api.stripe.com/v1";
 
 interface StripeCheckoutSessionParams {
@@ -135,11 +137,7 @@ export function verifyWebhookSignature(
   // Compute expected signature
   const signedPayload = `${timestamp}.${payload}`;
 
-  // Use Web Crypto API for HMAC-SHA256
-  const crypto = globalThis.crypto || require("crypto").webcrypto;
-
-  // This needs to be async, but we'll use the node crypto for sync verification
-  const nodeCrypto = require("crypto");
+  // Use node crypto for sync HMAC-SHA256 verification
   const expectedSig = nodeCrypto
     .createHmac("sha256", secret)
     .update(signedPayload)
