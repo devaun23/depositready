@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, memo } from "react";
 import { useWizard } from "../WizardContext";
 
-export function Step5PropertyInfo() {
+export const Step5PropertyInfo = memo(function Step5PropertyInfo() {
   const { data, updateNestedData, setCanProceed } = useWizard();
 
   useEffect(() => {
@@ -148,4 +148,4 @@ export function Step5PropertyInfo() {
       </div>
     </div>
   );
-}
+});

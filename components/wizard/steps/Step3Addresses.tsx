@@ -1,26 +1,31 @@
 "use client";
 
-import { useEffect, useCallback } from "react";
+import { useEffect, useCallback, memo } from "react";
 import { useWizard } from "../WizardContext";
 import { AddressAutocomplete } from "@/components/ui/AddressAutocomplete";
 import { ParsedAddress } from "@/types/google-places";
 
-export function Step3Addresses() {
+export const Step3Addresses = memo(function Step3Addresses() {
   const { data, updateNestedData, updateNestedBatch, setCanProceed } = useWizard();
 
+  // Debounced validation to reduce re-renders during typing
   useEffect(() => {
-    const landlordValid =
-      data.landlord.name.trim() !== "" &&
-      data.landlord.address.trim() !== "" &&
-      data.landlord.city.trim() !== "" &&
-      data.landlord.zip.trim() !== "";
+    const timeoutId = setTimeout(() => {
+      const landlordValid =
+        data.landlord.name.trim() !== "" &&
+        data.landlord.address.trim() !== "" &&
+        data.landlord.city.trim() !== "" &&
+        data.landlord.zip.trim() !== "";
 
-    const propertyValid =
-      data.property.address.trim() !== "" &&
-      data.property.city.trim() !== "" &&
-      data.property.zip.trim() !== "";
+      const propertyValid =
+        data.property.address.trim() !== "" &&
+        data.property.city.trim() !== "" &&
+        data.property.zip.trim() !== "";
 
-    setCanProceed(landlordValid && propertyValid);
+      setCanProceed(landlordValid && propertyValid);
+    }, 150);
+
+    return () => clearTimeout(timeoutId);
   }, [data.landlord, data.property, setCanProceed]);
 
   const updateLandlord = (field: string, value: string) => {
@@ -94,8 +99,8 @@ export function Step3Addresses() {
             onAddressSelect={handleLandlordAddressSelect}
           />
 
-          <div className="grid grid-cols-6 gap-3">
-            <div className="col-span-3">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-6">
+            <div className="sm:col-span-3">
               <label
                 htmlFor="landlordCity"
                 className="block text-sm font-medium text-gray-700 mb-1"
@@ -108,10 +113,10 @@ export function Step3Addresses() {
                 placeholder="Miami"
                 value={data.landlord.city}
                 onChange={(e) => updateLandlord("city", e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black"
+                className="w-full px-4 py-3 min-h-[44px] border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black"
               />
             </div>
-            <div className="col-span-1">
+            <div className="sm:col-span-1">
               <label
                 htmlFor="landlordState"
                 className="block text-sm font-medium text-gray-700 mb-1"
@@ -123,10 +128,10 @@ export function Step3Addresses() {
                 id="landlordState"
                 value={data.stateCode || ""}
                 disabled
-                className="w-full px-4 py-2 border border-gray-200 rounded-lg bg-gray-50 text-gray-500"
+                className="w-full px-4 py-3 min-h-[44px] border border-gray-200 rounded-lg bg-gray-50 text-gray-500"
               />
             </div>
-            <div className="col-span-2">
+            <div className="sm:col-span-2">
               <label
                 htmlFor="landlordZip"
                 className="block text-sm font-medium text-gray-700 mb-1"
@@ -138,14 +143,15 @@ export function Step3Addresses() {
                 id="landlordZip"
                 placeholder="33101"
                 maxLength={10}
+                inputMode="numeric"
                 value={data.landlord.zip}
                 onChange={(e) => updateLandlord("zip", e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black"
+                className="w-full px-4 py-3 min-h-[44px] border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black"
               />
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <div>
               <label
                 htmlFor="landlordEmail"
@@ -156,10 +162,11 @@ export function Step3Addresses() {
               <input
                 type="email"
                 id="landlordEmail"
+                inputMode="email"
                 placeholder="landlord@email.com"
                 value={data.landlord.email}
                 onChange={(e) => updateLandlord("email", e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black"
+                className="w-full px-4 py-3 min-h-[44px] border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black"
               />
             </div>
             <div>
@@ -172,10 +179,11 @@ export function Step3Addresses() {
               <input
                 type="tel"
                 id="landlordPhone"
+                inputMode="tel"
                 placeholder="(555) 123-4567"
                 value={data.landlord.phone}
                 onChange={(e) => updateLandlord("phone", e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black"
+                className="w-full px-4 py-3 min-h-[44px] border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black"
               />
             </div>
           </div>
@@ -215,8 +223,8 @@ export function Step3Addresses() {
             />
           </div>
 
-          <div className="grid grid-cols-6 gap-3">
-            <div className="col-span-3">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-6">
+            <div className="sm:col-span-3">
               <label
                 htmlFor="propertyCity"
                 className="block text-sm font-medium text-gray-700 mb-1"
@@ -229,10 +237,10 @@ export function Step3Addresses() {
                 placeholder="Orlando"
                 value={data.property.city}
                 onChange={(e) => updateProperty("city", e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black"
+                className="w-full px-4 py-3 min-h-[44px] border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black"
               />
             </div>
-            <div className="col-span-1">
+            <div className="sm:col-span-1">
               <label
                 htmlFor="propertyState"
                 className="block text-sm font-medium text-gray-700 mb-1"
@@ -244,10 +252,10 @@ export function Step3Addresses() {
                 id="propertyState"
                 value={data.stateCode || ""}
                 disabled
-                className="w-full px-4 py-2 border border-gray-200 rounded-lg bg-gray-50 text-gray-500"
+                className="w-full px-4 py-3 min-h-[44px] border border-gray-200 rounded-lg bg-gray-50 text-gray-500"
               />
             </div>
-            <div className="col-span-2">
+            <div className="sm:col-span-2">
               <label
                 htmlFor="propertyZip"
                 className="block text-sm font-medium text-gray-700 mb-1"
@@ -259,14 +267,15 @@ export function Step3Addresses() {
                 id="propertyZip"
                 placeholder="32801"
                 maxLength={10}
+                inputMode="numeric"
                 value={data.property.zip}
                 onChange={(e) => updateProperty("zip", e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black"
+                className="w-full px-4 py-3 min-h-[44px] border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black"
               />
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <div>
               <label
                 htmlFor="leaseStartDate"
@@ -281,7 +290,7 @@ export function Step3Addresses() {
                 onChange={(e) =>
                   updateProperty("leaseStartDate", e.target.value || "")
                 }
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black"
+                className="w-full px-4 py-3 min-h-[44px] border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black"
               />
             </div>
             <div>
@@ -298,7 +307,7 @@ export function Step3Addresses() {
                 onChange={(e) =>
                   updateProperty("leaseEndDate", e.target.value || "")
                 }
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black"
+                className="w-full px-4 py-3 min-h-[44px] border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black"
               />
             </div>
           </div>
@@ -314,4 +323,4 @@ export function Step3Addresses() {
       </div>
     </div>
   );
-}
+});

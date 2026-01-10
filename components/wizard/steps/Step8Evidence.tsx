@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, memo } from "react";
 import { useWizard } from "../WizardContext";
 
-export function Step8Evidence() {
+export const Step8Evidence = memo(function Step8Evidence() {
   const { data, updateNestedData, setCanProceed } = useWizard();
 
   // Evidence step is optional, always allow proceeding
@@ -126,4 +126,4 @@ export function Step8Evidence() {
       </div>
     </div>
   );
-}
+});

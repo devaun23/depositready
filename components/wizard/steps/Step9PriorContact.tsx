@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, memo } from "react";
 import { useWizard } from "../WizardContext";
 
-export function Step9PriorContact() {
+export const Step9PriorContact = memo(function Step9PriorContact() {
   const { data, updateNestedData, setCanProceed } = useWizard();
 
   // Always allow proceeding
@@ -133,4 +133,4 @@ export function Step9PriorContact() {
       )}
     </div>
   );
-}
+});

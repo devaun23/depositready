@@ -1,23 +1,28 @@
 "use client";
 
-import { useEffect, useCallback } from "react";
+import { useEffect, useCallback, memo } from "react";
 import { useWizard } from "../WizardContext";
 import { AddressAutocomplete } from "@/components/ui/AddressAutocomplete";
 import { ParsedAddress } from "@/types/google-places";
 
-export function Step10YourInfo() {
+export const Step10YourInfo = memo(function Step10YourInfo() {
   const { data, updateNestedData, updateNestedBatch, setCanProceed } = useWizard();
 
+  // Debounced validation to reduce re-renders during typing
   useEffect(() => {
-    const { name, currentAddress, city, state, zip, phone } = data.tenant;
-    setCanProceed(
-      name.trim() !== "" &&
-        currentAddress.trim() !== "" &&
-        city.trim() !== "" &&
-        state.trim() !== "" &&
-        zip.trim() !== "" &&
-        phone.trim() !== ""
-    );
+    const timeoutId = setTimeout(() => {
+      const { name, currentAddress, city, state, zip, phone } = data.tenant;
+      setCanProceed(
+        name.trim() !== "" &&
+          currentAddress.trim() !== "" &&
+          city.trim() !== "" &&
+          state.trim() !== "" &&
+          zip.trim() !== "" &&
+          phone.trim() !== ""
+      );
+    }, 150);
+
+    return () => clearTimeout(timeoutId);
   }, [data.tenant, setCanProceed]);
 
   const updateField = (field: string, value: string) => {
@@ -75,8 +80,8 @@ export function Step10YourInfo() {
           onAddressSelect={handleTenantAddressSelect}
         />
 
-        <div className="grid grid-cols-6 gap-3">
-          <div className="col-span-3">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-6">
+          <div className="sm:col-span-3">
             <label
               htmlFor="tenantCity"
               className="block text-sm font-medium text-gray-700 mb-1"
@@ -89,10 +94,10 @@ export function Step10YourInfo() {
               placeholder="Tampa"
               value={data.tenant.city}
               onChange={(e) => updateField("city", e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black"
+              className="w-full px-4 py-3 min-h-[44px] border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black"
             />
           </div>
-          <div className="col-span-1">
+          <div className="sm:col-span-1">
             <label
               htmlFor="tenantState"
               className="block text-sm font-medium text-gray-700 mb-1"
@@ -108,10 +113,10 @@ export function Step10YourInfo() {
               onChange={(e) =>
                 updateField("state", e.target.value.toUpperCase())
               }
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black"
+              className="w-full px-4 py-3 min-h-[44px] border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black"
             />
           </div>
-          <div className="col-span-2">
+          <div className="sm:col-span-2">
             <label
               htmlFor="tenantZip"
               className="block text-sm font-medium text-gray-700 mb-1"
@@ -123,14 +128,15 @@ export function Step10YourInfo() {
               id="tenantZip"
               placeholder="33602"
               maxLength={10}
+              inputMode="numeric"
               value={data.tenant.zip}
               onChange={(e) => updateField("zip", e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black"
+              className="w-full px-4 py-3 min-h-[44px] border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black"
             />
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
           <div>
             <label
               htmlFor="tenantEmail"
@@ -141,10 +147,11 @@ export function Step10YourInfo() {
             <input
               type="email"
               id="tenantEmail"
+              inputMode="email"
               placeholder="you@email.com"
               value={data.tenant.email}
               onChange={(e) => updateField("email", e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black"
+              className="w-full px-4 py-3 min-h-[44px] border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black"
             />
           </div>
           <div>
@@ -157,10 +164,11 @@ export function Step10YourInfo() {
             <input
               type="tel"
               id="tenantPhone"
+              inputMode="tel"
               placeholder="(555) 123-4567"
               value={data.tenant.phone}
               onChange={(e) => updateField("phone", e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black"
+              className="w-full px-4 py-3 min-h-[44px] border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black"
             />
           </div>
         </div>
@@ -174,4 +182,4 @@ export function Step10YourInfo() {
       </div>
     </div>
   );
-}
+});

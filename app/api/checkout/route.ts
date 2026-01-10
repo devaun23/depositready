@@ -8,17 +8,56 @@ export const maxDuration = 30;
 
 const PRICE_CENTS = 3900; // $39.00
 
+// Simple email validation regex
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const { tenantName, tenantEmail, propertyAddress, depositAmount, formData } =
       body;
 
+    // Validate required fields
     if (!tenantName || !propertyAddress) {
       return NextResponse.json(
         { error: "Missing required fields" },
         { status: 400 }
       );
+    }
+
+    // Validate tenant name length
+    if (typeof tenantName !== "string" || tenantName.length > 200) {
+      return NextResponse.json(
+        { error: "Invalid tenant name" },
+        { status: 400 }
+      );
+    }
+
+    // Validate property address length
+    if (typeof propertyAddress !== "string" || propertyAddress.length > 500) {
+      return NextResponse.json(
+        { error: "Invalid property address" },
+        { status: 400 }
+      );
+    }
+
+    // Validate email format if provided
+    if (tenantEmail && !EMAIL_REGEX.test(tenantEmail)) {
+      return NextResponse.json(
+        { error: "Invalid email format" },
+        { status: 400 }
+      );
+    }
+
+    // Validate deposit amount if provided (must be positive and reasonable)
+    if (depositAmount !== undefined && depositAmount !== null) {
+      const amount = Number(depositAmount);
+      if (isNaN(amount) || amount < 0 || amount > 100000) {
+        return NextResponse.json(
+          { error: "Invalid deposit amount" },
+          { status: 400 }
+        );
+      }
     }
 
     const baseUrl = (process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000").trim();

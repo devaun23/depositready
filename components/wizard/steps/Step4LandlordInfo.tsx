@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, memo } from "react";
 import { useWizard } from "../WizardContext";
 
-export function Step4LandlordInfo() {
+export const Step4LandlordInfo = memo(function Step4LandlordInfo() {
   const { data, updateNestedData, setCanProceed } = useWizard();
 
   useEffect(() => {
@@ -159,4 +159,4 @@ export function Step4LandlordInfo() {
       </div>
     </div>
   );
-}
+});

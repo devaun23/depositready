@@ -55,13 +55,13 @@ export function WizardShell({ children, onComplete }: WizardShellProps) {
       {/* Step Indicators (Mobile + Desktop) */}
       <div className="bg-white border-b border-gray-200">
         <div className="max-w-3xl mx-auto px-4 py-2 md:py-3">
-          <div className="flex gap-1 md:gap-0 md:justify-between overflow-x-auto scrollbar-hide">
+          <div className="flex gap-1 sm:gap-0 sm:justify-between overflow-x-auto scrollbar-hide">
             {WIZARD_STEPS.map((step) => (
               <div
                 key={step.id}
-                className={`text-[10px] md:text-xs font-medium whitespace-nowrap px-1.5 py-0.5 md:px-0 md:py-0 rounded ${
+                className={`text-xs sm:text-sm font-medium whitespace-nowrap px-1.5 py-0.5 sm:px-0 sm:py-0 rounded ${
                   step.id === currentStep
-                    ? "text-white bg-black md:bg-transparent md:text-black"
+                    ? "text-white bg-black sm:bg-transparent sm:text-black"
                     : step.id < currentStep
                     ? "text-gray-500"
                     : "text-gray-300"
@@ -88,7 +88,7 @@ export function WizardShell({ children, onComplete }: WizardShellProps) {
             <button
               onClick={prevStep}
               disabled={currentStep === 1}
-              className={`px-6 py-2 rounded-lg font-medium transition-colors ${
+              className={`px-6 py-3 min-h-[44px] rounded-lg font-medium transition-colors ${
                 currentStep === 1
                   ? "text-gray-300 cursor-not-allowed"
                   : "text-gray-600 hover:text-black hover:bg-gray-100"
@@ -99,7 +99,7 @@ export function WizardShell({ children, onComplete }: WizardShellProps) {
             <button
               onClick={handleNext}
               disabled={!canProceed}
-              className={`px-6 py-2 rounded-lg font-medium transition-colors ${
+              className={`px-6 py-3 min-h-[44px] rounded-lg font-medium transition-colors ${
                 canProceed
                   ? "bg-black text-white hover:bg-gray-800"
                   : "bg-gray-200 text-gray-400 cursor-not-allowed"
@@ -111,10 +111,10 @@ export function WizardShell({ children, onComplete }: WizardShellProps) {
         </div>
       </main>
 
-      {/* Sticky Mobile Check Deadline Button */}
-      <div className="fixed bottom-0 left-0 right-0 p-4 bg-white border-t border-gray-200 sm:hidden z-40">
+      {/* Sticky Mobile Check Deadline Button - with safe area for notched devices */}
+      <div className="fixed bottom-0 left-0 right-0 p-4 pb-[max(1rem,env(safe-area-inset-bottom))] bg-white border-t border-gray-200 sm:hidden z-40">
         <Link href="/#deadline-checker">
-          <Button className="w-full" size="lg">
+          <Button className="w-full min-h-[44px]" size="lg">
             Check My Deadline
           </Button>
         </Link>

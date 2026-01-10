@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, memo } from "react";
 import { useWizard } from "../WizardContext";
 
-export function Step3DepositDetails() {
+export const Step3DepositDetails = memo(function Step3DepositDetails() {
   const { data, updateData, setCanProceed } = useWizard();
 
   useEffect(() => {
@@ -97,4 +97,4 @@ export function Step3DepositDetails() {
       )}
     </div>
   );
-}
+});

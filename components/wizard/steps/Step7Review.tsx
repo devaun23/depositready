@@ -1,11 +1,22 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useMemo, memo } from "react";
 import { useWizard } from "../WizardContext";
 import { getStateRulesByCode } from "@/lib/state-rules";
 import { analyzeDeadlines } from "@/lib/state-rules/deadlines";
 
-export function Step7Review() {
+// Move constant array outside component to prevent recreation on every render
+const EVIDENCE_ITEMS = [
+  { key: "hasPhotos", label: "Photos" },
+  { key: "hasVideos", label: "Videos" },
+  { key: "hasReceipts", label: "Receipts" },
+  { key: "hasLeaseAgreement", label: "Lease" },
+  { key: "hasMoveInChecklist", label: "Move-in checklist" },
+  { key: "hasMoveOutChecklist", label: "Move-out checklist" },
+  { key: "hasCorrespondence", label: "Correspondence" },
+] as const;
+
+export const Step7Review = memo(function Step7Review() {
   const { data, goToStep, setCanProceed } = useWizard();
 
   useEffect(() => {
@@ -18,7 +29,12 @@ export function Step7Review() {
       ? analyzeDeadlines(new Date(data.moveOutDate), stateRules)
       : null;
 
-  const totalDeductions = data.deductions.reduce((sum, d) => sum + d.amount, 0);
+  // Memoize expensive calculations to prevent recalculation on every render
+  const totalDeductions = useMemo(
+    () => data.deductions.reduce((sum, d) => sum + d.amount, 0),
+    [data.deductions]
+  );
+
   const amountOwed = (data.depositAmount || 0) - (data.amountReceived || 0);
 
   const issueTypeLabels = {
@@ -27,18 +43,11 @@ export function Step7Review() {
     partial_refund: "Partial refund without explanation",
   };
 
-  const evidenceItems = [
-    { key: "hasPhotos", label: "Photos" },
-    { key: "hasVideos", label: "Videos" },
-    { key: "hasReceipts", label: "Receipts" },
-    { key: "hasLeaseAgreement", label: "Lease" },
-    { key: "hasMoveInChecklist", label: "Move-in checklist" },
-    { key: "hasMoveOutChecklist", label: "Move-out checklist" },
-    { key: "hasCorrespondence", label: "Correspondence" },
-  ];
-
-  const selectedEvidence = evidenceItems.filter(
-    (item) => data.evidence[item.key as keyof typeof data.evidence] === true
+  const selectedEvidence = useMemo(
+    () => EVIDENCE_ITEMS.filter(
+      (item) => data.evidence[item.key as keyof typeof data.evidence] === true
+    ),
+    [data.evidence]
   );
 
   return (
@@ -291,4 +300,4 @@ export function Step7Review() {
       </div>
     </div>
   );
-}
+});

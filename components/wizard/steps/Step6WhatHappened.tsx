@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, memo } from "react";
 import { useWizard } from "../WizardContext";
 
-export function Step6WhatHappened() {
+export const Step6WhatHappened = memo(function Step6WhatHappened() {
   const { data, updateData, setCanProceed } = useWizard();
 
   useEffect(() => {
@@ -116,4 +116,4 @@ export function Step6WhatHappened() {
       )}
     </div>
   );
-}
+});

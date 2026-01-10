@@ -1,14 +1,19 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, memo } from "react";
 import { useWizard } from "../WizardContext";
 import { analyzeDeadlines, formatLegalDate, getStateRulesByCode } from "@/lib/state-rules";
 
-export function Step2Timeline() {
+export const Step2Timeline = memo(function Step2Timeline() {
   const { data, updateData, setCanProceed } = useWizard();
 
+  // Debounced validation to reduce re-renders during typing
   useEffect(() => {
-    setCanProceed(data.moveOutDate !== null);
+    const timeoutId = setTimeout(() => {
+      setCanProceed(data.moveOutDate !== null);
+    }, 150);
+
+    return () => clearTimeout(timeoutId);
   }, [data.moveOutDate, setCanProceed]);
 
   const stateRules = data.stateCode ? getStateRulesByCode(data.stateCode) : null;
@@ -120,4 +125,4 @@ export function Step2Timeline() {
       )}
     </div>
   );
-}
+});

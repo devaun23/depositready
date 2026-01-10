@@ -25,7 +25,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     const inputId = id || label?.toLowerCase().replace(/\s+/g, "-");
 
     const inputStyles = `
-      block px-3 py-2.5 text-base
+      block px-3 py-3 text-base min-h-[44px]
       bg-white border rounded
       placeholder:text-gray-400
       focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent

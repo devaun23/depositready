@@ -1,22 +1,27 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, memo } from "react";
 import { useWizard } from "../WizardContext";
 
-export function Step2YourDeposit() {
+export const Step2YourDeposit = memo(function Step2YourDeposit() {
   const { data, updateData, setCanProceed } = useWizard();
 
+  // Debounced validation to reduce re-renders during typing
   useEffect(() => {
-    const hasValidDeposit = data.depositAmount !== null && data.depositAmount > 0;
-    const hasItemizedAnswer = data.wasItemized !== null;
-    const hasIssueType = data.issueType !== null;
-    const hasAmountReceivedIfNeeded =
-      data.issueType !== "partial_refund" ||
-      (data.amountReceived !== null && data.amountReceived >= 0);
+    const timeoutId = setTimeout(() => {
+      const hasValidDeposit = data.depositAmount !== null && data.depositAmount > 0;
+      const hasItemizedAnswer = data.wasItemized !== null;
+      const hasIssueType = data.issueType !== null;
+      const hasAmountReceivedIfNeeded =
+        data.issueType !== "partial_refund" ||
+        (data.amountReceived !== null && data.amountReceived >= 0);
 
-    setCanProceed(
-      hasValidDeposit && hasItemizedAnswer && hasIssueType && hasAmountReceivedIfNeeded
-    );
+      setCanProceed(
+        hasValidDeposit && hasItemizedAnswer && hasIssueType && hasAmountReceivedIfNeeded
+      );
+    }, 150);
+
+    return () => clearTimeout(timeoutId);
   }, [
     data.depositAmount,
     data.wasItemized,
@@ -209,4 +214,4 @@ export function Step2YourDeposit() {
       )}
     </div>
   );
-}
+});

@@ -57,6 +57,28 @@ body {
   min-width: 44px;
 }
 
+/* Safe area handling for notched devices (iPhone X+, etc.) */
+.pb-safe {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+.pt-safe {
+  padding-top: env(safe-area-inset-top, 0px);
+}
+
+.mb-safe {
+  margin-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+.mt-safe {
+  margin-top: env(safe-area-inset-top, 0px);
+}
+
+/* Utility for safe padding with minimum value */
+.pb-safe-min {
+  padding-bottom: max(1rem, env(safe-area-inset-bottom, 0px));
+}
+
 /* Ensure all interactive elements are touch-friendly */
 button,
 a,

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, memo } from "react";
 import { useWizard } from "../WizardContext";
 import { getStateRulesByCode, formatLegalDate } from "@/lib/state-rules";
 import { analyzeDeadlines } from "@/lib/state-rules/deadlines";
@@ -15,15 +15,20 @@ const STATES: { code: StateCode; name: string }[] = [
   { code: "IL", name: "Illinois" },
 ];
 
-export function Step1GettingStarted() {
+export const Step1GettingStarted = memo(function Step1GettingStarted() {
   const { data, updateData, setCanProceed } = useWizard();
 
+  // Debounced validation to reduce re-renders during typing
   useEffect(() => {
-    setCanProceed(
-      data.stateCode !== null &&
-        data.situation !== null &&
-        data.moveOutDate !== null
-    );
+    const timeoutId = setTimeout(() => {
+      setCanProceed(
+        data.stateCode !== null &&
+          data.situation !== null &&
+          data.moveOutDate !== null
+      );
+    }, 150);
+
+    return () => clearTimeout(timeoutId);
   }, [data.stateCode, data.situation, data.moveOutDate, setCanProceed]);
 
   const stateRules = data.stateCode ? getStateRulesByCode(data.stateCode) : null;
@@ -230,4 +235,4 @@ export function Step1GettingStarted() {
       )}
     </div>
   );
-}
+});

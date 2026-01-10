@@ -1,10 +1,19 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo, memo } from "react";
 import { useWizard } from "../WizardContext";
 import { Deduction } from "@/types/dispute";
 
-export function Step7Deductions() {
+// Move constant array outside component to prevent recreation on every render
+const DEDUCTION_CATEGORIES = [
+  { value: "cleaning", label: "Cleaning" },
+  { value: "damage", label: "Property Damage" },
+  { value: "unpaid_rent", label: "Unpaid Rent" },
+  { value: "utilities", label: "Utilities" },
+  { value: "other", label: "Other" },
+] as const;
+
+export const Step7Deductions = memo(function Step7Deductions() {
   const { data, addDeduction, removeDeduction, setCanProceed } =
     useWizard();
   const [isAdding, setIsAdding] = useState(false);
@@ -15,11 +24,16 @@ export function Step7Deductions() {
     category: null,
   });
 
+  // Debounced validation to reduce re-renders during typing
   // If no deductions claimed (no_refund), allow skip. Otherwise need at least one deduction.
   useEffect(() => {
-    const canSkip = data.issueType === "no_refund";
-    const hasDeductions = data.deductions.length > 0;
-    setCanProceed(canSkip || hasDeductions);
+    const timeoutId = setTimeout(() => {
+      const canSkip = data.issueType === "no_refund";
+      const hasDeductions = data.deductions.length > 0;
+      setCanProceed(canSkip || hasDeductions);
+    }, 150);
+
+    return () => clearTimeout(timeoutId);
   }, [data.deductions, data.issueType, setCanProceed]);
 
   const handleAddDeduction = () => {
@@ -41,15 +55,11 @@ export function Step7Deductions() {
     }
   };
 
-  const categories = [
-    { value: "cleaning", label: "Cleaning" },
-    { value: "damage", label: "Property Damage" },
-    { value: "unpaid_rent", label: "Unpaid Rent" },
-    { value: "utilities", label: "Utilities" },
-    { value: "other", label: "Other" },
-  ];
-
-  const totalDeductions = data.deductions.reduce((sum, d) => sum + d.amount, 0);
+  // Memoize expensive calculation to prevent recalculation on every render
+  const totalDeductions = useMemo(
+    () => data.deductions.reduce((sum, d) => sum + d.amount, 0),
+    [data.deductions]
+  );
 
   if (data.issueType === "no_refund") {
     return (
@@ -151,11 +161,11 @@ export function Step7Deductions() {
               onChange={(e) =>
                 setNewDeduction({ ...newDeduction, description: e.target.value })
               }
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black"
+              className="w-full px-4 py-3 min-h-[44px] border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black"
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Amount
@@ -165,7 +175,8 @@ export function Step7Deductions() {
                   $
                 </span>
                 <input
-                  type="number"
+                  type="text"
+                  inputMode="decimal"
                   min="0"
                   step="0.01"
                   value={newDeduction.amount || ""}
@@ -175,7 +186,7 @@ export function Step7Deductions() {
                       amount: parseFloat(e.target.value) || 0,
                     })
                   }
-                  className="w-full pl-8 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black"
+                  className="w-full pl-8 pr-4 py-3 min-h-[44px] border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black"
                 />
               </div>
             </div>
@@ -191,10 +202,10 @@ export function Step7Deductions() {
                     category: e.target.value as Deduction["category"],
                   })
                 }
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black"
+                className="w-full px-4 py-3 min-h-[44px] border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black"
               >
                 <option value="">Select...</option>
-                {categories.map((cat) => (
+                {DEDUCTION_CATEGORIES.map((cat) => (
                   <option key={cat.value} value={cat.value}>
                     {cat.label}
                   </option>
@@ -214,7 +225,7 @@ export function Step7Deductions() {
               onChange={(e) =>
                 setNewDeduction({ ...newDeduction, dispute: e.target.value })
               }
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black"
+              className="w-full px-4 py-3 min-h-[44px] border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black"
             />
           </div>
 
@@ -222,13 +233,13 @@ export function Step7Deductions() {
             <button
               onClick={handleAddDeduction}
               disabled={!newDeduction.description || !newDeduction.amount}
-              className="px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-4 py-3 min-h-[44px] bg-black text-white rounded-lg hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Add Deduction
             </button>
             <button
               onClick={() => setIsAdding(false)}
-              className="px-4 py-2 text-gray-600 hover:text-gray-900"
+              className="px-4 py-3 min-h-[44px] text-gray-600 hover:text-gray-900"
             >
               Cancel
             </button>
@@ -237,11 +248,11 @@ export function Step7Deductions() {
       ) : (
         <button
           onClick={() => setIsAdding(true)}
-          className="w-full py-3 border-2 border-dashed border-gray-300 rounded-lg text-gray-600 hover:border-gray-400 hover:text-black transition-colors"
+          className="w-full py-3 min-h-[44px] border-2 border-dashed border-gray-300 rounded-lg text-gray-600 hover:border-gray-400 hover:text-black transition-colors"
         >
           + Add a Deduction
         </button>
       )}
     </div>
   );
-}
+});

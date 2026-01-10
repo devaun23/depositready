@@ -1,9 +1,55 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, memo } from "react";
 import { useWizard } from "../WizardContext";
 
-export function Step5EvidenceContact() {
+// Move constant arrays outside component to prevent recreation on every render
+const EVIDENCE_ITEMS = [
+  {
+    key: "hasPhotos",
+    label: "Move-in/move-out photos",
+    description: "Photos documenting the condition of the property",
+  },
+  {
+    key: "hasVideos",
+    label: "Video walkthrough",
+    description: "Video documentation of property condition",
+  },
+  {
+    key: "hasReceipts",
+    label: "Receipts for repairs/cleaning",
+    description: "Any receipts for work you did before moving out",
+  },
+  {
+    key: "hasLeaseAgreement",
+    label: "Lease agreement",
+    description: "Your original lease contract",
+  },
+  {
+    key: "hasMoveInChecklist",
+    label: "Move-in checklist",
+    description: "Condition report from when you moved in",
+  },
+  {
+    key: "hasMoveOutChecklist",
+    label: "Move-out checklist",
+    description: "Condition report from when you moved out",
+  },
+  {
+    key: "hasCorrespondence",
+    label: "Communication with landlord",
+    description: "Emails, texts, or letters about the deposit",
+  },
+] as const;
+
+const CONTACT_METHODS = [
+  { value: "email", label: "Email" },
+  { value: "phone", label: "Phone call" },
+  { value: "letter", label: "Written letter" },
+  { value: "in_person", label: "In person" },
+] as const;
+
+export const Step5EvidenceContact = memo(function Step5EvidenceContact() {
   const { data, updateNestedData, setCanProceed } = useWizard();
 
   // This step is optional, always allow proceeding
@@ -253,4 +299,4 @@ export function Step5EvidenceContact() {
       </div>
     </div>
   );
-}
+});

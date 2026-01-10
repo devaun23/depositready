@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, memo } from "react";
 import { useWizard } from "../WizardContext";
 import type { StateCode } from "@/lib/state-rules/types";
 
@@ -13,7 +13,7 @@ const STATES: { code: StateCode; name: string }[] = [
   { code: "IL", name: "Illinois" },
 ];
 
-export function Step1Situation() {
+export const Step1Situation = memo(function Step1Situation() {
   const { data, updateData, setCanProceed } = useWizard();
 
   useEffect(() => {
@@ -123,4 +123,4 @@ export function Step1Situation() {
       )}
     </div>
   );
-}
+});

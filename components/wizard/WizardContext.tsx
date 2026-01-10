@@ -5,6 +5,7 @@ import {
   useContext,
   useState,
   useCallback,
+  useMemo,
   ReactNode,
 } from "react";
 import { WizardData, EMPTY_WIZARD_DATA, Deduction } from "@/types/dispute";
@@ -149,25 +150,43 @@ export function WizardProvider({
     }
   }, []);
 
+  // Memoize context value to prevent unnecessary re-renders
+  const contextValue = useMemo(
+    () => ({
+      data,
+      currentStep,
+      totalSteps: WIZARD_STEPS.length,
+      updateData,
+      updateNestedData,
+      updateNestedBatch,
+      addDeduction,
+      updateDeduction,
+      removeDeduction,
+      nextStep,
+      prevStep,
+      goToStep,
+      canProceed,
+      setCanProceed,
+    }),
+    [
+      data,
+      currentStep,
+      updateData,
+      updateNestedData,
+      updateNestedBatch,
+      addDeduction,
+      updateDeduction,
+      removeDeduction,
+      nextStep,
+      prevStep,
+      goToStep,
+      canProceed,
+      setCanProceed,
+    ]
+  );
+
   return (
-    <WizardContext.Provider
-      value={{
-        data,
-        currentStep,
-        totalSteps: WIZARD_STEPS.length,
-        updateData,
-        updateNestedData,
-        updateNestedBatch,
-        addDeduction,
-        updateDeduction,
-        removeDeduction,
-        nextStep,
-        prevStep,
-        goToStep,
-        canProceed,
-        setCanProceed,
-      }}
-    >
+    <WizardContext.Provider value={contextValue}>
       {children}
     </WizardContext.Provider>
   );
