@@ -31,7 +31,7 @@ const features = [
 
 export function WhatsIncluded() {
   return (
-    <section id="whats-included" className="py-10 md:py-16 px-4 sm:px-6">
+    <section id="whats-included" className="pt-20 pb-10 md:py-16 px-4 sm:px-6">
       <div className="max-w-5xl mx-auto">
         {/* Header */}
         <div className="text-center mb-8 md:mb-12">
