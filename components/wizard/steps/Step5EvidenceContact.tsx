@@ -65,52 +65,9 @@ export const Step5EvidenceContact = memo(function Step5EvidenceContact() {
     updateNestedData("priorCommunication", field, value);
   };
 
-  const evidenceItems = [
-    {
-      key: "hasPhotos",
-      label: "Move-in/move-out photos",
-      description: "Photos documenting the condition of the property",
-    },
-    {
-      key: "hasVideos",
-      label: "Video walkthrough",
-      description: "Video documentation of property condition",
-    },
-    {
-      key: "hasReceipts",
-      label: "Receipts for repairs/cleaning",
-      description: "Any receipts for work you did before moving out",
-    },
-    {
-      key: "hasLeaseAgreement",
-      label: "Lease agreement",
-      description: "Your original lease contract",
-    },
-    {
-      key: "hasMoveInChecklist",
-      label: "Move-in checklist",
-      description: "Condition report from when you moved in",
-    },
-    {
-      key: "hasMoveOutChecklist",
-      label: "Move-out checklist",
-      description: "Condition report from when you moved out",
-    },
-    {
-      key: "hasCorrespondence",
-      label: "Communication with landlord",
-      description: "Emails, texts, or letters about the deposit",
-    },
-  ];
 
-  const contactMethods = [
-    { value: "email", label: "Email" },
-    { value: "phone", label: "Phone call" },
-    { value: "letter", label: "Written letter" },
-    { value: "in_person", label: "In person" },
-  ];
 
-  const selectedCount = evidenceItems.filter(
+  const selectedCount = EVIDENCE_ITEMS.filter(
     (item) => data.evidence[item.key as keyof typeof data.evidence] === true
   ).length;
 
@@ -129,7 +86,7 @@ export const Step5EvidenceContact = memo(function Step5EvidenceContact() {
           Check all that apply. This helps us tailor your evidence checklist.
         </p>
         <div className="space-y-3">
-          {evidenceItems.map((item) => (
+          {EVIDENCE_ITEMS.map((item) => (
             <label
               key={item.key}
               className={`flex items-start gap-3 p-4 rounded-lg border-2 cursor-pointer transition-all ${
@@ -234,7 +191,7 @@ export const Step5EvidenceContact = memo(function Step5EvidenceContact() {
                 How did you contact them?
               </label>
               <div className="grid grid-cols-2 gap-2">
-                {contactMethods.map((method) => (
+                {CONTACT_METHODS.map((method) => (
                   <button
                     key={method.value}
                     onClick={() => updateContact("contactMethod", method.value)}

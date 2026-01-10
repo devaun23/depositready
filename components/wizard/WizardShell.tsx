@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useMemo, useCallback } from "react";
 import { Logo, Button } from "@/components/ui";
 import { useWizard, WIZARD_STEPS } from "./WizardContext";
 
@@ -13,17 +14,23 @@ export function WizardShell({ children, onComplete }: WizardShellProps) {
   const { currentStep, totalSteps, nextStep, prevStep, canProceed } =
     useWizard();
 
-  const progress = (currentStep / totalSteps) * 100;
+  // Memoize calculations to prevent recalculation on every render
+  const progress = useMemo(
+    () => (currentStep / totalSteps) * 100,
+    [currentStep, totalSteps]
+  );
+
   const currentStepInfo = WIZARD_STEPS[currentStep - 1];
   const isLastStep = currentStep === totalSteps;
 
-  const handleNext = () => {
+  // Memoize handler to prevent recreation on every render
+  const handleNext = useCallback(() => {
     if (isLastStep && onComplete) {
       onComplete();
     } else {
       nextStep();
     }
-  };
+  }, [isLastStep, onComplete, nextStep]);
 
   return (
     <div className="min-h-screen bg-white">

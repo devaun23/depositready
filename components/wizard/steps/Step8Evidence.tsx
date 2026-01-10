@@ -1,7 +1,46 @@
 "use client";
 
-import { useEffect, memo } from "react";
+import { useEffect, useMemo, memo } from "react";
 import { useWizard } from "../WizardContext";
+
+// Move constant array outside component to prevent recreation on every render
+const EVIDENCE_ITEMS = [
+  {
+    key: "hasPhotos",
+    label: "Move-in/move-out photos",
+    description: "Photos documenting the condition of the property",
+  },
+  {
+    key: "hasVideos",
+    label: "Video walkthrough",
+    description: "Video documentation of property condition",
+  },
+  {
+    key: "hasReceipts",
+    label: "Receipts for repairs/cleaning",
+    description: "Any receipts for work you did before moving out",
+  },
+  {
+    key: "hasLeaseAgreement",
+    label: "Lease agreement",
+    description: "Your original lease contract",
+  },
+  {
+    key: "hasMoveInChecklist",
+    label: "Move-in checklist",
+    description: "Condition report from when you moved in",
+  },
+  {
+    key: "hasMoveOutChecklist",
+    label: "Move-out checklist",
+    description: "Condition report from when you moved out",
+  },
+  {
+    key: "hasCorrespondence",
+    label: "Communication with landlord",
+    description: "Emails, texts, or letters about the deposit",
+  },
+] as const;
 
 export const Step8Evidence = memo(function Step8Evidence() {
   const { data, updateNestedData, setCanProceed } = useWizard();
@@ -15,47 +54,13 @@ export const Step8Evidence = memo(function Step8Evidence() {
     updateNestedData("evidence", field, value);
   };
 
-  const evidenceItems = [
-    {
-      key: "hasPhotos",
-      label: "Move-in/move-out photos",
-      description: "Photos documenting the condition of the property",
-    },
-    {
-      key: "hasVideos",
-      label: "Video walkthrough",
-      description: "Video documentation of property condition",
-    },
-    {
-      key: "hasReceipts",
-      label: "Receipts for repairs/cleaning",
-      description: "Any receipts for work you did before moving out",
-    },
-    {
-      key: "hasLeaseAgreement",
-      label: "Lease agreement",
-      description: "Your original lease contract",
-    },
-    {
-      key: "hasMoveInChecklist",
-      label: "Move-in checklist",
-      description: "Condition report from when you moved in",
-    },
-    {
-      key: "hasMoveOutChecklist",
-      label: "Move-out checklist",
-      description: "Condition report from when you moved out",
-    },
-    {
-      key: "hasCorrespondence",
-      label: "Communication with landlord",
-      description: "Emails, texts, or letters about the deposit",
-    },
-  ];
 
-  const selectedCount = evidenceItems.filter(
+  const selectedCount = useMemo(
+    () => EVIDENCE_ITEMS.filter(
     (item) => data.evidence[item.key as keyof typeof data.evidence] === true
-  ).length;
+  ).length,
+    [data.evidence]
+  );
 
   return (
     <div className="space-y-6">
@@ -65,7 +70,7 @@ export const Step8Evidence = memo(function Step8Evidence() {
       </p>
 
       <div className="space-y-3">
-        {evidenceItems.map((item) => (
+        {EVIDENCE_ITEMS.map((item) => (
           <label
             key={item.key}
             className={`flex items-start gap-3 p-4 rounded-lg border-2 cursor-pointer transition-all ${

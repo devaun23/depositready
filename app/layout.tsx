@@ -3,7 +3,6 @@ import { Inter, Playfair_Display } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
 import Script from "next/script";
 import { ExitIntentPopup } from "@/components/common/ExitIntentPopup";
-import { GooglePlacesProvider } from "@/components/providers/GooglePlacesProvider";
 import "./globals.css";
 
 export const viewport: Viewport = {
@@ -97,16 +96,15 @@ export default function RootLayout({
         <a href="#main-content" className="skip-link">
           Skip to main content
         </a>
-        <GooglePlacesProvider>
-          {children}
-        </GooglePlacesProvider>
+        {children}
         <ExitIntentPopup />
         <Analytics />
+        {/* Changed to lazyOnload to defer loading until after page interactivity */}
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=AW-17859927660"
-          strategy="afterInteractive"
+          strategy="lazyOnload"
         />
-        <Script id="google-ads" strategy="afterInteractive">
+        <Script id="google-ads" strategy="lazyOnload">
           {`
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
@@ -117,7 +115,7 @@ export default function RootLayout({
             });
           `}
         </Script>
-        <Script id="microsoft-clarity" strategy="afterInteractive">
+        <Script id="microsoft-clarity" strategy="lazyOnload">
           {`
             (function(c,l,a,r,i,t,y){
               c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
