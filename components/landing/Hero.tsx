@@ -26,7 +26,11 @@ export function Hero() {
 
         {/* CTA */}
         <div className="flex flex-col items-center justify-center gap-4 mb-4">
-          <Button onClick={() => setIsModalOpen(true)} size="lg">
+          <Button
+            onClick={() => setIsModalOpen(true)}
+            size="lg"
+            className="w-full sm:w-auto"
+          >
             Check My Deadline
           </Button>
           <p className="text-sm text-gray-600 max-w-md">
@@ -35,9 +39,9 @@ export function Hero() {
         </div>
 
         {/* Social Proof */}
-        <p className="text-sm text-gray-500 mb-2">
-          Join 2,400+ renters who&apos;ve disputed unfair charges
-        </p>
+        <a href="#testimonials" className="text-sm text-gray-500 mb-2 underline hover:text-gray-700 block">
+          Join 2,400+ renters who&apos;ve disputed unfair charges →
+        </a>
 
         {/* Trust Blocks */}
         <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-xs text-gray-500 mb-4">
@@ -62,7 +66,7 @@ export function Hero() {
           <span className="hidden sm:inline">·</span>
           <span>Used in FL, CA, TX, NY, GA, IL</span>
           <span className="hidden sm:inline">·</span>
-          <span>Questions? support@depositready.com</span>
+          <span>Questions? <a href="mailto:support@depositready.com" className="underline hover:text-gray-700">support@depositready.com</a></span>
         </div>
 
         {/* Value Prop with Anchoring */}
@@ -82,6 +86,17 @@ export function Hero() {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
       />
+
+      {/* Sticky Mobile CTA */}
+      <div className="fixed bottom-0 left-0 right-0 p-4 bg-white border-t border-gray-200 sm:hidden z-40">
+        <Button
+          onClick={() => setIsModalOpen(true)}
+          className="w-full"
+          size="lg"
+        >
+          Check My Deadline
+        </Button>
+      </div>
     </section>
   );
 }

@@ -6,7 +6,7 @@ export function WhatWeDo() {
       <div className="max-w-5xl mx-auto">
         <div className="grid md:grid-cols-2 gap-6">
           {/* What we do */}
-          <Card className="p-6">
+          <Card className="p-6 cursor-default">
             <CardTitle className="mb-4">What DepositReady does</CardTitle>
             <CardContent className="p-0">
               <ul className="space-y-3 text-gray-600">
@@ -27,7 +27,7 @@ export function WhatWeDo() {
           </Card>
 
           {/* What we don't do */}
-          <Card className="p-6">
+          <Card className="p-6 cursor-default">
             <CardTitle className="mb-4">
               What DepositReady isn&apos;t designed for
             </CardTitle>

@@ -51,7 +51,7 @@ export function WhatsIncluded() {
         {/* Feature Grid */}
         <div className="grid md:grid-cols-2 gap-6">
           {features.map((feature, index) => (
-            <Card key={index} className="p-6">
+            <Card key={index} className="p-6 cursor-default">
               <CardTitle className="mb-3 text-lg">{feature.title}</CardTitle>
               <CardContent className="p-0">
                 <p className="text-gray-600 mb-2">{feature.description}</p>
