@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1200, height=1200">
+  <title>DepositReady Ad - Square</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      width: 1200px;
+      height: 1200px;
+      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 60px;
+    }
+    .container {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 40px;
+    }
+    .document {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.15), 0 8px 20px rgba(0,0,0,0.1);
+      padding: 50px;
+      width: 100%;
+      max-width: 900px;
+    }
+    .doc-header {
+      border-bottom: 3px solid #000;
+      padding-bottom: 30px;
+      margin-bottom: 40px;
+    }
+    .doc-title {
+      font-size: 42px;
+      font-weight: 700;
+      color: #000;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+    .doc-subtitle {
+      font-size: 22px;
+      color: #666;
+      margin-top: 10px;
+    }
+    .checklist {
+      list-style: none;
+      margin: 30px 0;
+    }
+    .checklist li {
+      font-size: 28px;
+      color: #333;
+      padding: 18px 0;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      border-bottom: 1px solid #eee;
+    }
+    .checklist li:last-child {
+      border-bottom: none;
+    }
+    .check {
+      width: 40px;
+      height: 40px;
+      background: #000;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 24px;
+      flex-shrink: 0;
+    }
+    .price-badge {
+      background: #000;
+      color: white;
+      padding: 20px 50px;
+      border-radius: 50px;
+      font-size: 36px;
+      font-weight: 700;
+      display: inline-block;
+      margin-top: 20px;
+    }
+    .brand {
+      font-size: 32px;
+      font-weight: 600;
+      color: #000;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    .brand-icon {
+      width: 50px;
+      height: 50px;
+      background: #000;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .brand-icon svg {
+      width: 30px;
+      height: 30px;
+      fill: white;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="document">
+      <div class="doc-header">
+        <div class="doc-title">Security Deposit</div>
+        <div class="doc-title">Dispute Packet</div>
+        <div class="doc-subtitle">Everything you need to get your money back</div>
+      </div>
+
+      <ul class="checklist">
+        <li>
+          <span class="check">&#10003;</span>
+          Customized Demand Letter
+        </li>
+        <li>
+          <span class="check">&#10003;</span>
+          Legal Timeline Analysis
+        </li>
+        <li>
+          <span class="check">&#10003;</span>
+          Evidence Checklist
+        </li>
+        <li>
+          <span class="check">&#10003;</span>
+          Small Claims Court Guide
+        </li>
+      </ul>
+
+      <div style="text-align: center;">
+        <div class="price-badge">Only $39</div>
+      </div>
+    </div>
+
+    <div class="brand">
+      <div class="brand-icon">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+        </svg>
+      </div>
+      DepositReady
+    </div>
+  </div>
+</body>
+</html>

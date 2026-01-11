@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1200, height=628">
+  <title>DepositReady Ad - Landscape</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      width: 1200px;
+      height: 628px;
+      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+    }
+    .container {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      gap: 50px;
+    }
+    .left {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .right {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .document {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.15), 0 8px 20px rgba(0,0,0,0.1);
+      padding: 35px;
+      width: 100%;
+    }
+    .doc-header {
+      border-bottom: 3px solid #000;
+      padding-bottom: 20px;
+      margin-bottom: 25px;
+    }
+    .doc-title {
+      font-size: 28px;
+      font-weight: 700;
+      color: #000;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+    .doc-subtitle {
+      font-size: 16px;
+      color: #666;
+      margin-top: 8px;
+    }
+    .checklist {
+      list-style: none;
+    }
+    .checklist li {
+      font-size: 18px;
+      color: #333;
+      padding: 12px 0;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      border-bottom: 1px solid #eee;
+    }
+    .checklist li:last-child {
+      border-bottom: none;
+    }
+    .check {
+      width: 28px;
+      height: 28px;
+      background: #000;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+    .headline {
+      font-size: 48px;
+      font-weight: 700;
+      color: #000;
+      line-height: 1.1;
+      margin-bottom: 20px;
+    }
+    .subheadline {
+      font-size: 24px;
+      color: #555;
+      margin-bottom: 30px;
+    }
+    .price-badge {
+      background: #000;
+      color: white;
+      padding: 18px 45px;
+      border-radius: 50px;
+      font-size: 32px;
+      font-weight: 700;
+      display: inline-block;
+      margin-bottom: 25px;
+    }
+    .brand {
+      font-size: 26px;
+      font-weight: 600;
+      color: #000;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .brand-icon {
+      width: 40px;
+      height: 40px;
+      background: #000;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .brand-icon svg {
+      width: 24px;
+      height: 24px;
+      fill: white;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="left">
+      <div class="document">
+        <div class="doc-header">
+          <div class="doc-title">Dispute Packet</div>
+          <div class="doc-subtitle">Complete legal document kit</div>
+        </div>
+
+        <ul class="checklist">
+          <li>
+            <span class="check">&#10003;</span>
+            Customized Demand Letter
+          </li>
+          <li>
+            <span class="check">&#10003;</span>
+            Legal Timeline Analysis
+          </li>
+          <li>
+            <span class="check">&#10003;</span>
+            Evidence Checklist
+          </li>
+          <li>
+            <span class="check">&#10003;</span>
+            Small Claims Guide
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="right">
+      <div class="headline">Get Your<br>Deposit Back</div>
+      <div class="subheadline">10 minutes. Instant download.</div>
+      <div class="price-badge">Only $39</div>
+      <div class="brand">
+        <div class="brand-icon">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+          </svg>
+        </div>
+        DepositReady
+      </div>
+    </div>
+  </div>
+</body>
+</html>
