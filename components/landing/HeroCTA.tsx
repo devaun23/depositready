@@ -16,16 +16,13 @@ export function HeroCTA() {
   return (
     <>
       {/* CTA - Desktop only (mobile uses sticky bottom CTA) */}
-      <div className="hidden sm:flex flex-col items-center justify-center gap-4 mb-4">
+      <div className="hidden sm:flex flex-col items-center justify-center mb-4">
         <Button
           onClick={() => setIsModalOpen(true)}
           size="lg"
         >
           Check My Deadline
         </Button>
-        <p className="text-sm text-gray-600 max-w-md">
-          Most renters don&apos;t lose disputes because of photos — they lose them because of missed deadlines.
-        </p>
       </div>
 
       {/* Eligibility Modal */}

@@ -36,19 +36,43 @@ interface WizardContextType {
   goToStep: (step: number) => void;
   canProceed: boolean;
   setCanProceed: (value: boolean) => void;
+  // Validation state
+  touched: Record<string, boolean>;
+  errors: Record<string, string>;
+  markTouched: (field: string) => void;
+  getMissingFields: () => string[];
+  clearErrors: () => void;
 }
 
 const WizardContext = createContext<WizardContextType | null>(null);
 
 export const WIZARD_STEPS = [
-  { id: 1, title: "Getting Started", shortTitle: "Start" },
+  { id: 1, title: "Your Situation", shortTitle: "Situation" },
   { id: 2, title: "Your Deposit", shortTitle: "Deposit" },
   { id: 3, title: "Addresses", shortTitle: "Addresses" },
-  { id: 4, title: "Deductions", shortTitle: "Deductions" },
-  { id: 5, title: "Evidence & Contact", shortTitle: "Evidence" },
-  { id: 6, title: "Your Information", shortTitle: "You" },
-  { id: 7, title: "Review", shortTitle: "Review" },
+  { id: 4, title: "Build Your Case", shortTitle: "Case" },
+  { id: 5, title: "Review & Submit", shortTitle: "Review" },
 ] as const;
+
+// Field labels for validation messages
+const FIELD_LABELS: Record<string, string> = {
+  stateCode: "State",
+  situation: "Your situation",
+  moveOutDate: "Move-out date",
+  depositAmount: "Deposit amount",
+  wasItemized: "Itemization question",
+  issueType: "Issue type",
+  amountReceived: "Amount received",
+  "landlord.name": "Landlord name",
+  "landlord.address": "Landlord address",
+  "landlord.city": "Landlord city",
+  "landlord.zip": "Landlord ZIP code",
+  "property.address": "Property address",
+  "property.city": "Property city",
+  "property.zip": "Property ZIP code",
+  "tenant.name": "Your name",
+  "tenant.email": "Your email",
+};
 
 interface WizardProviderProps {
   children: ReactNode;
@@ -75,6 +99,55 @@ export function WizardProvider({
   }));
   const [currentStep, setCurrentStep] = useState(initialStep);
   const [canProceed, setCanProceed] = useState(false);
+  const [touched, setTouched] = useState<Record<string, boolean>>({});
+  const [errors, setErrors] = useState<Record<string, string>>({});
+
+  const markTouched = useCallback((field: string) => {
+    setTouched((prev) => ({ ...prev, [field]: true }));
+  }, []);
+
+  const clearErrors = useCallback(() => {
+    setErrors({});
+    setTouched({});
+  }, []);
+
+  // Get missing required fields for current step
+  const getMissingFields = useCallback((): string[] => {
+    const missing: string[] = [];
+
+    switch (currentStep) {
+      case 1: // Your Situation
+        if (!data.stateCode) missing.push(FIELD_LABELS.stateCode);
+        if (!data.situation) missing.push(FIELD_LABELS.situation);
+        if (!data.moveOutDate) missing.push(FIELD_LABELS.moveOutDate);
+        break;
+      case 2: // Your Deposit
+        if (!data.depositAmount || data.depositAmount <= 0) missing.push(FIELD_LABELS.depositAmount);
+        if (data.wasItemized === null) missing.push(FIELD_LABELS.wasItemized);
+        if (!data.issueType) missing.push(FIELD_LABELS.issueType);
+        if (data.issueType === "partial_refund" && (data.amountReceived === null || data.amountReceived < 0)) {
+          missing.push(FIELD_LABELS.amountReceived);
+        }
+        break;
+      case 3: // Addresses
+        if (!data.landlord.name) missing.push(FIELD_LABELS["landlord.name"]);
+        if (!data.landlord.address) missing.push(FIELD_LABELS["landlord.address"]);
+        if (!data.landlord.city) missing.push(FIELD_LABELS["landlord.city"]);
+        if (!data.landlord.zip) missing.push(FIELD_LABELS["landlord.zip"]);
+        if (!data.property.address) missing.push(FIELD_LABELS["property.address"]);
+        if (!data.property.city) missing.push(FIELD_LABELS["property.city"]);
+        if (!data.property.zip) missing.push(FIELD_LABELS["property.zip"]);
+        break;
+      case 4: // Build Your Case - no strict requirements
+        break;
+      case 5: // Review & Submit
+        if (!data.tenant.name) missing.push(FIELD_LABELS["tenant.name"]);
+        if (!data.tenant.email) missing.push(FIELD_LABELS["tenant.email"]);
+        break;
+    }
+
+    return missing;
+  }, [currentStep, data]);
 
   const updateData = useCallback(
     <K extends keyof WizardData>(key: K, value: WizardData[K]) => {
@@ -167,6 +240,11 @@ export function WizardProvider({
       goToStep,
       canProceed,
       setCanProceed,
+      touched,
+      errors,
+      markTouched,
+      getMissingFields,
+      clearErrors,
     }),
     [
       data,
@@ -182,6 +260,11 @@ export function WizardProvider({
       goToStep,
       canProceed,
       setCanProceed,
+      touched,
+      errors,
+      markTouched,
+      getMissingFields,
+      clearErrors,
     ]
   );
 

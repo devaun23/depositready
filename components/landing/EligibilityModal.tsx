@@ -2,7 +2,8 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import { Button, Select, Input } from "@/components/ui";
+import { Button, Select } from "@/components/ui";
+import { DateDropdowns } from "@/components/ui/DateDropdowns";
 import {
   analyzeDeadlines,
   getStateRulesByCode,
@@ -170,20 +171,17 @@ export function EligibilityModal({ isOpen, onClose }: EligibilityModalProps) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      {/* Backdrop */}
-      <div
-        className="absolute inset-0 bg-black/50 backdrop-blur-sm"
-        onClick={onClose}
-      />
+      {/* Backdrop - no click to close to prevent accidental dismissal */}
+      <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" />
 
       {/* Modal */}
       <div className={`relative bg-white rounded-xl shadow-2xl w-full max-w-[calc(100vw-2rem)] max-h-[90vh] overflow-y-auto ${
         step === "preview" ? "sm:max-w-3xl" : "sm:max-w-md"
       }`}>
-        {/* Close button */}
+        {/* Close button - improved contrast */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 p-2 min-h-[44px] min-w-[44px] flex items-center justify-center text-gray-400 hover:text-gray-600 transition"
+          className="absolute top-4 right-4 p-2 min-h-[44px] min-w-[44px] flex items-center justify-center text-gray-600 hover:text-black hover:bg-gray-100 rounded-lg transition"
           aria-label="Close"
         >
           <svg
@@ -227,15 +225,15 @@ export function EligibilityModal({ isOpen, onClose }: EligibilityModalProps) {
               />
 
               {/* Move-out date */}
-              <Input
+              <DateDropdowns
                 label="When did you move out?"
-                type="date"
-                value={formData.moveOutDate}
-                onChange={(e) =>
-                  setFormData({ ...formData, moveOutDate: e.target.value })
+                value={formData.moveOutDate || null}
+                onChange={(date) =>
+                  setFormData({ ...formData, moveOutDate: date || "" })
                 }
-                max={new Date().toISOString().split("T")[0]}
+                maxDate={new Date()}
                 required
+                id="eligibility-moveout"
               />
 
               {/* Forwarding address */}
@@ -270,16 +268,20 @@ export function EligibilityModal({ isOpen, onClose }: EligibilityModalProps) {
 
               {/* Notice date (conditional) */}
               {formData.receivedItemized === "yes" && (
-                <Input
-                  label="When did you receive this document?"
-                  type="date"
-                  value={formData.noticeDate}
-                  onChange={(e) =>
-                    setFormData({ ...formData, noticeDate: e.target.value })
-                  }
-                  max={new Date().toISOString().split("T")[0]}
-                  helperText="This helps determine if the notice was sent on time"
-                />
+                <div>
+                  <DateDropdowns
+                    label="When did you receive this document?"
+                    value={formData.noticeDate || null}
+                    onChange={(date) =>
+                      setFormData({ ...formData, noticeDate: date || "" })
+                    }
+                    maxDate={new Date()}
+                    id="eligibility-notice"
+                  />
+                  <p className="text-xs text-gray-500 mt-1">
+                    This helps determine if the notice was sent on time
+                  </p>
+                </div>
               )}
             </div>
 

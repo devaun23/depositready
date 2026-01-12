@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, memo } from "react";
+import { useEffect, memo, useCallback } from "react";
 import { useWizard } from "../WizardContext";
+import { DateDropdowns } from "@/components/ui/DateDropdowns";
 import { getStateRulesByCode, formatLegalDate } from "@/lib/state-rules";
 import { analyzeDeadlines } from "@/lib/state-rules/deadlines";
 import type { StateCode } from "@/lib/state-rules/types";
@@ -16,9 +17,9 @@ const STATES: { code: StateCode; name: string }[] = [
 ];
 
 export const Step1GettingStarted = memo(function Step1GettingStarted() {
-  const { data, updateData, setCanProceed } = useWizard();
+  const { data, updateData, setCanProceed, markTouched, touched } = useWizard();
 
-  // Debounced validation to reduce re-renders during typing
+  // Validation
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       setCanProceed(
@@ -30,6 +31,17 @@ export const Step1GettingStarted = memo(function Step1GettingStarted() {
 
     return () => clearTimeout(timeoutId);
   }, [data.stateCode, data.situation, data.moveOutDate, setCanProceed]);
+
+  const handleMoveOutDateChange = useCallback((date: string | null) => {
+    updateData("moveOutDate", date);
+  }, [updateData]);
+
+  const handleMoveOutDateBlur = useCallback(() => {
+    markTouched("moveOutDate");
+  }, [markTouched]);
+
+  // Show error only if field was touched and is empty
+  const showMoveOutError = touched.moveOutDate && !data.moveOutDate;
 
   const stateRules = data.stateCode ? getStateRulesByCode(data.stateCode) : null;
   const deadlineAnalysis =
@@ -97,30 +109,15 @@ export const Step1GettingStarted = memo(function Step1GettingStarted() {
             <button
               key={option.value}
               onClick={() => updateData("situation", option.value)}
-              className={`w-full p-4 text-left rounded-lg border-2 transition-all ${
+              className={`w-full p-4 min-h-[56px] text-left rounded-lg border-2 transition-all ${
                 data.situation === option.value
-                  ? "border-black bg-gray-50"
-                  : "border-gray-200 hover:border-gray-300"
+                  ? "border-black bg-gray-50 ring-1 ring-black"
+                  : "border-gray-300 hover:border-gray-400 hover:bg-gray-50"
               }`}
             >
-              <div className="flex items-start gap-3">
-                <div
-                  className={`w-5 h-5 mt-0.5 rounded-full border-2 flex items-center justify-center ${
-                    data.situation === option.value
-                      ? "border-black"
-                      : "border-gray-300"
-                  }`}
-                >
-                  {data.situation === option.value && (
-                    <div className="w-2.5 h-2.5 bg-black rounded-full" />
-                  )}
-                </div>
-                <div>
-                  <div className="font-medium text-gray-900">{option.title}</div>
-                  <div className="text-sm text-gray-500 mt-1">
-                    {option.description}
-                  </div>
-                </div>
+              <div className="font-medium text-gray-900">{option.title}</div>
+              <div className="text-sm text-gray-500 mt-1">
+                {option.description}
               </div>
             </button>
           ))}
@@ -139,43 +136,16 @@ export const Step1GettingStarted = memo(function Step1GettingStarted() {
       )}
 
       {/* Move-out Date */}
-      <div>
-        <label
-          htmlFor="moveOutDate"
-          className="block text-sm font-medium text-gray-700 mb-1"
-        >
-          When did you move out? <span className="text-red-500">*</span>
-        </label>
-        <input
-          type="date"
-          id="moveOutDate"
-          value={data.moveOutDate || ""}
-          onChange={(e) => updateData("moveOutDate", e.target.value || null)}
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black"
-        />
-      </div>
-
-      {/* Deposit Paid Date (Optional) */}
-      <div>
-        <label
-          htmlFor="depositPaidDate"
-          className="block text-sm font-medium text-gray-700 mb-1"
-        >
-          When did you pay the security deposit? (optional)
-        </label>
-        <input
-          type="date"
-          id="depositPaidDate"
-          value={data.depositPaidDate || ""}
-          onChange={(e) =>
-            updateData("depositPaidDate", e.target.value || null)
-          }
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black"
-        />
-        <p className="text-xs text-gray-500 mt-1">
-          Usually the same as your lease start date
-        </p>
-      </div>
+      <DateDropdowns
+        label="When did you move out?"
+        required
+        value={data.moveOutDate}
+        onChange={handleMoveOutDateChange}
+        onBlur={handleMoveOutDateBlur}
+        maxDate={new Date()}
+        error={showMoveOutError ? "Please select a date" : undefined}
+        id="moveOutDate"
+      />
 
       {/* Deadline Analysis */}
       {deadlineAnalysis && stateRules && (

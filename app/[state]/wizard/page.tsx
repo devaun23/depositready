@@ -9,10 +9,8 @@ import {
   Step1GettingStarted,
   Step2YourDeposit,
   Step3Addresses,
-  Step4Deductions,
-  Step5EvidenceContact,
-  Step6YourInfo,
-  Step7Review,
+  Step4BuildCase,
+  Step5ReviewSubmit,
 } from "@/components/wizard";
 import { getStateRules, isValidStateSlug, getStateCodeFromSlug } from "@/lib/state-rules";
 import type { StateCode } from "@/lib/state-rules/types";
@@ -36,13 +34,9 @@ function WizardContent() {
       case 3:
         return <Step3Addresses />;
       case 4:
-        return <Step4Deductions />;
+        return <Step4BuildCase />;
       case 5:
-        return <Step5EvidenceContact />;
-      case 6:
-        return <Step6YourInfo />;
-      case 7:
-        return <Step7Review />;
+        return <Step5ReviewSubmit />;
       default:
         return <Step1GettingStarted />;
     }

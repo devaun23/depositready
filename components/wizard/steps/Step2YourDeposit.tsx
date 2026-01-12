@@ -94,23 +94,23 @@ export const Step2YourDeposit = memo(function Step2YourDeposit() {
           Did your landlord give you a written breakdown of deductions?{" "}
           <span className="text-red-500">*</span>
         </label>
-        <div className="flex gap-3">
+        <div className="flex gap-4">
           <button
             onClick={() => updateData("wasItemized", true)}
-            className={`flex-1 py-2 px-4 rounded-lg border-2 font-medium transition-all ${
+            className={`flex-1 py-3 px-4 min-h-[48px] rounded-lg border-2 font-medium transition-all ${
               data.wasItemized === true
-                ? "border-black bg-gray-50 text-black"
-                : "border-gray-200 hover:border-gray-300"
+                ? "border-black bg-gray-50 text-black ring-1 ring-black"
+                : "border-gray-300 hover:border-gray-400 hover:bg-gray-50"
             }`}
           >
             Yes
           </button>
           <button
             onClick={() => updateData("wasItemized", false)}
-            className={`flex-1 py-2 px-4 rounded-lg border-2 font-medium transition-all ${
+            className={`flex-1 py-3 px-4 min-h-[48px] rounded-lg border-2 font-medium transition-all ${
               data.wasItemized === false
-                ? "border-black bg-gray-50 text-black"
-                : "border-gray-200 hover:border-gray-300"
+                ? "border-black bg-gray-50 text-black ring-1 ring-black"
+                : "border-gray-300 hover:border-gray-400 hover:bg-gray-50"
             }`}
           >
             No
@@ -142,30 +142,15 @@ export const Step2YourDeposit = memo(function Step2YourDeposit() {
             <button
               key={option.value}
               onClick={() => updateData("issueType", option.value)}
-              className={`w-full p-4 text-left rounded-lg border-2 transition-all ${
+              className={`w-full p-4 min-h-[56px] text-left rounded-lg border-2 transition-all ${
                 data.issueType === option.value
-                  ? "border-black bg-gray-50"
-                  : "border-gray-200 hover:border-gray-300"
+                  ? "border-black bg-gray-50 ring-1 ring-black"
+                  : "border-gray-300 hover:border-gray-400 hover:bg-gray-50"
               }`}
             >
-              <div className="flex items-start gap-3">
-                <div
-                  className={`w-5 h-5 mt-0.5 rounded-full border-2 flex items-center justify-center ${
-                    data.issueType === option.value
-                      ? "border-black"
-                      : "border-gray-300"
-                  }`}
-                >
-                  {data.issueType === option.value && (
-                    <div className="w-2.5 h-2.5 bg-black rounded-full" />
-                  )}
-                </div>
-                <div>
-                  <div className="font-medium text-gray-900">{option.title}</div>
-                  <div className="text-sm text-gray-500 mt-1">
-                    {option.description}
-                  </div>
-                </div>
+              <div className="font-medium text-gray-900">{option.title}</div>
+              <div className="text-sm text-gray-500 mt-1">
+                {option.description}
               </div>
             </button>
           ))}

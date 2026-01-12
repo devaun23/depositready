@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useCallback } from "react";
+import { useMemo, useCallback, useState } from "react";
 import { Logo, Button } from "@/components/ui";
 import { useWizard, WIZARD_STEPS } from "./WizardContext";
 
@@ -11,8 +11,10 @@ interface WizardShellProps {
 }
 
 export function WizardShell({ children, onComplete }: WizardShellProps) {
-  const { currentStep, totalSteps, nextStep, prevStep, canProceed } =
+  const { currentStep, totalSteps, nextStep, prevStep, canProceed, getMissingFields } =
     useWizard();
+  const [showMissing, setShowMissing] = useState(false);
+  const [isShaking, setIsShaking] = useState(false);
 
   // Memoize calculations to prevent recalculation on every render
   const progress = useMemo(
@@ -25,12 +27,23 @@ export function WizardShell({ children, onComplete }: WizardShellProps) {
 
   // Memoize handler to prevent recreation on every render
   const handleNext = useCallback(() => {
+    if (!canProceed) {
+      // Show missing fields and shake
+      setShowMissing(true);
+      setIsShaking(true);
+      setTimeout(() => setIsShaking(false), 500);
+      return;
+    }
+
+    setShowMissing(false);
     if (isLastStep && onComplete) {
       onComplete();
     } else {
       nextStep();
     }
-  }, [isLastStep, onComplete, nextStep]);
+  }, [canProceed, isLastStep, onComplete, nextStep]);
+
+  const missingFields = getMissingFields();
 
   return (
     <div className="min-h-screen bg-white">
@@ -91,29 +104,40 @@ export function WizardShell({ children, onComplete }: WizardShellProps) {
           <div className="mt-6">{children}</div>
 
           {/* Navigation */}
-          <div className="flex justify-between mt-8 pt-6 border-t border-gray-200">
-            <button
-              onClick={prevStep}
-              disabled={currentStep === 1}
-              className={`px-6 py-3 min-h-[44px] rounded-lg font-medium transition-colors ${
-                currentStep === 1
-                  ? "text-gray-300 cursor-not-allowed"
-                  : "text-gray-600 hover:text-black hover:bg-gray-100"
-              }`}
-            >
-              Back
-            </button>
-            <button
-              onClick={handleNext}
-              disabled={!canProceed}
-              className={`px-6 py-3 min-h-[44px] rounded-lg font-medium transition-colors ${
-                canProceed
-                  ? "bg-black text-white hover:bg-gray-800"
-                  : "bg-gray-200 text-gray-400 cursor-not-allowed"
-              }`}
-            >
-              {isLastStep ? "Review Packet" : "Continue"}
-            </button>
+          <div className="mt-8 pt-6 border-t border-gray-200">
+            {/* Missing fields message */}
+            {showMissing && missingFields.length > 0 && (
+              <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+                <p className="text-sm text-red-700">
+                  <span className="font-medium">Please complete: </span>
+                  {missingFields.join(", ")}
+                </p>
+              </div>
+            )}
+
+            <div className="flex justify-between">
+              <button
+                onClick={prevStep}
+                disabled={currentStep === 1}
+                className={`px-6 py-3 min-h-[44px] rounded-lg font-medium transition-colors ${
+                  currentStep === 1
+                    ? "text-gray-400 cursor-not-allowed"
+                    : "text-gray-600 hover:text-black hover:bg-gray-100"
+                }`}
+              >
+                Back
+              </button>
+              <button
+                onClick={handleNext}
+                className={`px-6 py-3 min-h-[44px] rounded-lg font-medium transition-all ${
+                  canProceed
+                    ? "bg-black text-white hover:bg-gray-800"
+                    : "bg-gray-300 text-gray-600"
+                } ${isShaking ? "animate-shake" : ""}`}
+              >
+                {isLastStep ? "Generate Packet" : "Continue"}
+              </button>
+            </div>
           </div>
         </div>
       </main>
