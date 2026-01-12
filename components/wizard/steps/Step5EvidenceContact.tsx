@@ -86,29 +86,35 @@ export const Step5EvidenceContact = memo(function Step5EvidenceContact() {
           Check all that apply. This helps us tailor your evidence checklist.
         </p>
         <div className="space-y-3">
-          {EVIDENCE_ITEMS.map((item) => (
-            <label
-              key={item.key}
-              className={`flex items-start gap-3 p-4 rounded-lg border-2 cursor-pointer transition-all ${
-                data.evidence[item.key as keyof typeof data.evidence]
-                  ? "border-black bg-gray-50"
-                  : "border-gray-200 hover:border-gray-300"
-              }`}
-            >
-              <input
-                type="checkbox"
-                checked={
-                  data.evidence[item.key as keyof typeof data.evidence] as boolean
-                }
-                onChange={(e) => updateEvidence(item.key, e.target.checked)}
-                className="w-5 h-5 mt-0.5 rounded border-gray-300 text-black focus:ring-black accent-black"
-              />
-              <div>
-                <div className="font-medium text-gray-900">{item.label}</div>
-                <div className="text-sm text-gray-500">{item.description}</div>
-              </div>
-            </label>
-          ))}
+          {EVIDENCE_ITEMS.map((item) => {
+            const isChecked = data.evidence[item.key as keyof typeof data.evidence] as boolean;
+            return (
+              <button
+                key={item.key}
+                type="button"
+                onClick={() => updateEvidence(item.key, !isChecked)}
+                className={`flex items-start gap-3 p-4 min-h-[52px] w-full text-left rounded-lg border-2 cursor-pointer transition-all ${
+                  isChecked
+                    ? "border-black bg-gray-50 ring-1 ring-black"
+                    : "border-gray-200 hover:border-gray-300"
+                }`}
+              >
+                <div className={`w-5 h-5 mt-0.5 rounded border-2 flex items-center justify-center flex-shrink-0 transition-colors ${
+                  isChecked ? "bg-black border-black" : "border-gray-300"
+                }`}>
+                  {isChecked && (
+                    <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                    </svg>
+                  )}
+                </div>
+                <div>
+                  <div className="font-medium text-gray-900">{item.label}</div>
+                  <div className="text-sm text-gray-500">{item.description}</div>
+                </div>
+              </button>
+            );
+          })}
         </div>
 
         <div className="mt-4">
@@ -159,9 +165,9 @@ export const Step5EvidenceContact = memo(function Step5EvidenceContact() {
         <div className="flex gap-3 mb-4">
           <button
             onClick={() => updateContact("hasContacted", true)}
-            className={`flex-1 py-2 px-4 rounded-lg border-2 font-medium transition-all ${
+            className={`flex-1 py-3 px-4 min-h-[48px] rounded-lg border-2 font-medium transition-all ${
               data.priorCommunication.hasContacted === true
-                ? "border-black bg-gray-50 text-black"
+                ? "border-black bg-gray-50 text-black ring-1 ring-black"
                 : "border-gray-200 hover:border-gray-300"
             }`}
           >
@@ -174,9 +180,9 @@ export const Step5EvidenceContact = memo(function Step5EvidenceContact() {
               updateContact("contactDate", null);
               updateContact("response", "");
             }}
-            className={`flex-1 py-2 px-4 rounded-lg border-2 font-medium transition-all ${
+            className={`flex-1 py-3 px-4 min-h-[48px] rounded-lg border-2 font-medium transition-all ${
               data.priorCommunication.hasContacted === false
-                ? "border-black bg-gray-50 text-black"
+                ? "border-black bg-gray-50 text-black ring-1 ring-black"
                 : "border-gray-200 hover:border-gray-300"
             }`}
           >
@@ -195,9 +201,9 @@ export const Step5EvidenceContact = memo(function Step5EvidenceContact() {
                   <button
                     key={method.value}
                     onClick={() => updateContact("contactMethod", method.value)}
-                    className={`py-2 px-4 rounded-lg border-2 text-sm font-medium transition-all ${
+                    className={`py-3 px-4 min-h-[48px] rounded-lg border-2 text-sm font-medium transition-all ${
                       data.priorCommunication.contactMethod === method.value
-                        ? "border-black bg-gray-50 text-black"
+                        ? "border-black bg-gray-50 text-black ring-1 ring-black"
                         : "border-gray-200 hover:border-gray-300"
                     }`}
                   >

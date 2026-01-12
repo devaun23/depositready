@@ -46,9 +46,9 @@ export const Step6WhatHappened = memo(function Step6WhatHappened() {
           <button
             key={option.value}
             onClick={() => updateData("issueType", option.value)}
-            className={`w-full p-4 text-left rounded-lg border-2 transition-all ${
+            className={`w-full p-4 min-h-[56px] text-left rounded-lg border-2 transition-all ${
               data.issueType === option.value
-                ? "border-black bg-gray-50"
+                ? "border-black bg-gray-50 ring-1 ring-black"
                 : "border-gray-200 hover:border-gray-300"
             }`}
           >

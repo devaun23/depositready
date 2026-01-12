@@ -60,9 +60,9 @@ export const Step3DepositDetails = memo(function Step3DepositDetails() {
           <div className="flex gap-3">
             <button
               onClick={() => updateData("wasItemized", true)}
-              className={`flex-1 py-2 px-4 rounded-lg border-2 font-medium transition-all ${
+              className={`flex-1 py-3 px-4 min-h-[48px] rounded-lg border-2 font-medium transition-all ${
                 data.wasItemized === true
-                  ? "border-black bg-gray-50 text-black"
+                  ? "border-black bg-gray-50 text-black ring-1 ring-black"
                   : "border-gray-200 hover:border-gray-300"
               }`}
             >
@@ -70,9 +70,9 @@ export const Step3DepositDetails = memo(function Step3DepositDetails() {
             </button>
             <button
               onClick={() => updateData("wasItemized", false)}
-              className={`flex-1 py-2 px-4 rounded-lg border-2 font-medium transition-all ${
+              className={`flex-1 py-3 px-4 min-h-[48px] rounded-lg border-2 font-medium transition-all ${
                 data.wasItemized === false
-                  ? "border-black bg-gray-50 text-black"
+                  ? "border-black bg-gray-50 text-black ring-1 ring-black"
                   : "border-gray-200 hover:border-gray-300"
               }`}
             >

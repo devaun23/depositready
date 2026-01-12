@@ -36,9 +36,9 @@ export const Step9PriorContact = memo(function Step9PriorContact() {
         <div className="flex gap-3">
           <button
             onClick={() => updateField("hasContacted", true)}
-            className={`flex-1 py-2 px-4 rounded-lg border-2 font-medium transition-all ${
+            className={`flex-1 py-3 px-4 min-h-[48px] rounded-lg border-2 font-medium transition-all ${
               data.priorCommunication.hasContacted === true
-                ? "border-black bg-gray-50 text-black"
+                ? "border-black bg-gray-50 text-black ring-1 ring-black"
                 : "border-gray-200 hover:border-gray-300"
             }`}
           >
@@ -51,9 +51,9 @@ export const Step9PriorContact = memo(function Step9PriorContact() {
               updateField("contactDate", null);
               updateField("response", "");
             }}
-            className={`flex-1 py-2 px-4 rounded-lg border-2 font-medium transition-all ${
+            className={`flex-1 py-3 px-4 min-h-[48px] rounded-lg border-2 font-medium transition-all ${
               data.priorCommunication.hasContacted === false
-                ? "border-black bg-gray-50 text-black"
+                ? "border-black bg-gray-50 text-black ring-1 ring-black"
                 : "border-gray-200 hover:border-gray-300"
             }`}
           >
@@ -73,9 +73,9 @@ export const Step9PriorContact = memo(function Step9PriorContact() {
                 <button
                   key={method.value}
                   onClick={() => updateField("contactMethod", method.value)}
-                  className={`py-2 px-4 rounded-lg border-2 text-sm font-medium transition-all ${
+                  className={`py-3 px-4 min-h-[48px] rounded-lg border-2 text-sm font-medium transition-all ${
                     data.priorCommunication.contactMethod === method.value
-                      ? "border-black bg-gray-50 text-black"
+                      ? "border-black bg-gray-50 text-black ring-1 ring-black"
                       : "border-gray-200 hover:border-gray-300"
                   }`}
                 >

@@ -116,12 +116,11 @@ export const Step7Deductions = memo(function Step7Deductions() {
                 </div>
                 <button
                   onClick={() => removeDeduction(deduction.id)}
-                  className="text-gray-400 hover:text-red-600 ml-4"
+                  className="text-gray-400 hover:text-red-600 hover:bg-red-50 ml-2 p-2 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-lg transition-colors"
+                  aria-label="Remove deduction"
                 >
                   <svg
                     className="w-5 h-5"
-                    width="20"
-                    height="20"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
