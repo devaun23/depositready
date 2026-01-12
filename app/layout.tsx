@@ -111,7 +111,7 @@ export default function RootLayout({
             setTimeout(function() {
               // Load Google Tag Manager
               var gtagScript = document.createElement('script');
-              gtagScript.src = 'https://www.googletagmanager.com/gtag/js?id=AW-17859927660';
+              gtagScript.src = 'https://www.googletagmanager.com/gtag/js?id=G-BWS7EBG6HG';
               gtagScript.async = true;
               document.head.appendChild(gtagScript);
 
@@ -120,6 +120,7 @@ export default function RootLayout({
               function gtag(){dataLayer.push(arguments);}
               window.gtag = gtag;
               gtag('js', new Date());
+              gtag('config', 'G-BWS7EBG6HG');
               gtag('config', 'AW-17859927660', {
                 'allow_google_signals': true,
                 'allow_ad_personalization_signals': true
