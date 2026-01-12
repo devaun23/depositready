@@ -342,7 +342,7 @@ export function PreviewPacket() {
         <View style={styles.coverDivider} />
 
         <View style={styles.coverStateBox}>
-          <Text style={styles.coverStateText}>Prepared for: [Your State]</Text>
+          <Text style={styles.coverStateText}>Prepared for: Florida</Text>
         </View>
 
         <Text style={styles.coverTagline}>
@@ -382,12 +382,12 @@ export function PreviewPacket() {
         <Text style={styles.tocTitle}>Table of Contents</Text>
 
         {[
-          { num: "1", label: "Demand Letter", desc: "Formal demand for deposit return" },
-          { num: "2", label: "Legal Timeline", desc: "State deadline analysis" },
-          { num: "3", label: "Deductions Summary", desc: "Line-by-line dispute table" },
-          { num: "4", label: "Evidence Checklist", desc: "Documentation to gather" },
-          { num: "5", label: "Small Claims Guide", desc: "Court filing instructions" },
-          { num: "6", label: "State Law Reference", desc: "Full legal reference" },
+          { num: "1", label: "Demand Letter", desc: "Formal demand for deposit return", page: "3" },
+          { num: "2", label: "Legal Timeline", desc: "State deadline analysis", page: "5" },
+          { num: "3", label: "Deductions Summary", desc: "Line-by-line dispute table", page: "7" },
+          { num: "4", label: "Evidence Checklist", desc: "Documentation to gather", page: "9" },
+          { num: "5", label: "Small Claims Guide", desc: "Court filing instructions", page: "11" },
+          { num: "6", label: "State Law Reference", desc: "Full legal reference", page: "13" },
         ].map((item, i) => (
           <View key={i} style={styles.tocItem}>
             <Text style={styles.tocNumber}>{item.num}</Text>
@@ -395,7 +395,7 @@ export function PreviewPacket() {
               <Text style={[styles.tocLabel, styles.bold]}>{item.label}</Text>
               <Text style={[styles.tocLabel, { color: "#6b7280", fontSize: 10 }]}>{item.desc}</Text>
             </View>
-            <Text style={styles.tocPageNumber}>██</Text>
+            <Text style={styles.tocPageNumber}>{item.page}</Text>
           </View>
         ))}
 
@@ -411,82 +411,75 @@ export function PreviewPacket() {
         </View>
       </Page>
 
-      {/* PAGE 3: DEMAND LETTER - HEAVILY REDACTED */}
+      {/* PAGE 3: DEMAND LETTER - SAMPLE CONTENT */}
       <Page size="LETTER" style={styles.page}>
         <View style={styles.pageHeader}>
           <Text style={styles.pageTitle}>Section 1: Demand Letter</Text>
           <Text style={styles.pageSubtitle}>Send via certified mail with return receipt requested</Text>
         </View>
 
-        {/* Sender Info - Redacted */}
+        {/* Sender Info */}
         <View style={styles.letterSenderBlock}>
-          <View style={[styles.redactedMedium, { marginBottom: 4 }]} />
-          <View style={[styles.redactedMedium, { marginBottom: 4 }]} />
-          <View style={styles.redactedShort} />
+          <Text style={styles.paragraph}>Sarah Chen</Text>
+          <Text style={styles.paragraph}>789 New Street, Apt 5</Text>
+          <Text style={styles.paragraph}>Tampa, FL 33601</Text>
         </View>
 
-        {/* Date - Redacted */}
+        {/* Date */}
         <View style={styles.letterDateBlock}>
-          <View style={styles.redactedShort} />
+          <Text style={styles.paragraph}>January 11, 2026</Text>
         </View>
 
-        {/* Recipient - Redacted */}
+        {/* Recipient */}
         <View style={styles.letterRecipientBlock}>
-          <View style={[styles.redactedMedium, { marginBottom: 4 }]} />
-          <View style={styles.redactedMedium} />
+          <Text style={styles.paragraph}>Sunset Property Management</Text>
+          <Text style={styles.paragraph}>100 Corporate Blvd, Suite 200</Text>
+          <Text style={styles.paragraph}>Tampa, FL 33602</Text>
         </View>
 
-        {/* Subject - Redacted */}
+        {/* Subject */}
         <View style={{ marginBottom: 20 }}>
           <Text style={styles.letterSubject}>RE: DEMAND FOR RETURN OF SECURITY DEPOSIT</Text>
-          <View style={styles.redactedMedium} />
+          <Text style={[styles.paragraph, { fontStyle: "italic" }]}>Property: 456 Palm Avenue, Apt 12, Tampa, FL 33602</Text>
         </View>
 
         {/* Salutation */}
-        <Text style={styles.letterSalutation}>Dear Property Management,</Text>
+        <Text style={styles.letterSalutation}>Dear Sunset Property Management,</Text>
 
-        {/* Opening paragraph - Visible */}
+        {/* Opening paragraph */}
         <Text style={styles.paragraph}>
-          This letter serves as formal demand for the return of my security deposit. I vacated the premises and am entitled to the return of my deposit in accordance with state law.
+          This letter serves as formal demand for the return of my security deposit in the amount of $1,850.00 paid on June 1, 2024. I vacated the premises on November 15, 2025, and I am entitled to the return of my deposit in accordance with Florida law.
         </Text>
 
-        {/* Redacted content */}
-        <View style={{ marginBottom: 15 }}>
-          <View style={styles.redactedLine} />
-          <View style={styles.redactedLine} />
-          <View style={styles.redactedLine} />
-          <View style={styles.redactedMedium} />
-        </View>
+        {/* Legal basis paragraph */}
+        <Text style={styles.paragraph}>
+          Pursuant to Florida Statute §83.49(3), you were required to return my security deposit or provide a written notice of claim within 21 days of my departure. As of today, 57 days have passed and I have received neither a refund nor proper itemization.
+        </Text>
 
-        <View style={{ marginBottom: 15 }}>
-          <View style={styles.redactedLine} />
-          <View style={styles.redactedLine} />
-          <View style={styles.redactedLine} />
-          <View style={styles.redactedLine} />
-          <View style={styles.redactedShort} />
-        </View>
+        {/* Demand paragraph */}
+        <Text style={styles.paragraph}>
+          Your failure to comply with the statutory deadline means you have forfeited your right to impose any claim against the deposit. Under Florida law, I am entitled to the full return of $1,850.00 plus potential statutory damages.
+        </Text>
 
         {/* Info box */}
         <View style={styles.infoBox}>
           <Text style={styles.infoText}>
-            {"This letter references your state's security deposit deadlines and legal consequences for non-compliance."}
+            This letter cites Florida Statute §83.49(3) - your state-specific deadlines and penalties are automatically included.
           </Text>
         </View>
 
-        {/* More redacted content */}
-        <View style={{ marginBottom: 15 }}>
-          <View style={styles.redactedLine} />
-          <View style={styles.redactedLine} />
-          <View style={styles.redactedMedium} />
-        </View>
+        {/* Closing */}
+        <Text style={styles.paragraph}>
+          I demand payment of $1,850.00 within 14 days of receipt of this letter. Failure to comply will result in my pursuing all available legal remedies, including small claims court action for statutory damages.
+        </Text>
 
         <View style={styles.footer}>
-          <Text>DepositReady.co - Preview</Text>
+          <Text>DepositReady.co - Sample Preview</Text>
           <Text>Page 3</Text>
         </View>
       </Page>
 
-      {/* PAGE 4: EVIDENCE LOG - PARTIAL */}
+      {/* PAGE 4: EVIDENCE LOG - SAMPLE CONTENT */}
       <Page size="LETTER" style={styles.page}>
         <View style={styles.pageHeader}>
           <Text style={styles.pageTitle}>Section 4: Evidence Checklist</Text>
@@ -503,16 +496,21 @@ export function PreviewPacket() {
             <View style={{ width: "25%" }}><Text style={styles.tableHeaderText}>Status</Text></View>
             <View style={{ width: "45%" }}><Text style={styles.tableHeaderText}>Notes</Text></View>
           </View>
-          {[1, 2, 3, 4].map((_, i) => (
+          {[
+            { doc: "Lease Agreement", status: "Have", notes: "Signed copy from June 2024" },
+            { doc: "Move-in Photos", status: "Have", notes: "47 photos dated June 1, 2024" },
+            { doc: "Move-out Photos", status: "Have", notes: "52 photos dated Nov 15, 2025" },
+            { doc: "Landlord Notice", status: "Missing", notes: "Never received itemization" },
+          ].map((item, i) => (
             <View key={i} style={[styles.tableRow, i % 2 === 1 ? { backgroundColor: "#f9fafb" } : {}]}>
-              <View style={[styles.tableCellRedacted, { width: "30%" }]}>
-                <View style={[styles.redactedMedium, { width: "80%", marginBottom: 0 }]} />
+              <View style={{ width: "30%" }}>
+                <Text style={styles.tableCell}>{item.doc}</Text>
               </View>
-              <View style={[styles.tableCellRedacted, { width: "25%" }]}>
-                <View style={[styles.redactedShort, { width: "60%", marginBottom: 0 }]} />
+              <View style={{ width: "25%" }}>
+                <Text style={[styles.tableCell, { color: item.status === "Have" ? "#16a34a" : "#dc2626" }]}>{item.status}</Text>
               </View>
-              <View style={[styles.tableCellRedacted, { width: "45%" }]}>
-                <View style={[styles.redactedLine, { width: "90%", marginBottom: 0 }]} />
+              <View style={{ width: "45%" }}>
+                <Text style={styles.tableCell}>{item.notes}</Text>
               </View>
             </View>
           ))}
@@ -541,43 +539,46 @@ export function PreviewPacket() {
         </View>
       </Page>
 
-      {/* PAGE 5: LEGAL REFERENCES - LOCKED */}
+      {/* PAGE 5: LEGAL REFERENCES - SAMPLE CONTENT */}
       <Page size="LETTER" style={styles.page}>
         <View style={styles.pageHeader}>
           <Text style={styles.pageTitle}>Section 6: State Law Reference</Text>
-          <Text style={styles.pageSubtitle}>Security Deposit Statute - Key Points</Text>
+          <Text style={styles.pageSubtitle}>Florida Security Deposit Statute</Text>
         </View>
 
-        <View style={styles.lockedBox}>
-          <Text style={styles.lockedIcon}>🔒</Text>
-          <Text style={styles.lockedTitle}>LOCKED</Text>
-          <Text style={styles.lockedText}>
-            State-specific legal references unlock after checkout. Your packet will include the full statute text for your state.
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Florida Statute §83.49(3)</Text>
+          <Text style={styles.paragraph}>
+            Upon the vacating of the premises for termination of the lease, if the landlord does not intend to impose a claim on the security deposit, the landlord shall have 15 days to return the security deposit together with interest if otherwise required, or the landlord shall have 30 days to give the tenant written notice by certified mail of the landlord&apos;s intention to impose a claim on the deposit.
           </Text>
         </View>
 
-        <View style={{ marginTop: 30 }}>
-          <Text style={[styles.sectionTitle, { marginBottom: 15 }]}>Includes:</Text>
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Key Requirements for Florida</Text>
           <View style={styles.list}>
-            <Text style={styles.listItem}>• Applicable statute text for your state</Text>
-            <Text style={styles.listItem}>• Return deadline requirements</Text>
-            <Text style={styles.listItem}>• Claim notice requirements</Text>
-            <Text style={styles.listItem}>• Itemization requirements</Text>
-            <Text style={styles.listItem}>• Penalty provisions for non-compliance</Text>
-            <Text style={styles.listItem}>• Bad faith damages multiplier</Text>
-            <Text style={styles.listItem}>• Tenant rights summary</Text>
-            <Text style={styles.listItem}>• Link to full statute online</Text>
+            <Text style={styles.listItem}>• <Text style={styles.bold}>Return Deadline:</Text> 15 days (no claim) or 30 days (with claim notice)</Text>
+            <Text style={styles.listItem}>• <Text style={styles.bold}>Notice Method:</Text> Certified mail required for claims</Text>
+            <Text style={styles.listItem}>• <Text style={styles.bold}>Itemization:</Text> Must specify each deduction with amount</Text>
+            <Text style={styles.listItem}>• <Text style={styles.bold}>Penalty:</Text> Forfeiture of right to claim against deposit</Text>
+            <Text style={styles.listItem}>• <Text style={styles.bold}>Bad Faith:</Text> Court may award damages up to 2x deposit</Text>
           </View>
+        </View>
+
+        <View style={styles.quoteBox}>
+          <Text style={styles.quoteText}>
+            {'"If the landlord fails to give the required notice within the 30-day period, he or she forfeits the right to impose a claim upon the security deposit."'}
+          </Text>
+          <Text style={[styles.paragraph, { marginTop: 8, fontSize: 9 }]}>— Florida Statute §83.49(3)(a)</Text>
         </View>
 
         <View style={styles.infoBox}>
           <Text style={styles.infoText}>
-            {"Your state's law determines deadlines, required notices, and penalties. This section is customized based on where your rental property is located."}
+            Your Recovery Package includes the complete statute text, court citations, and step-by-step guidance for your specific situation.
           </Text>
         </View>
 
         <View style={styles.footer}>
-          <Text>DepositReady.co - Preview</Text>
+          <Text>DepositReady.co - Sample Preview</Text>
           <Text>Page 5</Text>
         </View>
       </Page>
