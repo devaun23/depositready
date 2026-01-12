@@ -184,7 +184,7 @@ export default function CaliforniaSecurityDepositDeadlinePage() {
 
       <SEOCTA
         title="Check your California security deposit deadline in 30 seconds"
-        description="Know where you stand before taking action. $39 one time · Takes about 10 minutes · Instant download. Typical California deposits range from $1,500–$3,500."
+        description="Know where you stand before taking action. $79 one time · Takes about 10 minutes · Instant download. Typical California deposits range from $1,500–$3,500."
         primaryButton={{
           text: "Start My Dispute Packet",
           href: "/wizard",

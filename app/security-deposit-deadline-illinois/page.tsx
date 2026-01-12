@@ -184,7 +184,7 @@ export default function IllinoisSecurityDepositDeadlinePage() {
 
       <SEOCTA
         title="Check your Illinois security deposit deadline in 30 seconds"
-        description="Know where you stand before taking action. $39 one time · Takes about 10 minutes · Instant download. Typical Illinois deposits range from $1,000–$2,500."
+        description="Know where you stand before taking action. $79 one time · Takes about 10 minutes · Instant download. Typical Illinois deposits range from $1,000–$2,500."
         primaryButton={{
           text: "Start My Dispute Packet",
           href: "/wizard",

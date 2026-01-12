@@ -2,7 +2,7 @@ import { HeroCTA } from "./HeroCTA";
 
 export function Hero() {
   return (
-    <section className="py-12 pb-20 sm:pb-12 md:py-16 px-4 sm:px-6">
+    <section className="min-h-[calc(100dvh-64px)] sm:min-h-0 flex flex-col justify-center py-8 sm:py-12 md:py-16 px-4 sm:px-6 snap-start">
       <div className="max-w-3xl mx-auto text-center">
         {/* Headline */}
         <h1 className="font-serif text-3xl md:text-5xl lg:text-6xl font-semibold text-black leading-tight mb-6 md:mb-8">
@@ -26,7 +26,7 @@ export function Hero() {
 
         {/* Trust Line */}
         <p className="text-xs text-gray-500">
-          $39 one-time · Secure checkout via Stripe · Used in FL, CA, TX, NY, GA, IL
+          $79 one-time · Secure checkout via Stripe · Used in FL, CA, TX, NY, GA, IL
         </p>
       </div>
     </section>

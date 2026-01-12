@@ -62,7 +62,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "DepositReady - Get Your Security Deposit Back",
     description:
-      "Generate a complete Florida security deposit dispute packet in 10 minutes. $39 one-time purchase.",
+      "Generate a complete Florida security deposit dispute packet in 10 minutes. $79 one-time purchase.",
     images: ["/og-image.png"],
   },
   robots: {

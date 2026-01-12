@@ -6,7 +6,7 @@ import { stripeFetch } from "@/lib/stripe-fetch";
 export const runtime = "nodejs";
 export const maxDuration = 30;
 
-const PRICE_CENTS = 3900; // $39.00
+const PRICE_CENTS = 7900; // $79.00
 
 // Simple email validation regex
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

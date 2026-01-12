@@ -66,7 +66,7 @@ export default async function StateLandingPage({
               </Button>
             </div>
             <p className="text-sm text-gray-500">
-              $39 one-time purchase. Preview before you pay.
+              $79 one-time purchase. Preview before you pay.
             </p>
           </div>
         </section>
@@ -202,7 +202,7 @@ export default async function StateLandingPage({
               Ready to Get Your Money Back?
             </h2>
             <p className="text-gray-600 mb-8">
-              Most tenants recover 100% of their deposit. The $39 packet pays
+              Most tenants recover 100% of their deposit. The $79 packet pays
               for itself.
             </p>
             <Button href={`/${state}/wizard`} size="lg">

@@ -432,7 +432,7 @@ export function EligibilityModal({ isOpen, onClose }: EligibilityModalProps) {
                 </button>
 
                 <p className="text-xs text-gray-500 text-center mt-4">
-                  $39 one-time · Preview before you pay
+                  $79 one-time · Preview before you pay
                 </p>
               </>
             )}
@@ -534,7 +534,7 @@ export function EligibilityModal({ isOpen, onClose }: EligibilityModalProps) {
                 </div>
 
                 <p className="text-xs text-gray-500 text-center">
-                  $39 one-time · Takes 5 minutes
+                  $79 one-time · Takes 5 minutes
                 </p>
               </div>
             </div>

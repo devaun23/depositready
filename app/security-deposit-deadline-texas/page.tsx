@@ -166,7 +166,7 @@ export default function TexasSecurityDepositDeadlinePage() {
 
       <SEOCTA
         title="Check Your Texas Security Deposit Deadline in 30 Seconds"
-        description="Know where you stand before taking action. $39 one time · Takes about 10 minutes · Instant download. Typical Texas deposits range from $1,000–$3,000."
+        description="Know where you stand before taking action. $79 one time · Takes about 10 minutes · Instant download. Typical Texas deposits range from $1,000–$3,000."
         primaryButton={{
           text: "Start My Dispute Packet",
           href: "/wizard",

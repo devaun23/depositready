@@ -100,7 +100,7 @@ export default function TermsPage() {
             </h2>
             <ul className="list-disc pl-6 text-gray-600 space-y-2">
               <li>
-                The current price for a dispute packet is <strong>$39</strong>{" "}
+                The current price for a dispute packet is <strong>$79</strong>{" "}
                 (one-time payment)
               </li>
               <li>

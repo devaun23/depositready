@@ -31,7 +31,7 @@ const Footer = dynamic(
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white sm:snap-none snap-y snap-mandatory overflow-y-auto">
       <ViewLandingTracker />
       <Navbar />
       <main id="main-content">

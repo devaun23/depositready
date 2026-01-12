@@ -211,7 +211,7 @@ export default function WhatCanLandlordsDeductPage() {
 
       <SEOCTA
         title="Unsure if your landlord's deductions are valid?"
-        description="Check where you stand before escalating. $39 one-time · Takes about 10 minutes · Instant download. Typical deposits range from $1,000–$3,000."
+        description="Check where you stand before escalating. $79 one-time · Takes about 10 minutes · Instant download. Typical deposits range from $1,000–$3,000."
         primaryButton={{
           text: "Start My Dispute Packet",
           href: "/wizard",

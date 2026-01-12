@@ -186,7 +186,7 @@ export default function FloridaSecurityDepositDeadlinePage() {
 
       <SEOCTA
         title="Check your Florida security deposit deadline in 30 seconds"
-        description="Know where you stand before taking action. $39 one time · Takes about 10 minutes · Instant download. Typical Florida deposits range from $1,000–$3,000."
+        description="Know where you stand before taking action. $79 one time · Takes about 10 minutes · Instant download. Typical Florida deposits range from $1,000–$3,000."
         primaryButton={{
           text: "Start My Dispute Packet",
           href: "/wizard",

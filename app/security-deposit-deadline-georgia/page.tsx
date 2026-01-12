@@ -179,7 +179,7 @@ export default function GeorgiaSecurityDepositDeadlinePage() {
 
       <SEOCTA
         title="Check your Georgia security deposit deadline in 30 seconds"
-        description="Know where you stand before taking action. $39 one time · Takes about 10 minutes · Instant download. Typical Georgia deposits range from $800–$2,500."
+        description="Know where you stand before taking action. $79 one time · Takes about 10 minutes · Instant download. Typical Georgia deposits range from $800–$2,500."
         primaryButton={{
           text: "Start My Dispute Packet",
           href: "/wizard",

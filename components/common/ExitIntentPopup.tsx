@@ -129,7 +129,7 @@ export function ExitIntentPopup() {
 
         {/* Price reminder */}
         <p className="text-center text-xs text-gray-400 mt-4">
-          $39 one-time purchase. No subscription.
+          $79 one-time purchase. No subscription.
         </p>
       </div>
     </div>

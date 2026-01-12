@@ -70,7 +70,7 @@ function PreviewContent() {
         // Fire Google Ads conversion for checkout initiation
         window.gtag?.("event", "conversion", {
           send_to: "AW-17859927660/jtPRCJKB9N4bEOy8o8RC",
-          value: 39.0,
+          value: 79.0,
           currency: "USD",
         });
 
@@ -286,7 +286,7 @@ function PreviewContent() {
             </div>
           )}
 
-          <div className="text-3xl font-bold text-gray-900 mb-2">$39</div>
+          <div className="text-3xl font-bold text-gray-900 mb-2">$79</div>
           <p className="text-gray-600 mb-6">
             One-time purchase. Instant download. No subscription.
           </p>
@@ -317,7 +317,7 @@ function PreviewContent() {
                 Redirecting to checkout...
               </span>
             ) : (
-              "Get My Packet — $39"
+              "Get My Packet — $79"
             )}
           </button>
 
