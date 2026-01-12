@@ -32,7 +32,7 @@ interface FormData {
   noticeDate: string;
 }
 
-type ModalStep = "form" | "result";
+type ModalStep = "form" | "result" | "preview";
 
 export function EligibilityModal({ isOpen, onClose }: EligibilityModalProps) {
   const router = useRouter();
@@ -177,7 +177,9 @@ export function EligibilityModal({ isOpen, onClose }: EligibilityModalProps) {
       />
 
       {/* Modal */}
-      <div className="relative bg-white rounded-xl shadow-2xl w-full max-w-[calc(100vw-2rem)] sm:max-w-md max-h-[90vh] overflow-y-auto">
+      <div className={`relative bg-white rounded-xl shadow-2xl w-full max-w-[calc(100vw-2rem)] max-h-[90vh] overflow-y-auto ${
+        step === "preview" ? "sm:max-w-3xl" : "sm:max-w-md"
+      }`}>
         {/* Close button */}
         <button
           onClick={onClose}
@@ -296,7 +298,7 @@ export function EligibilityModal({ isOpen, onClose }: EligibilityModalProps) {
               Free to check. No payment required.
             </p>
           </div>
-        ) : (
+        ) : step === "result" ? (
           <div className="p-6">
             {analysis && stateRules && (
               <>
@@ -413,13 +415,11 @@ export function EligibilityModal({ isOpen, onClose }: EligibilityModalProps) {
 
                 {/* CTA */}
                 <Button
-                  onClick={handleContinueToWizard}
+                  onClick={() => setStep("preview")}
                   className="w-full"
                   size="lg"
                 >
-                  {analysis.landlordInViolation
-                    ? "Generate My Demand Letter"
-                    : "Build My Dispute Packet"}
+                  See What You&apos;ll Get →
                 </Button>
 
                 <button
@@ -434,6 +434,108 @@ export function EligibilityModal({ isOpen, onClose }: EligibilityModalProps) {
                 </p>
               </>
             )}
+          </div>
+        ) : (
+          /* Preview Step */
+          <div className="p-6">
+            <h2 className="text-xl font-semibold text-black mb-6 text-center">
+              Here&apos;s What You&apos;ll Get
+            </h2>
+
+            <div className="grid md:grid-cols-2 gap-6">
+              {/* Left: PDF Preview */}
+              <div className="space-y-3">
+                <div className="border border-gray-200 rounded-lg overflow-hidden shadow-sm">
+                  <img
+                    src="/packet-preview.png"
+                    alt="Preview of your legal dispute packet"
+                    className="w-full h-auto"
+                  />
+                </div>
+                <p className="text-xs text-gray-500 text-center">
+                  Your personalized 10-page dispute packet
+                </p>
+              </div>
+
+              {/* Right: Why It Works */}
+              <div className="space-y-6">
+                {/* Success Stat */}
+                <div className="text-center md:text-left">
+                  <div className="text-4xl font-bold text-black">85%+</div>
+                  <p className="text-gray-600 text-sm">
+                    of users recover their full security deposit
+                  </p>
+                </div>
+
+                {/* Testimonial */}
+                <div className="bg-gray-50 rounded-lg p-4">
+                  <blockquote className="text-gray-700 text-sm italic mb-2">
+                    &ldquo;The deadline calculator showed my landlord was 3 weeks late. I cited the statute in my letter and got my full $1,800 back.&rdquo;
+                  </blockquote>
+                  <p className="text-gray-500 text-xs">
+                    — Marcus W., Texas
+                  </p>
+                </div>
+
+                {/* What's Included */}
+                <div>
+                  <h3 className="font-medium text-black mb-2 text-sm">What&apos;s Included:</h3>
+                  <ul className="space-y-1.5 text-sm text-gray-600">
+                    <li className="flex items-center gap-2">
+                      <svg className="w-4 h-4 text-green-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                      10-page legal demand letter
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <svg className="w-4 h-4 text-green-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                      Deadline violation analysis
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <svg className="w-4 h-4 text-green-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                      Damages calculation
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <svg className="w-4 h-4 text-green-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                      Evidence checklist
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <svg className="w-4 h-4 text-green-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                      Small claims court guide
+                    </li>
+                  </ul>
+                </div>
+
+                {/* CTA */}
+                <div className="space-y-3">
+                  <Button
+                    onClick={handleContinueToWizard}
+                    className="w-full"
+                    size="lg"
+                  >
+                    Start My Packet →
+                  </Button>
+                  <button
+                    onClick={() => setStep("result")}
+                    className="w-full text-sm text-gray-500 hover:text-gray-700 transition"
+                  >
+                    ← Back
+                  </button>
+                </div>
+
+                <p className="text-xs text-gray-500 text-center">
+                  $39 one-time · Takes 5 minutes
+                </p>
+              </div>
+            </div>
           </div>
         )}
       </div>
