@@ -205,17 +205,9 @@ export const Step5ReviewSubmit = memo(function Step5ReviewSubmit() {
           Review Your Information
         </h3>
 
-        {/* Situation & Timeline */}
+        {/* Situation & Timeline - Read only (from eligibility modal) */}
         <div className="bg-gray-50 rounded-lg p-4 mb-4">
-          <div className="flex justify-between items-start mb-3">
-            <h4 className="font-medium text-gray-900">Situation</h4>
-            <button
-              onClick={() => goToStep(1)}
-              className="text-sm text-gray-600 hover:text-black underline"
-            >
-              Edit
-            </button>
-          </div>
+          <h4 className="font-medium text-gray-900 mb-3">Situation</h4>
           <div className="grid grid-cols-2 gap-3 text-sm">
             <div>
               <span className="text-gray-500">State:</span>
@@ -243,7 +235,7 @@ export const Step5ReviewSubmit = memo(function Step5ReviewSubmit() {
           <div className="flex justify-between items-start mb-3">
             <h4 className="font-medium text-gray-900">Deposit</h4>
             <button
-              onClick={() => goToStep(2)}
+              onClick={() => goToStep(1)}
               className="text-sm text-gray-600 hover:text-black underline"
             >
               Edit
@@ -272,7 +264,7 @@ export const Step5ReviewSubmit = memo(function Step5ReviewSubmit() {
           <div className="flex justify-between items-start mb-3">
             <h4 className="font-medium text-gray-900">Addresses</h4>
             <button
-              onClick={() => goToStep(3)}
+              onClick={() => goToStep(2)}
               className="text-sm text-gray-600 hover:text-black underline"
             >
               Edit
@@ -291,54 +283,13 @@ export const Step5ReviewSubmit = memo(function Step5ReviewSubmit() {
             </div>
           </div>
         </div>
-
-        {/* Case Details */}
-        <div className="bg-gray-50 rounded-lg p-4 mb-4">
-          <div className="flex justify-between items-start mb-3">
-            <h4 className="font-medium text-gray-900">Your Case</h4>
-            <button
-              onClick={() => goToStep(4)}
-              className="text-sm text-gray-600 hover:text-black underline"
-            >
-              Edit
-            </button>
-          </div>
-          <div className="space-y-2 text-sm">
-            <div>
-              <span className="text-gray-500">Disputed deductions:</span>
-              <span className="ml-2 font-medium">
-                {data.deductions.length > 0
-                  ? `${data.deductions.length} items ($${totalDeductions.toFixed(2)})`
-                  : data.issueType === "no_refund" ? "N/A (no breakdown received)" : "None added"}
-              </span>
-            </div>
-            <div>
-              <span className="text-gray-500">Evidence:</span>
-              <span className="ml-2 font-medium">
-                {selectedEvidence.length > 0
-                  ? selectedEvidence.map((e) => e.label).join(", ")
-                  : "None selected"}
-              </span>
-            </div>
-            <div>
-              <span className="text-gray-500">Prior contact:</span>
-              <span className="ml-2 font-medium">
-                {data.priorCommunication.hasContacted === true
-                  ? `Yes (${data.priorCommunication.contactMethod || "method not specified"})`
-                  : data.priorCommunication.hasContacted === false
-                  ? "No"
-                  : "Not specified"}
-              </span>
-            </div>
-          </div>
-        </div>
       </div>
 
       {/* Ready to Generate */}
       <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
-        <h4 className="font-medium text-green-900 mb-2">Ready to Generate Your Packet</h4>
+        <h4 className="font-medium text-green-900 mb-2">Ready to Generate Your Recovery Package</h4>
         <p className="text-sm text-green-800">
-          Click &quot;Generate Packet&quot; to see a preview of your complete dispute packet including your customized demand letter, legal timeline, and evidence checklist.
+          Click &quot;Generate Recovery Package&quot; to see a preview of your complete package including your customized demand letter, legal timeline, and evidence checklist.
         </p>
       </div>
     </div>

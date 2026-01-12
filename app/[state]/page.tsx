@@ -53,13 +53,13 @@ export default async function StateLandingPage({
               {rules.headline}
             </h1>
             <p className="text-base md:text-xl text-gray-600 mb-6 md:mb-8 max-w-2xl mx-auto">
-              Generate a complete dispute packet in 10 minutes. Customized
+              Get your complete Recovery Package in 10 minutes. Customized
               demand letter, legal deadlines, and small claims guidance based on{" "}
               {rules.statuteTitle}.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-6">
               <Button href={`/${state}/wizard`} size="lg">
-                Start Your Dispute Packet
+                Start Your Recovery Package
               </Button>
               <Button href="#whats-included" variant="outline" size="lg">
                 See what&apos;s included
@@ -162,7 +162,7 @@ export default async function StateLandingPage({
         <section id="whats-included" className="py-10 md:py-16 px-4 sm:px-6 bg-gray-50">
           <div className="max-w-5xl mx-auto">
             <h2 className="font-serif text-2xl md:text-3xl font-semibold text-black mb-6 md:mb-8 text-center">
-              Your Complete Dispute Packet
+              Your Complete Recovery Package
             </h2>
             <div className="grid md:grid-cols-2 gap-6">
               {[
@@ -202,11 +202,11 @@ export default async function StateLandingPage({
               Ready to Get Your Money Back?
             </h2>
             <p className="text-gray-600 mb-8">
-              Most tenants recover 100% of their deposit. The $79 packet pays
+              Most tenants recover 100% of their deposit. The $79 Recovery Package pays
               for itself.
             </p>
             <Button href={`/${state}/wizard`} size="lg">
-              Start Your Dispute Packet
+              Start Your Recovery Package
             </Button>
           </div>
         </section>

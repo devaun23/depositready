@@ -16,10 +16,10 @@ export function PacketPreviewSection({
       {/* Header */}
       <div className="px-6 py-4 border-b border-gray-100">
         <h2 className="text-lg font-semibold text-gray-900">
-          Preview Your Packet
+          Preview Your Recovery Package
         </h2>
         <p className="text-sm text-gray-500 mt-1">
-          See exactly what you&apos;re getting — a professional dispute packet that landlords take seriously.
+          See exactly what you&apos;re getting — a professional recovery package that landlords take seriously.
         </p>
       </div>
 
@@ -31,7 +31,7 @@ export function PacketPreviewSection({
       {/* Footer with CTA */}
       <div className="px-6 py-4 bg-white border-t border-gray-100">
         <p className="text-xs text-gray-500 text-center mb-4">
-          This preview uses sample data. Your packet will include your specific details, deadlines, and state law references.
+          This preview uses sample data. Your Recovery Package will include your specific details, deadlines, and state law references.
         </p>
 
         <button

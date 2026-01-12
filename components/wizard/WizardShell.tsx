@@ -135,7 +135,7 @@ export function WizardShell({ children, onComplete }: WizardShellProps) {
                     : "bg-gray-300 text-gray-600"
                 } ${isShaking ? "animate-shake" : ""}`}
               >
-                {isLastStep ? "Generate Packet" : "Continue"}
+                {isLastStep ? "Generate Recovery Package" : "Continue"}
               </button>
             </div>
           </div>

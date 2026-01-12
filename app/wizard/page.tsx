@@ -6,10 +6,8 @@ import {
   WizardProvider,
   WizardShell,
   useWizard,
-  Step1GettingStarted,
   Step2YourDeposit,
   Step3Addresses,
-  Step4BuildCase,
   Step5ReviewSubmit,
 } from "@/components/wizard";
 import { isValidStateCode } from "@/lib/state-rules";
@@ -34,17 +32,13 @@ function WizardContent() {
   const renderStep = () => {
     switch (currentStep) {
       case 1:
-        return <Step1GettingStarted />;
-      case 2:
         return <Step2YourDeposit />;
-      case 3:
+      case 2:
         return <Step3Addresses />;
-      case 4:
-        return <Step4BuildCase />;
-      case 5:
+      case 3:
         return <Step5ReviewSubmit />;
       default:
-        return <Step1GettingStarted />;
+        return <Step2YourDeposit />;
     }
   };
 
@@ -56,17 +50,18 @@ function WizardPageContent() {
   const [initialData, setInitialData] = useState<{
     stateCode: StateCode | null;
     moveOutDate: string | null;
-    skipStep1: boolean;
+    depositAmount: number | null;
   } | null>(null);
 
   useEffect(() => {
     // Check query params first, then localStorage
     const stateParam = searchParams.get("state");
     const moveoutParam = searchParams.get("moveout");
-    const skipStep1 = searchParams.get("skipStep1") === "true";
+    const depositParam = searchParams.get("deposit");
 
     let stateCode: StateCode | null = null;
     let moveOutDate: string | null = null;
+    let depositAmount: number | null = null;
 
     // Try query params first
     if (stateParam && isValidStateCode(stateParam)) {
@@ -74,6 +69,9 @@ function WizardPageContent() {
     }
     if (moveoutParam) {
       moveOutDate = moveoutParam;
+    }
+    if (depositParam) {
+      depositAmount = parseFloat(depositParam) || null;
     }
 
     // Fall back to localStorage eligibility data
@@ -88,6 +86,9 @@ function WizardPageContent() {
           if (!moveOutDate && parsed.moveOutDate) {
             moveOutDate = parsed.moveOutDate;
           }
+          if (!depositAmount && parsed.depositAmount) {
+            depositAmount = parseFloat(parsed.depositAmount) || null;
+          }
         }
       } catch {
         // Ignore parse errors
@@ -95,14 +96,13 @@ function WizardPageContent() {
     }
 
     // eslint-disable-next-line react-hooks/set-state-in-effect -- initializing from URL params and localStorage (external systems)
-    setInitialData({ stateCode, moveOutDate, skipStep1 });
+    setInitialData({ stateCode, moveOutDate, depositAmount });
 
     // Track wizard start
     if (typeof window !== "undefined" && window.gtag) {
       window.gtag("event", "wizard_start", {
         event_category: "engagement",
         state: stateCode || "unknown",
-        from_eligibility: skipStep1,
       });
     }
   }, [searchParams]);
@@ -120,7 +120,8 @@ function WizardPageContent() {
       <WizardProvider
         initialStateCode={initialData.stateCode || undefined}
         initialMoveOutDate={initialData.moveOutDate || undefined}
-        initialStep={initialData.skipStep1 ? 2 : 1}
+        initialDepositAmount={initialData.depositAmount || undefined}
+        initialStep={1}
       >
         <WizardContent />
       </WizardProvider>

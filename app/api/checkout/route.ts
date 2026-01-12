@@ -97,8 +97,8 @@ export async function POST(request: NextRequest) {
           price_data: {
             currency: "usd",
             product_data: {
-              name: "Security Deposit Dispute Packet",
-              description: `Dispute packet for ${propertyAddress}`,
+              name: "Security Deposit Recovery Package",
+              description: `Recovery package for ${propertyAddress}`,
             },
             unit_amount: PRICE_CENTS,
           },

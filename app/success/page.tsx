@@ -283,7 +283,7 @@ function SuccessContent() {
             Payment Successful!
           </h1>
           <p className="text-gray-600 mb-6">
-            Thank you for your purchase. Your dispute packet is ready.
+            Thank you for your purchase. Your Recovery Package is ready.
           </p>
 
           {paymentDetails && (
@@ -333,7 +333,7 @@ function SuccessContent() {
             ) : hasDownloaded ? (
               "Download Again"
             ) : (
-              "Download Your Packet"
+              "Download Your Recovery Package"
             )}
           </button>
 
@@ -354,7 +354,7 @@ function SuccessContent() {
                 <strong>Permanent Download Link:</strong>
               </p>
               <p className="text-blue-700 mb-2">
-                Bookmark this link to download your packet anytime:
+                Bookmark this link to download your Recovery Package anytime:
               </p>
               <Link
                 href={`/download?token=${paymentDetails.downloadToken}`}

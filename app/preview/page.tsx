@@ -129,10 +129,10 @@ function PreviewContent() {
       <main className="max-w-4xl mx-auto px-4 py-8">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Your Dispute Packet Preview
+            Your Recovery Package Preview
           </h1>
           <p className="text-gray-600">
-            Review what you will receive, then purchase to download.
+            Review your personalized legal strategy, then purchase to download.
           </p>
         </div>
 
@@ -207,7 +207,7 @@ function PreviewContent() {
         {/* Packet Contents */}
         <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
           <h2 className="text-lg font-semibold text-gray-900 mb-4">
-            Your Packet Includes
+            Your Recovery Package Includes
           </h2>
           <div className="space-y-4">
             {[
@@ -317,7 +317,7 @@ function PreviewContent() {
                 Redirecting to checkout...
               </span>
             ) : (
-              "Get My Packet — $79"
+              "Get My Recovery Package — $79"
             )}
           </button>
 

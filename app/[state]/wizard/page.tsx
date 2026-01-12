@@ -6,10 +6,8 @@ import {
   WizardProvider,
   WizardShell,
   useWizard,
-  Step1GettingStarted,
   Step2YourDeposit,
   Step3Addresses,
-  Step4BuildCase,
   Step5ReviewSubmit,
 } from "@/components/wizard";
 import { getStateRules, isValidStateSlug, getStateCodeFromSlug } from "@/lib/state-rules";
@@ -28,17 +26,13 @@ function WizardContent() {
   const renderStep = () => {
     switch (currentStep) {
       case 1:
-        return <Step1GettingStarted />;
-      case 2:
         return <Step2YourDeposit />;
-      case 3:
+      case 2:
         return <Step3Addresses />;
-      case 4:
-        return <Step4BuildCase />;
-      case 5:
+      case 3:
         return <Step5ReviewSubmit />;
       default:
-        return <Step1GettingStarted />;
+        return <Step2YourDeposit />;
     }
   };
 
@@ -90,7 +84,7 @@ export default function StateWizardPage() {
     <div className="min-h-screen bg-gray-50">
       {/* State indicator */}
       <div className="bg-blue-600 text-white text-center py-2 text-sm">
-        Creating dispute packet for <strong>{rules?.name}</strong> under{" "}
+        Creating Recovery Package for <strong>{rules?.name}</strong> under{" "}
         {rules?.statuteTitle}
       </div>
 

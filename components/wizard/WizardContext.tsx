@@ -47,11 +47,9 @@ interface WizardContextType {
 const WizardContext = createContext<WizardContextType | null>(null);
 
 export const WIZARD_STEPS = [
-  { id: 1, title: "Your Situation", shortTitle: "Situation" },
-  { id: 2, title: "Your Deposit", shortTitle: "Deposit" },
-  { id: 3, title: "Addresses", shortTitle: "Addresses" },
-  { id: 4, title: "Build Your Case", shortTitle: "Case" },
-  { id: 5, title: "Review & Submit", shortTitle: "Review" },
+  { id: 1, title: "Your Deposit", shortTitle: "Deposit" },
+  { id: 2, title: "Addresses", shortTitle: "Addresses" },
+  { id: 3, title: "Review & Submit", shortTitle: "Review" },
 ] as const;
 
 // Field labels for validation messages
@@ -78,6 +76,7 @@ interface WizardProviderProps {
   children: ReactNode;
   initialStateCode?: StateCode;
   initialMoveOutDate?: string;
+  initialDepositAmount?: number;
   initialStep?: number;
 }
 
@@ -85,12 +84,14 @@ export function WizardProvider({
   children,
   initialStateCode,
   initialMoveOutDate,
+  initialDepositAmount,
   initialStep = 1,
 }: WizardProviderProps) {
   const [data, setData] = useState<WizardData>(() => ({
     ...EMPTY_WIZARD_DATA,
     stateCode: initialStateCode || null,
     moveOutDate: initialMoveOutDate || null,
+    depositAmount: initialDepositAmount || null,
     // Pre-fill property state to match stateCode
     property: {
       ...EMPTY_WIZARD_DATA.property,
@@ -116,12 +117,7 @@ export function WizardProvider({
     const missing: string[] = [];
 
     switch (currentStep) {
-      case 1: // Your Situation
-        if (!data.stateCode) missing.push(FIELD_LABELS.stateCode);
-        if (!data.situation) missing.push(FIELD_LABELS.situation);
-        if (!data.moveOutDate) missing.push(FIELD_LABELS.moveOutDate);
-        break;
-      case 2: // Your Deposit
+      case 1: // Your Deposit
         if (!data.depositAmount || data.depositAmount <= 0) missing.push(FIELD_LABELS.depositAmount);
         if (data.wasItemized === null) missing.push(FIELD_LABELS.wasItemized);
         if (!data.issueType) missing.push(FIELD_LABELS.issueType);
@@ -129,7 +125,7 @@ export function WizardProvider({
           missing.push(FIELD_LABELS.amountReceived);
         }
         break;
-      case 3: // Addresses
+      case 2: // Addresses
         if (!data.landlord.name) missing.push(FIELD_LABELS["landlord.name"]);
         if (!data.landlord.address) missing.push(FIELD_LABELS["landlord.address"]);
         if (!data.landlord.city) missing.push(FIELD_LABELS["landlord.city"]);
@@ -138,9 +134,7 @@ export function WizardProvider({
         if (!data.property.city) missing.push(FIELD_LABELS["property.city"]);
         if (!data.property.zip) missing.push(FIELD_LABELS["property.zip"]);
         break;
-      case 4: // Build Your Case - no strict requirements
-        break;
-      case 5: // Review & Submit
+      case 3: // Review & Submit
         if (!data.tenant.name) missing.push(FIELD_LABELS["tenant.name"]);
         if (!data.tenant.email) missing.push(FIELD_LABELS["tenant.email"]);
         break;

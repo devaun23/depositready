@@ -136,10 +136,10 @@ function DownloadContent() {
                 </svg>
               </div>
               <h1 className="text-2xl font-bold text-gray-900 mb-2">
-                Downloading Your Packet
+                Downloading Your Recovery Package
               </h1>
               <p className="text-gray-600">
-                Your dispute packet is being downloaded...
+                Your Recovery Package is being downloaded...
               </p>
             </>
           )}
@@ -165,7 +165,7 @@ function DownloadContent() {
                 Download Complete
               </h1>
               <p className="text-gray-600 mb-6">
-                Your dispute packet has been downloaded successfully.
+                Your Recovery Package has been downloaded successfully.
               </p>
 
               <button
@@ -185,7 +185,7 @@ function DownloadContent() {
                       1
                     </span>
                     <div>
-                      <strong>Print the demand letter</strong> from your packet
+                      <strong>Print the demand letter</strong> from your Recovery Package
                     </div>
                   </div>
                   <div className="flex items-start gap-3">
