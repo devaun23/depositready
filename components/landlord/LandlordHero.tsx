@@ -32,7 +32,7 @@ export function LandlordHero() {
 
         {/* Trust Line */}
         <p className="text-xs text-gray-500">
-          No subscription · No court filing · No legal jargon
+          $79 one-time · Secure checkout via Stripe · Available in FL, CA, TX, NY, GA, IL
         </p>
       </div>
     </section>
