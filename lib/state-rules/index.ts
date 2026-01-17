@@ -13,26 +13,61 @@ import { TEXAS } from './texas';
 import { NEW_YORK } from './new-york';
 import { GEORGIA } from './georgia';
 import { ILLINOIS } from './illinois';
+// Tier 1 expansion states
+import { NEW_JERSEY } from './new-jersey';
+import { ARIZONA } from './arizona';
+import { COLORADO } from './colorado';
+import { WASHINGTON } from './washington';
+import { NORTH_CAROLINA } from './north-carolina';
+import { VIRGINIA } from './virginia';
+import { OHIO } from './ohio';
+import { PENNSYLVANIA } from './pennsylvania';
+import { MICHIGAN } from './michigan';
+import { MASSACHUSETTS } from './massachusetts';
 import type { StateCode, StateRules } from './types';
 
 // Registry of all supported states
 const STATE_REGISTRY: Record<StateCode, StateRules> = {
+  // Original 6
   FL: FLORIDA,
   CA: CALIFORNIA,
   TX: TEXAS,
   NY: NEW_YORK,
   GA: GEORGIA,
   IL: ILLINOIS,
+  // Tier 1 expansion
+  NJ: NEW_JERSEY,
+  AZ: ARIZONA,
+  CO: COLORADO,
+  WA: WASHINGTON,
+  NC: NORTH_CAROLINA,
+  VA: VIRGINIA,
+  OH: OHIO,
+  PA: PENNSYLVANIA,
+  MI: MICHIGAN,
+  MA: MASSACHUSETTS,
 };
 
 // Slug to code mapping
 const SLUG_TO_CODE: Record<string, StateCode> = {
+  // Original 6
   florida: 'FL',
   california: 'CA',
   texas: 'TX',
   'new-york': 'NY',
   georgia: 'GA',
   illinois: 'IL',
+  // Tier 1 expansion
+  'new-jersey': 'NJ',
+  arizona: 'AZ',
+  colorado: 'CO',
+  washington: 'WA',
+  'north-carolina': 'NC',
+  virginia: 'VA',
+  ohio: 'OH',
+  pennsylvania: 'PA',
+  michigan: 'MI',
+  massachusetts: 'MA',
 };
 
 /**
@@ -77,6 +112,14 @@ export function getAllStateSlugs(): string[] {
 export function getAllStateCodes(): StateCode[] {
   return Object.keys(STATE_REGISTRY) as StateCode[];
 }
+
+/**
+ * State options for select dropdowns
+ */
+export const STATE_OPTIONS = Object.entries(STATE_REGISTRY).map(([code, rules]) => ({
+  value: code as StateCode,
+  label: rules.name,
+}));
 
 /**
  * Check if a slug is a valid state
@@ -124,6 +167,17 @@ export { TEXAS } from './texas';
 export { NEW_YORK } from './new-york';
 export { GEORGIA } from './georgia';
 export { ILLINOIS } from './illinois';
+// Tier 1 expansion
+export { NEW_JERSEY } from './new-jersey';
+export { ARIZONA } from './arizona';
+export { COLORADO } from './colorado';
+export { WASHINGTON } from './washington';
+export { NORTH_CAROLINA } from './north-carolina';
+export { VIRGINIA } from './virginia';
+export { OHIO } from './ohio';
+export { PENNSYLVANIA } from './pennsylvania';
+export { MICHIGAN } from './michigan';
+export { MASSACHUSETTS } from './massachusetts';
 
 // Re-export deadline and damages functions
 export { analyzeDeadlines } from './deadlines';
