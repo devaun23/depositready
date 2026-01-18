@@ -1,7 +1,6 @@
 "use client";
 
-import { useCallback } from "react";
-import { useRouter } from "next/navigation";
+import { useCallback, useState } from "react";
 import { Button } from "@/components/ui";
 import type { StateCode } from "@/lib/state-rules";
 
@@ -16,41 +15,77 @@ interface UpsellCardProps {
   stateCode: StateCode;
   depositAmount: number;
   moveOutDate: string;
+  tenantName?: string;
+  landlordName?: string;
+  propertyAddress?: string;
 }
 
-export function UpsellCard({ email, stateCode, depositAmount, moveOutDate }: UpsellCardProps) {
-  const router = useRouter();
+export function UpsellCard({
+  email,
+  stateCode,
+  depositAmount,
+  moveOutDate,
+  tenantName,
+  landlordName,
+  propertyAddress,
+}: UpsellCardProps) {
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleUpsellClick = useCallback(() => {
+  const handleUpsellClick = useCallback(async () => {
+    if (isLoading) return;
+    setIsLoading(true);
+
     // Track upsell click
     if (typeof window !== "undefined" && window.gtag) {
       window.gtag("event", "free_upsell_clicked", {
         event_category: "conversion",
         state: stateCode,
-        value: 79,
+        value: 29,
       });
     }
 
-    // Store upsell click timestamp
+    // Store upsell click timestamp (non-blocking)
     fetch("/api/free-letter/upsell", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email }),
-    }).catch(() => {
-      // Non-blocking, ignore errors
-    });
+    }).catch(() => {});
 
-    // Build query params for wizard
-    const params = new URLSearchParams({
-      source: "free",
-      email,
-      state: stateCode,
-      deposit: depositAmount.toString(),
-      moveout: moveOutDate,
-    });
+    try {
+      // Call $29 checkout API directly
+      const response = await fetch("/api/checkout-basic", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          tenantName: tenantName || "Tenant",
+          tenantEmail: email,
+          propertyAddress: propertyAddress || "Property Address",
+          depositAmount,
+          source: "free_upsell",
+          formData: {
+            stateCode,
+            moveOutDate,
+            tenantName,
+            landlordName,
+            propertyAddress,
+            depositAmount,
+          },
+        }),
+      });
 
-    router.push(`/wizard?${params.toString()}`);
-  }, [email, stateCode, depositAmount, moveOutDate, router]);
+      const result = await response.json();
+
+      if (result.url) {
+        window.location.href = result.url;
+      } else {
+        console.error("No checkout URL returned");
+        setIsLoading(false);
+      }
+    } catch (error) {
+      console.error("Checkout error:", error);
+      setIsLoading(false);
+    }
+  }, [email, stateCode, depositAmount, moveOutDate, tenantName, landlordName, propertyAddress, isLoading]);
 
   const features = [
     "Evidence checklist to document your case",
@@ -99,7 +134,7 @@ export function UpsellCard({ email, stateCode, depositAmount, moveOutDate }: Ups
       </ul>
 
       <div className="flex items-baseline gap-2 mb-4">
-        <span className="text-3xl font-bold">$79</span>
+        <span className="text-3xl font-bold">$29</span>
         <span className="text-gray-400 text-sm">one-time</span>
       </div>
 
@@ -107,8 +142,9 @@ export function UpsellCard({ email, stateCode, depositAmount, moveOutDate }: Ups
         onClick={handleUpsellClick}
         className="w-full bg-white text-black hover:bg-gray-100"
         size="lg"
+        disabled={isLoading}
       >
-        Get Full Package
+        {isLoading ? "Redirecting..." : "Get Recovery Kit"}
       </Button>
 
       <p className="text-xs text-gray-400 text-center mt-4">

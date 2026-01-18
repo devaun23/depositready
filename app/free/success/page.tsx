@@ -137,6 +137,7 @@ export default function FreeLetterSuccessPage() {
                   stateCode={data.stateCode}
                   depositAmount={data.depositAmount}
                   moveOutDate={data.moveOutDate}
+                  landlordName={data.landlordName}
                 />
 
                 {/* Potential Recovery */}
