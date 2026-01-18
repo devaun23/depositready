@@ -5,7 +5,9 @@
  * Each state has different deadlines, statutes, small claims limits, and damages.
  */
 
-export type StateCode = 'FL' | 'CA' | 'TX' | 'NY' | 'GA' | 'IL';
+export type StateCode =
+  | 'FL' | 'CA' | 'TX' | 'NY' | 'GA' | 'IL'  // Original 6
+  | 'NJ' | 'AZ' | 'CO' | 'WA' | 'NC' | 'VA' | 'OH' | 'PA' | 'MI' | 'MA';  // Tier 1 expansion
 
 export interface StateRules {
   // Identity

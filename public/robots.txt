@@ -1,0 +1,16 @@
+# DepositReady Robots.txt
+# https://depositready.co
+
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://depositready.co/sitemap.xml
+
+# Disallow internal/API routes
+Disallow: /api/
+Disallow: /_next/
+Disallow: /preview
+Disallow: /success
+Disallow: /download
+Disallow: /free/success

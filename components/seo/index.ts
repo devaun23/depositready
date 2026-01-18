@@ -7,6 +7,7 @@ export { SEOCallout } from "./SEOCallout";
 export { SEOFeatureCard, SEOFeatureGrid } from "./SEOFeatureCard";
 export { SEOCTA } from "./SEOCTA";
 export { SEOFAQ } from "./SEOFAQ";
+export { SEOFAQWithSchema } from "./SEOFAQWithSchema";
 export { SEORelatedResources } from "./SEORelatedResources";
 export { SEODisclaimer } from "./SEODisclaimer";
 export { SEODeadlineBox } from "./SEODeadlineBox";
