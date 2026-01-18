@@ -23,6 +23,7 @@ export function QuizResult() {
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isCheckoutLoading, setIsCheckoutLoading] = useState(false);
 
   // Get state rules and analyze deadlines
   const { stateRules, analysis, potentialRecovery } = useMemo(() => {
@@ -135,6 +136,56 @@ export function QuizResult() {
 
     router.push(`/wizard?${params.toString()}`);
   }, [data, potentialRecovery, router]);
+
+  const handleGetBasicPackage = useCallback(async () => {
+    if (isCheckoutLoading) return;
+    setIsCheckoutLoading(true);
+
+    // Track conversion click
+    if (typeof window !== "undefined" && window.gtag) {
+      window.gtag("event", "cta_clicked", {
+        event_category: "conversion",
+        event_label: "quiz_get_basic_package",
+        state: data.stateCode,
+        deposit_amount: data.depositAmount,
+        potential_recovery: potentialRecovery,
+        value: 29,
+      });
+    }
+
+    try {
+      // Call $29 checkout API directly
+      const response = await fetch("/api/checkout-basic", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          tenantName: "Tenant",
+          tenantEmail: data.email,
+          propertyAddress: "Property Address",
+          depositAmount: data.depositAmount,
+          source: "quiz_basic",
+          formData: {
+            stateCode: data.stateCode,
+            moveOutDate: data.moveOutDate,
+            depositStatus: data.depositStatus,
+            depositAmount: data.depositAmount,
+          },
+        }),
+      });
+
+      const result = await response.json();
+
+      if (result.url) {
+        window.location.href = result.url;
+      } else {
+        console.error("No checkout URL returned");
+        setIsCheckoutLoading(false);
+      }
+    } catch (error) {
+      console.error("Checkout error:", error);
+      setIsCheckoutLoading(false);
+    }
+  }, [data, potentialRecovery, isCheckoutLoading]);
 
   const handleCustomize = useCallback(() => {
     // Track customize click
@@ -336,20 +387,53 @@ export function QuizResult() {
                   )}
                 </div>
 
-                {/* Dual CTAs */}
-                <div className="space-y-3">
-                  <Button
-                    onClick={handleGetPackage}
-                    className="w-full"
-                    size="lg"
-                  >
-                    Get Recovery Package — $79
-                  </Button>
+                {/* Pricing Options */}
+                <div className="space-y-4">
+                  {/* $29 Quick Option - Primary */}
+                  <div className="border-2 border-black rounded-xl p-4 bg-gray-50">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-sm font-medium text-gray-900">Recovery Kit</span>
+                      <span className="bg-green-100 text-green-800 text-xs font-medium px-2 py-0.5 rounded">
+                        QUICK START
+                      </span>
+                    </div>
+                    <p className="text-xs text-gray-600 mb-3">
+                      Demand letter + evidence checklist. Perfect for straightforward cases.
+                    </p>
+                    <Button
+                      onClick={handleGetBasicPackage}
+                      className="w-full"
+                      size="lg"
+                      disabled={isCheckoutLoading}
+                    >
+                      {isCheckoutLoading ? "Redirecting..." : "Get Recovery Kit — $29"}
+                    </Button>
+                  </div>
+
+                  {/* $79 Full Option */}
+                  <div className="border border-gray-200 rounded-xl p-4">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-sm font-medium text-gray-900">Full Package</span>
+                      <span className="text-xs text-gray-500">COMPREHENSIVE</span>
+                    </div>
+                    <p className="text-xs text-gray-600 mb-3">
+                      Complete wizard with personalized letter, court guides, and timeline tracking.
+                    </p>
+                    <Button
+                      onClick={handleGetPackage}
+                      variant="outline"
+                      className="w-full"
+                      size="lg"
+                    >
+                      Get Full Package — $79
+                    </Button>
+                  </div>
+
                   <button
                     onClick={handleCustomize}
-                    className="w-full py-3 text-gray-600 hover:text-black transition font-medium"
+                    className="w-full py-2 text-sm text-gray-500 hover:text-black transition"
                   >
-                    Customize My Details First →
+                    Customize details first →
                   </button>
                 </div>
 
