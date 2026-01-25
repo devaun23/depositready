@@ -51,7 +51,7 @@ export async function GET() {
 
   // Check 3: NEXT_PUBLIC_BASE_URL points to production
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "";
-  const isProduction = baseUrl.includes("depositready.com");
+  const isProduction = baseUrl.includes("depositready.co");
   checks.push({
     name: "Production Base URL",
     passed: isProduction,
