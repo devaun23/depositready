@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase";
 import { verifyWebhookSignature } from "@/lib/stripe-fetch";
+import { sendOrderConfirmationEmail, isEmailConfigured } from "@/lib/email";
 
 export const runtime = "nodejs";
 export const maxDuration = 30;
@@ -82,8 +83,41 @@ export async function POST(request: NextRequest) {
 
         if (updateError) {
           console.error("Failed to update order:", updateError);
+          // Return error status so Stripe will retry the webhook
+          return NextResponse.json(
+            { error: "Database update failed" },
+            { status: 500 }
+          );
         } else {
           console.log("Order marked as paid:", orderId);
+
+          // Send order confirmation email (non-blocking)
+          if (isEmailConfigured() && session.customer_email) {
+            // Look up the order to get download token
+            const { data: orderData } = await supabaseAdmin
+              .from("orders")
+              .select("download_token, tenant_name, form_data")
+              .eq("id", orderId)
+              .single();
+
+            if (orderData?.download_token) {
+              const productType = (session.metadata?.product_type || "full") as "basic" | "full" | "landlord";
+              const formData = orderData.form_data as { stateCode?: string } | null;
+
+              // Fire and forget email
+              sendOrderConfirmationEmail({
+                email: session.customer_email,
+                orderId,
+                downloadToken: orderData.download_token,
+                productType,
+                amountPaid: session.amount_total,
+                tenantName: orderData.tenant_name,
+                stateName: formData?.stateCode,
+              }).catch((err) => {
+                console.error("Order confirmation email failed:", err);
+              });
+            }
+          }
         }
       } else {
         console.warn("No order_id in session metadata");

@@ -107,6 +107,7 @@ export async function POST(request: NextRequest) {
       ],
       metadata: {
         order_id: order.id,
+        product_type: "full",
         tenant_name: tenantName,
         property_address: propertyAddress,
         deposit_amount: depositAmount?.toString() || "0",
