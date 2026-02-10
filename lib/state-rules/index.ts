@@ -5,7 +5,7 @@
  * Use this module to get rules for any supported state.
  */
 
-export type { StateCode, StateRules, DeadlineAnalysis, DamagesCalculation } from './types';
+export type { StateCode, StateRules, DeadlineAnalysis, DamagesCalculation, NoticeStatus, CaseStrength, DiagnosisInput, DiagnosisResult, TimelineEvent } from './types';
 
 import { FLORIDA } from './florida';
 import { CALIFORNIA } from './california';
@@ -182,3 +182,4 @@ export { MASSACHUSETTS } from './massachusetts';
 // Re-export deadline and damages functions
 export { analyzeDeadlines } from './deadlines';
 export { calculateDamages } from './damages';
+export { calculateCaseStrength } from './case-strength';

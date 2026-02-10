@@ -24,7 +24,7 @@ function QuizContent() {
   // Track quiz start
   useEffect(() => {
     if (typeof window !== "undefined" && window.gtag) {
-      window.gtag("event", "quiz_started", {
+      window.gtag("event", "diagnosis_started", {
         event_category: "engagement",
         event_label: "deadline_quiz",
       });

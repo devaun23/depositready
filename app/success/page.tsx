@@ -5,6 +5,8 @@ import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Logo } from "@/components/ui";
 import { WizardData } from "@/types/dispute";
+import { PostPaymentForm } from "@/components/success/PostPaymentForm";
+import { trackDiagnosis } from "@/lib/analytics";
 
 declare global {
   interface Window {
@@ -18,6 +20,8 @@ interface PaymentDetails {
   customerEmail: string | null;
   amountPaid: number;
   downloadToken: string | null;
+  orderId: string | null;
+  productType: string | null;
 }
 
 function SuccessContent() {
@@ -32,6 +36,9 @@ function SuccessContent() {
   const [isDownloading, setIsDownloading] = useState(false);
   const [downloadError, setDownloadError] = useState<string | null>(null);
   const [hasDownloaded, setHasDownloaded] = useState(false);
+  const [postPaymentDone, setPostPaymentDone] = useState(false);
+
+  const isDiagnosis = paymentDetails?.productType === "diagnosis";
 
   // Helper function to wait for gtag to be ready
   const waitForGtag = (timeout = 5000): Promise<void> => {
@@ -57,7 +64,7 @@ function SuccessContent() {
         return;
       }
 
-      // Load wizard data from localStorage (may not exist if session expired)
+      // Load wizard data from localStorage (may not exist for diagnosis flow)
       const storedData = localStorage.getItem("disputeData");
       if (storedData) {
         setWizardData(JSON.parse(storedData) as WizardData);
@@ -79,27 +86,40 @@ function SuccessContent() {
             customerEmail: result.customerEmail,
             amountPaid: result.amountTotal / 100,
             downloadToken: result.downloadToken,
+            orderId: result.metadata?.order_id || null,
+            productType: result.metadata?.product_type || null,
           });
           setStatus("verified");
 
           // Fire Google Ads conversion
           const fireConversion = async () => {
             try {
-              console.log("[Conversion] Waiting for gtag to be ready...");
               await waitForGtag();
-              console.log("[Conversion] gtag ready, firing conversion event");
               window.gtag?.("event", "conversion", {
                 send_to: "AW-17859927660/jtPRCJKB9N4bEOy8o8RC",
                 value: result.amountTotal / 100,
                 currency: "USD",
                 transaction_id: sessionId,
               });
-              console.log("[Conversion] Google Ads conversion fired successfully", {
-                value: result.amountTotal / 100,
+
+              // Funnel analytics
+              const productType = result.metadata?.product_type || "full";
+              window.gtag?.("event", "payment_completed", {
+                event_category: "conversion",
                 transaction_id: sessionId,
+                value: result.amountTotal / 100,
+                currency: "USD",
+                product_type: productType,
               });
+
+              if (productType === "diagnosis") {
+                trackDiagnosis.paymentCompleted({
+                  amount: result.amountTotal / 100,
+                  state: result.metadata?.state_code || "",
+                });
+              }
             } catch (error) {
-              console.error("[Conversion] Failed to fire Google Ads conversion:", error);
+              console.error("[Conversion] Failed to fire conversion:", error);
             }
           };
           fireConversion();
@@ -174,12 +194,26 @@ function SuccessContent() {
     }
   }, [wizardData, paymentDetails, isDownloading]);
 
+  // Auto-download for non-diagnosis orders
   useEffect(() => {
-    if (status === "verified" && !hasDownloaded && (wizardData || paymentDetails?.downloadToken)) {
+    if (
+      status === "verified" &&
+      !hasDownloaded &&
+      !isDiagnosis &&
+      (wizardData || paymentDetails?.downloadToken)
+    ) {
       const timer = setTimeout(handleDownload, 1000);
       return () => clearTimeout(timer);
     }
-  }, [status, hasDownloaded, handleDownload, wizardData, paymentDetails]);
+  }, [status, hasDownloaded, handleDownload, wizardData, paymentDetails, isDiagnosis]);
+
+  // Auto-download after diagnosis post-payment form is done
+  useEffect(() => {
+    if (postPaymentDone && !hasDownloaded && paymentDetails?.downloadToken) {
+      const timer = setTimeout(handleDownload, 500);
+      return () => clearTimeout(timer);
+    }
+  }, [postPaymentDone, hasDownloaded, handleDownload, paymentDetails]);
 
   if (status === "loading") {
     return (
@@ -262,142 +296,169 @@ function SuccessContent() {
       </header>
 
       <main className="max-w-2xl mx-auto px-4 py-12">
-        <div className="bg-white rounded-lg shadow-sm p-8 text-center">
-          <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
-            <svg
-              className="w-10 h-10 text-green-600"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M5 13l4 4L19 7"
-              />
-            </svg>
-          </div>
+        <div className="bg-white rounded-lg shadow-sm p-8">
+          {/* Success header — always shown */}
+          <div className="text-center mb-8">
+            <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+              <svg
+                className="w-10 h-10 text-green-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M5 13l4 4L19 7"
+                />
+              </svg>
+            </div>
 
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Payment Successful!
-          </h1>
-          <p className="text-gray-600 mb-6">
-            Thank you for your purchase. Your Recovery Package is ready.
-          </p>
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">
+              Payment Successful!
+            </h1>
 
-          {paymentDetails && (
-            <div className="bg-gray-50 rounded-lg p-4 mb-6 text-sm text-gray-600">
-              <p>
-                Amount paid:{" "}
-                <span className="font-semibold">
-                  ${paymentDetails.amountPaid.toFixed(2)}
-                </span>
-              </p>
-              {paymentDetails.customerEmail && (
+            {paymentDetails && (
+              <div className="bg-gray-50 rounded-lg p-4 mt-4 text-sm text-gray-600 inline-block">
                 <p>
-                  Receipt sent to:{" "}
+                  Amount paid:{" "}
                   <span className="font-semibold">
-                    {paymentDetails.customerEmail}
+                    ${paymentDetails.amountPaid.toFixed(2)}
                   </span>
                 </p>
-              )}
-            </div>
-          )}
-
-          <button
-            onClick={handleDownload}
-            disabled={isDownloading}
-            className="w-full py-4 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 disabled:bg-blue-400 disabled:cursor-not-allowed transition-colors mb-4"
-          >
-            {isDownloading ? (
-              <span className="flex items-center justify-center gap-2">
-                <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
-                  <circle
-                    className="opacity-25"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="currentColor"
-                    strokeWidth="4"
-                    fill="none"
-                  />
-                  <path
-                    className="opacity-75"
-                    fill="currentColor"
-                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
-                  />
-                </svg>
-                Generating PDF...
-              </span>
-            ) : hasDownloaded ? (
-              "Download Again"
-            ) : (
-              "Download Your Recovery Package"
+                {paymentDetails.customerEmail && (
+                  <p>
+                    Receipt sent to:{" "}
+                    <span className="font-semibold">
+                      {paymentDetails.customerEmail}
+                    </span>
+                  </p>
+                )}
+              </div>
             )}
-          </button>
+          </div>
 
-          {downloadError && (
-            <p className="text-red-600 text-sm mb-4">{downloadError}</p>
+          {/* Diagnosis flow: show PostPaymentForm */}
+          {isDiagnosis && !postPaymentDone && paymentDetails && (
+            <PostPaymentForm
+              orderId={paymentDetails.orderId || ""}
+              email={paymentDetails.customerEmail || ""}
+              downloadToken={paymentDetails.downloadToken || ""}
+              onComplete={() => setPostPaymentDone(true)}
+            />
           )}
 
-          {hasDownloaded && (
-            <p className="text-green-600 text-sm mb-4">
-              Download started! Check your downloads folder.
-            </p>
-          )}
+          {/* Non-diagnosis OR post-payment complete: show download UI */}
+          {(!isDiagnosis || postPaymentDone) && (
+            <div className="text-center">
+              {isDiagnosis && postPaymentDone && (
+                <p className="text-gray-600 mb-6">
+                  Your personalized dispute packet is being generated...
+                </p>
+              )}
 
-          {/* Token-based download link as backup */}
-          {paymentDetails?.downloadToken && (
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6 text-sm">
-              <p className="text-blue-800 mb-2">
-                <strong>Permanent Download Link:</strong>
-              </p>
-              <p className="text-blue-700 mb-2">
-                Bookmark this link to download your Recovery Package anytime:
-              </p>
-              <Link
-                href={`/download?token=${paymentDetails.downloadToken}`}
-                className="text-blue-600 hover:text-blue-800 underline break-all"
+              {!isDiagnosis && (
+                <p className="text-gray-600 mb-6">
+                  Thank you for your purchase. Your Recovery Package is ready.
+                </p>
+              )}
+
+              <button
+                onClick={handleDownload}
+                disabled={isDownloading}
+                className="w-full py-4 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 disabled:bg-blue-400 disabled:cursor-not-allowed transition-colors mb-4"
               >
-                {typeof window !== "undefined"
-                  ? `${window.location.origin}/download?token=${paymentDetails.downloadToken}`
-                  : `/download?token=${paymentDetails.downloadToken}`}
-              </Link>
+                {isDownloading ? (
+                  <span className="flex items-center justify-center gap-2">
+                    <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                        fill="none"
+                      />
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+                      />
+                    </svg>
+                    Generating PDF...
+                  </span>
+                ) : hasDownloaded ? (
+                  "Download Again"
+                ) : (
+                  "Download Your Recovery Package"
+                )}
+              </button>
+
+              {downloadError && (
+                <p className="text-red-600 text-sm mb-4">{downloadError}</p>
+              )}
+
+              {hasDownloaded && (
+                <p className="text-green-600 text-sm mb-4">
+                  Download started! Check your downloads folder.
+                </p>
+              )}
+
+              {/* Token-based download link as backup */}
+              {paymentDetails?.downloadToken && (
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6 text-sm">
+                  <p className="text-blue-800 mb-2">
+                    <strong>Permanent Download Link:</strong>
+                  </p>
+                  <p className="text-blue-700 mb-2">
+                    Bookmark this link to download your Recovery Package anytime:
+                  </p>
+                  <Link
+                    href={`/download?token=${paymentDetails.downloadToken}`}
+                    className="text-blue-600 hover:text-blue-800 underline break-all"
+                  >
+                    {typeof window !== "undefined"
+                      ? `${window.location.origin}/download?token=${paymentDetails.downloadToken}`
+                      : `/download?token=${paymentDetails.downloadToken}`}
+                  </Link>
+                </div>
+              )}
+
+              <div className="border-t border-gray-200 pt-6 mt-6">
+                <h2 className="text-lg font-semibold text-gray-900 mb-4">
+                  Next Steps
+                </h2>
+                <ol className="text-left text-sm text-gray-600 space-y-3">
+                  <li className="flex gap-3">
+                    <span className="flex-shrink-0 w-6 h-6 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-xs font-bold">
+                      1
+                    </span>
+                    <span>
+                      Print your demand letter and send it via{" "}
+                      <strong>certified mail</strong> with return receipt
+                    </span>
+                  </li>
+                  <li className="flex gap-3">
+                    <span className="flex-shrink-0 w-6 h-6 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-xs font-bold">
+                      2
+                    </span>
+                    <span>Keep a copy of everything for your records</span>
+                  </li>
+                  <li className="flex gap-3">
+                    <span className="flex-shrink-0 w-6 h-6 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-xs font-bold">
+                      3
+                    </span>
+                    <span>
+                      Wait 14 days for a response before considering small claims
+                      court
+                    </span>
+                  </li>
+                </ol>
+              </div>
             </div>
           )}
-
-          <div className="border-t border-gray-200 pt-6 mt-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">
-              Next Steps
-            </h2>
-            <ol className="text-left text-sm text-gray-600 space-y-3">
-              <li className="flex gap-3">
-                <span className="flex-shrink-0 w-6 h-6 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-xs font-bold">
-                  1
-                </span>
-                <span>
-                  Print your demand letter and send it via{" "}
-                  <strong>certified mail</strong> with return receipt
-                </span>
-              </li>
-              <li className="flex gap-3">
-                <span className="flex-shrink-0 w-6 h-6 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-xs font-bold">
-                  2
-                </span>
-                <span>Keep a copy of everything for your records</span>
-              </li>
-              <li className="flex gap-3">
-                <span className="flex-shrink-0 w-6 h-6 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-xs font-bold">
-                  3
-                </span>
-                <span>
-                  Wait 14 days for a response before considering small claims
-                  court
-                </span>
-              </li>
-            </ol>
-          </div>
         </div>
 
         <p className="text-center text-xs text-gray-500 mt-8">
