@@ -100,10 +100,7 @@ export async function POST(request: NextRequest) {
           if (creditData?.access_token) {
             sendWelcomeEmail({
               email: session.customer_email,
-              accessToken: creditData.access_token,
-              packageSize: creditData.package_size,
-              companyName: creditData.company_name,
-              amountPaid: session.amount_total,
+              source: "quiz",
             }).catch((err) => {
               console.error("B2B welcome email failed:", err);
             });
