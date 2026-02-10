@@ -240,3 +240,136 @@ export async function sendOrderConfirmationEmail(data: OrderConfirmationEmailDat
     return { success: false, error: error instanceof Error ? error.message : "Unknown error" };
   }
 }
+
+// --- B2B Email Types ---
+
+export interface B2BWelcomeEmailData {
+  email: string;
+  accessToken: string;
+  packageSize: number;
+  companyName?: string | null;
+  amountPaid: number;
+}
+
+export interface B2BLetterGeneratedEmailData {
+  email: string;
+  downloadToken: string;
+  tenantName: string;
+  stateCode: string;
+  creditsRemaining: number;
+}
+
+// --- B2B Email Templates ---
+
+function getB2BWelcomeEmailHtml(data: B2BWelcomeEmailData): string {
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://depositready.com";
+  const dashboardUrl = `${baseUrl}/business/dashboard?token=${data.accessToken}`;
+
+  return `<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"></head>
+<body style="font-family: Georgia, serif; line-height: 1.6; color: #1a1a1a; max-width: 600px; margin: 0 auto; padding: 20px;">
+  <div style="text-align: center; margin-bottom: 30px;">
+    <h1 style="font-size: 24px; margin: 0;">DepositReady</h1>
+    <p style="color: #666; margin: 4px 0 0;">Business</p>
+  </div>
+  <div style="background: #dcfce7; border-radius: 8px; padding: 20px; margin-bottom: 24px; text-align: center;">
+    <p style="margin: 0; color: #166534; font-size: 18px; font-weight: bold;">Payment Confirmed</p>
+  </div>
+  <h2 style="font-size: 20px; margin-bottom: 16px;">Your ${data.packageSize}-Letter Pack is Active</h2>
+  ${data.companyName ? `<p>Hi ${data.companyName} team,</p>` : ""}
+  <p>Your letter credits are ready to use.</p>
+  <div style="background: #f9fafb; border-radius: 8px; padding: 20px; margin: 24px 0;">
+    <p style="margin: 0 0 4px; font-size: 14px; color: #666;"><strong>Pack:</strong> ${data.packageSize} letters</p>
+    <p style="margin: 0 0 4px; font-size: 14px; color: #666;"><strong>Amount:</strong> $${(data.amountPaid / 100).toFixed(2)}</p>
+    <p style="margin: 0; font-size: 14px; color: #666;"><strong>Credits:</strong> ${data.packageSize}</p>
+  </div>
+  <div style="text-align: center; margin: 24px 0;">
+    <a href="${dashboardUrl}" style="display: inline-block; background: #000; color: #fff; padding: 14px 28px; border-radius: 6px; text-decoration: none; font-weight: 500;">Go to Dashboard</a>
+  </div>
+  <p style="font-size: 14px; color: #666; background: #fef3c7; padding: 12px; border-radius: 6px;">
+    <strong>Important:</strong> Save this email — the dashboard link is your access key.
+  </p>
+  <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 30px 0;">
+  <p style="font-size: 12px; color: #9ca3af; text-align: center;">DepositReady provides tools and templates based on state law. This is not legal advice.</p>
+</body>
+</html>`.trim();
+}
+
+function getB2BLetterGeneratedEmailHtml(data: B2BLetterGeneratedEmailData): string {
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://depositready.com";
+  const downloadUrl = `${baseUrl}/download?token=${data.downloadToken}`;
+
+  return `<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"></head>
+<body style="font-family: Georgia, serif; line-height: 1.6; color: #1a1a1a; max-width: 600px; margin: 0 auto; padding: 20px;">
+  <div style="text-align: center; margin-bottom: 30px;">
+    <h1 style="font-size: 24px; margin: 0;">DepositReady</h1>
+  </div>
+  <h2 style="font-size: 20px; margin-bottom: 16px;">Letter Generated</h2>
+  <div style="background: #f9fafb; border-radius: 8px; padding: 20px; margin: 24px 0;">
+    <p style="margin: 0 0 4px; font-size: 14px; color: #666;"><strong>Tenant:</strong> ${data.tenantName}</p>
+    <p style="margin: 0 0 4px; font-size: 14px; color: #666;"><strong>State:</strong> ${data.stateCode}</p>
+    <p style="margin: 0; font-size: 14px; color: #666;"><strong>Credits Remaining:</strong> ${data.creditsRemaining}</p>
+  </div>
+  <div style="text-align: center; margin: 24px 0;">
+    <a href="${downloadUrl}" style="display: inline-block; background: #000; color: #fff; padding: 14px 28px; border-radius: 6px; text-decoration: none; font-weight: 500;">Download Letter</a>
+  </div>
+  <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 30px 0;">
+  <p style="font-size: 12px; color: #9ca3af; text-align: center;">DepositReady provides tools and templates based on state law. This is not legal advice.</p>
+</body>
+</html>`.trim();
+}
+
+// --- B2B Email Sending ---
+
+export async function sendB2BWelcomeEmail(data: B2BWelcomeEmailData): Promise<{ success: boolean; error?: string }> {
+  if (!resend) {
+    console.log("Email not configured, skipping B2B welcome email to:", data.email);
+    return { success: false, error: "Email not configured" };
+  }
+  try {
+    const { error } = await resend.emails.send({
+      from: EMAIL_CONFIG.from,
+      replyTo: EMAIL_CONFIG.replyTo,
+      to: data.email,
+      subject: `Your ${data.packageSize}-Letter Pack is Ready`,
+      html: getB2BWelcomeEmailHtml(data),
+    });
+    if (error) {
+      console.error("Failed to send B2B welcome email:", error);
+      return { success: false, error: error.message };
+    }
+    console.log("B2B welcome email sent to:", data.email);
+    return { success: true };
+  } catch (error) {
+    console.error("B2B welcome email error:", error);
+    return { success: false, error: error instanceof Error ? error.message : "Unknown error" };
+  }
+}
+
+export async function sendB2BLetterGeneratedEmail(data: B2BLetterGeneratedEmailData): Promise<{ success: boolean; error?: string }> {
+  if (!resend) {
+    console.log("Email not configured, skipping B2B letter email to:", data.email);
+    return { success: false, error: "Email not configured" };
+  }
+  try {
+    const { error } = await resend.emails.send({
+      from: EMAIL_CONFIG.from,
+      replyTo: EMAIL_CONFIG.replyTo,
+      to: data.email,
+      subject: `Letter for ${data.tenantName} — Download Ready`,
+      html: getB2BLetterGeneratedEmailHtml(data),
+    });
+    if (error) {
+      console.error("Failed to send B2B letter email:", error);
+      return { success: false, error: error.message };
+    }
+    console.log("B2B letter generated email sent to:", data.email);
+    return { success: true };
+  } catch (error) {
+    console.error("B2B letter email error:", error);
+    return { success: false, error: error instanceof Error ? error.message : "Unknown error" };
+  }
+}
