@@ -113,7 +113,7 @@ export default function NextStepsPage() {
       totalDeposit: parseFloat(formData.totalDeposit),
       amountWithheld: formData.amountWithheld
         ? parseFloat(formData.amountWithheld)
-        : undefined,
+        : 0,
     };
 
     return diagnose(input);
