@@ -2,93 +2,88 @@ import { NextRequest, NextResponse } from "next/server";
 import { supabaseAdmin, generateDownloadToken } from "@/lib/supabase";
 import { stripeFetch } from "@/lib/stripe-fetch";
 
-// Force Node.js runtime
 export const runtime = "nodejs";
 export const maxDuration = 30;
 
-const PRICE_CENTS = 7900; // $79.00
+const PRICE_CENTS = 7900; // $79.00 for diagnosis dispute packet
 
-// Simple email validation regex
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { tenantName, tenantEmail, propertyAddress, depositAmount, formData, cancelUrl } =
-      body;
+    const {
+      stateCode,
+      moveOutDate,
+      noticeStatus,
+      caseStrength,
+      recoveryEstimate,
+      totalDeposit,
+      amountWithheld,
+      noticeSentDate,
+      email,
+    } = body;
 
     // Validate required fields
-    if (!tenantName || !propertyAddress) {
+    if (!stateCode || !moveOutDate || !noticeStatus || !caseStrength) {
       return NextResponse.json(
-        { error: "Missing required fields" },
-        { status: 400 }
-      );
-    }
-
-    // Validate tenant name length
-    if (typeof tenantName !== "string" || tenantName.length > 200) {
-      return NextResponse.json(
-        { error: "Invalid tenant name" },
-        { status: 400 }
-      );
-    }
-
-    // Validate property address length
-    if (typeof propertyAddress !== "string" || propertyAddress.length > 500) {
-      return NextResponse.json(
-        { error: "Invalid property address" },
+        { error: "Missing required diagnosis fields" },
         { status: 400 }
       );
     }
 
     // Validate email format if provided
-    if (tenantEmail && !EMAIL_REGEX.test(tenantEmail)) {
+    if (email && !EMAIL_REGEX.test(email)) {
       return NextResponse.json(
         { error: "Invalid email format" },
         { status: 400 }
       );
     }
 
-    // Validate deposit amount if provided (must be positive and reasonable)
-    if (depositAmount !== undefined && depositAmount !== null) {
-      const amount = Number(depositAmount);
-      if (isNaN(amount) || amount < 0 || amount > 100000) {
-        return NextResponse.json(
-          { error: "Invalid deposit amount" },
-          { status: 400 }
-        );
-      }
-    }
-
     const baseUrl = (process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000").trim();
-
-    // Generate a download token for this order
     const downloadToken = generateDownloadToken();
 
-    // Create pending order in Supabase with form_data
+    // Create pending order in Supabase
     const { data: order, error: dbError } = await supabaseAdmin
       .from("orders")
       .insert({
-        email: tenantEmail || "",
-        tenant_name: tenantName,
-        property_address: propertyAddress,
-        deposit_amount: depositAmount || 0,
-        form_data: formData || {},
+        email: email || "",
+        tenant_name: "", // collected post-payment
+        property_address: "", // collected post-payment
+        deposit_amount: totalDeposit || amountWithheld || 0,
+        form_data: {
+          stateCode,
+          moveOutDate,
+          noticeStatus,
+          caseStrength,
+          recoveryEstimate,
+          noticeSentDate,
+        },
         download_token: downloadToken,
         payment_status: "pending",
+        product_type: "diagnosis",
+        // New diagnosis columns
+        state_code: stateCode,
+        move_out_date: moveOutDate,
+        notice_status: noticeStatus,
+        case_strength: caseStrength,
+        recovery_estimate: recoveryEstimate || 0,
+        amount_withheld: amountWithheld || totalDeposit || 0,
+        notice_sent_date: noticeSentDate || null,
+        post_payment_completed: false,
       })
       .select()
       .single();
 
     if (dbError) {
-      console.error("Failed to create pending order:", dbError);
+      console.error("Failed to create diagnosis order:", dbError);
       return NextResponse.json(
         { error: "Failed to create order" },
         { status: 500 }
       );
     }
 
-    // Create Stripe checkout session with order_id in metadata (using fetch-based client)
+    // Create Stripe checkout session
     const session = await stripeFetch.checkout.sessions.create({
       payment_method_types: ["card"],
       mode: "payment",
@@ -97,8 +92,8 @@ export async function POST(request: NextRequest) {
           price_data: {
             currency: "usd",
             product_data: {
-              name: "Court-Ready Case File — Security Deposit Recovery",
-              description: `10-page legal case file for ${propertyAddress}`,
+              name: "Court-Ready Case File",
+              description: "10-page legal case file: demand letter, violation analysis, damages calculation, evidence index, small claims filing guide",
             },
             unit_amount: PRICE_CENTS,
           },
@@ -107,18 +102,20 @@ export async function POST(request: NextRequest) {
       ],
       metadata: {
         order_id: order.id,
-        product_type: "full",
-        tenant_name: tenantName,
-        property_address: propertyAddress,
-        deposit_amount: depositAmount?.toString() || "0",
+        product_type: "diagnosis",
+        state_code: stateCode,
+        notice_status: noticeStatus,
+        case_strength: caseStrength,
+        recovery_estimate: String(recoveryEstimate || 0),
+        move_out_date: moveOutDate,
       },
       success_url: `${baseUrl}/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${baseUrl}${cancelUrl || '/preview?canceled=true'}`,
-      ...(tenantEmail && { customer_email: tenantEmail }),
+      cancel_url: `${baseUrl}/next-steps`,
+      ...(email && { customer_email: email }),
       allow_promotion_codes: true,
     });
 
-    // Update order with stripe session ID
+    // Update order with Stripe session ID
     await supabaseAdmin
       .from("orders")
       .update({ stripe_session_id: session.id })
@@ -129,7 +126,7 @@ export async function POST(request: NextRequest) {
       url: session.url,
     });
   } catch (error) {
-    console.error("Checkout session error:", error);
+    console.error("Diagnosis checkout error:", error);
 
     if (
       error instanceof Error &&
