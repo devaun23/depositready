@@ -1,6 +1,15 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  async redirects() {
+    return [
+      {
+        source: "/quiz",
+        destination: "/diagnose",
+        permanent: false, // 302 — temporary while testing
+      },
+    ];
+  },
   async headers() {
     return [
       {

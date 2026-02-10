@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { Navbar, Footer } from "@/components/landing";
 import {
@@ -35,6 +35,7 @@ export default function FreeLetterSuccessPage() {
   const router = useRouter();
   const [data, setData] = useState<FreeLetterData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isDownloading, setIsDownloading] = useState(false);
 
   useEffect(() => {
     // Load data from localStorage
@@ -54,6 +55,52 @@ export default function FreeLetterSuccessPage() {
 
     setIsLoading(false);
   }, [router]);
+
+  const handleDownloadPDF = useCallback(async () => {
+    if (!data || isDownloading) return;
+    setIsDownloading(true);
+
+    try {
+      const response = await fetch("/api/free-letter/generate-pdf", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          landlordName: data.landlordName,
+          stateCode: data.stateCode,
+          stateName: data.stateName,
+          statuteTitle: data.statuteTitle,
+          depositAmount: data.depositAmount,
+          moveOutDate: data.moveOutDate,
+          returnDeadline: data.returnDeadline,
+          deadlinePassed: data.deadlinePassed,
+          damagesMultiplier: data.damagesMultiplier,
+          damagesDescription: data.damagesDescription,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to generate PDF");
+      }
+
+      // Get the PDF blob
+      const blob = await response.blob();
+
+      // Create download link
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `DepositReady_FreeLetter_${data.stateCode.toUpperCase()}_${new Date().toISOString().split("T")[0]}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Download error:", error);
+      alert("Failed to download PDF. Please try the Print option instead.");
+    } finally {
+      setIsDownloading(false);
+    }
+  }, [data, isDownloading]);
 
   if (isLoading || !data) {
     return (
@@ -79,9 +126,32 @@ export default function FreeLetterSuccessPage() {
             <h1 className="font-serif text-2xl md:text-3xl font-semibold text-black mb-2">
               Your Free Demand Letter is Ready
             </h1>
-            <p className="text-gray-600">
-              Print it, fill in the blanks, and send via certified mail.
+            <p className="text-gray-600 mb-4">
+              Download it, fill in the blanks, and send via certified mail.
             </p>
+
+            {/* Download and Print Buttons */}
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+              <button
+                onClick={handleDownloadPDF}
+                disabled={isDownloading}
+                className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-black text-white rounded-lg font-medium hover:bg-gray-800 transition disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                {isDownloading ? "Generating..." : "Download PDF"}
+              </button>
+              <button
+                onClick={() => window.print()}
+                className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-white text-black border border-gray-300 rounded-lg font-medium hover:bg-gray-50 transition"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+                </svg>
+                Print
+              </button>
+            </div>
           </div>
 
           {/* Deadline Warning */}

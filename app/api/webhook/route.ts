@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase";
 import { verifyWebhookSignature } from "@/lib/stripe-fetch";
-import { sendOrderConfirmationEmail, sendWelcomeEmail, isEmailConfigured } from "@/lib/email";
+import { sendOrderConfirmationEmail, sendB2BWelcomeEmail, isEmailConfigured } from "@/lib/email";
 
 export const runtime = "nodejs";
 export const maxDuration = 30;
@@ -98,11 +98,14 @@ export async function POST(request: NextRequest) {
             .single();
 
           if (creditData?.access_token) {
-            sendWelcomeEmail({
-              email: session.customer_email,
-              source: "quiz",
-            }).catch((err) => {
-              console.error("B2B welcome email failed:", err);
+            sendB2BWelcomeEmail({
+              email: session.customer_email!,
+              accessToken: creditData.access_token,
+              packageSize: creditData.package_size,
+              companyName: creditData.company_name,
+              amountPaid: session.amount_total,
+            }).catch((emailErr: unknown) => {
+              console.error("B2B welcome email failed:", emailErr);
             });
           }
         }
