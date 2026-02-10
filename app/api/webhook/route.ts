@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase";
 import { verifyWebhookSignature } from "@/lib/stripe-fetch";
-import { sendOrderConfirmationEmail, isEmailConfigured } from "@/lib/email";
+import { sendOrderConfirmationEmail, sendWelcomeEmail, isEmailConfigured } from "@/lib/email";
 
 export const runtime = "nodejs";
 export const maxDuration = 30;
@@ -54,15 +54,67 @@ export async function POST(request: NextRequest) {
   switch (event.type) {
     case "checkout.session.completed": {
       const session = event.data.object;
-      const orderId = session.metadata?.order_id;
 
       console.log("Payment successful:", {
         sessionId: session.id,
-        orderId,
         customerEmail: session.customer_email,
         amountTotal: session.amount_total,
         paymentStatus: session.payment_status,
+        productType: session.metadata?.product_type,
       });
+
+      // --- B2B credit pack handling ---
+      if (session.metadata?.product_type === "b2b_credits") {
+        const creditId = session.metadata.b2b_credit_id;
+        if (!creditId) {
+          console.warn("B2B payment but no b2b_credit_id in metadata");
+          break;
+        }
+
+        const { error: b2bError } = await supabaseAdmin
+          .from("b2b_credits")
+          .update({
+            payment_status: "paid",
+            paid_at: new Date().toISOString(),
+          })
+          .eq("id", creditId);
+
+        if (b2bError) {
+          console.error("Failed to update b2b_credits:", b2bError);
+          return NextResponse.json(
+            { error: "Database update failed" },
+            { status: 500 }
+          );
+        }
+
+        console.log("B2B credit pack marked as paid:", creditId);
+
+        // Send welcome email with dashboard link
+        if (isEmailConfigured() && session.customer_email) {
+          const { data: creditData } = await supabaseAdmin
+            .from("b2b_credits")
+            .select("access_token, package_size, company_name")
+            .eq("id", creditId)
+            .single();
+
+          if (creditData?.access_token) {
+            sendWelcomeEmail({
+              email: session.customer_email,
+              accessToken: creditData.access_token,
+              packageSize: creditData.package_size,
+              companyName: creditData.company_name,
+              amountPaid: session.amount_total,
+            }).catch((err) => {
+              console.error("B2B welcome email failed:", err);
+            });
+          }
+        }
+
+        break;
+      }
+
+      // --- B2C order handling ---
+      const orderId = session.metadata?.order_id;
 
       if (orderId) {
         // Update order to paid status
@@ -91,8 +143,10 @@ export async function POST(request: NextRequest) {
         } else {
           console.log("Order marked as paid:", orderId);
 
-          // Send order confirmation email (non-blocking)
-          if (isEmailConfigured() && session.customer_email) {
+          // Skip email for diagnosis orders — email sent after PostPaymentForm
+          if (session.metadata?.product_type === 'diagnosis') {
+            console.log("Diagnosis order — skipping email until post-payment form:", orderId);
+          } else if (isEmailConfigured() && session.customer_email) {
             // Look up the order to get download token
             const { data: orderData } = await supabaseAdmin
               .from("orders")
@@ -128,11 +182,21 @@ export async function POST(request: NextRequest) {
 
     case "checkout.session.expired": {
       const session = event.data.object;
-      const orderId = session.metadata?.order_id;
 
       console.log("Checkout session expired:", session.id);
 
-      // Optionally clean up pending orders
+      // Clean up pending B2B credits
+      if (session.metadata?.product_type === "b2b_credits") {
+        const creditId = session.metadata.b2b_credit_id;
+        if (creditId) {
+          await supabaseAdmin.from("b2b_credits").delete().eq("id", creditId);
+          console.log("Deleted expired B2B credit:", creditId);
+        }
+        break;
+      }
+
+      // Clean up pending B2C orders
+      const orderId = session.metadata?.order_id;
       if (orderId) {
         await supabaseAdmin.from("orders").delete().eq("id", orderId);
         console.log("Deleted expired pending order:", orderId);
