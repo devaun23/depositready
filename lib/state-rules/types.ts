@@ -88,3 +88,36 @@ export interface DamagesCalculation {
   maxRecoverable: number;
   damagesDescription: string;
 }
+
+// Diagnosis types for the /diagnose flow
+export type NoticeStatus = 'NOTICE_MISSED' | 'NOTICE_PENDING' | 'NOTICE_LATE' | 'NOTICE_TIMELY' | 'NOTICE_UNCLEAR';
+export type CaseStrength = 'STRONG' | 'MODERATE' | 'WEAK';
+
+export interface DiagnosisInput {
+  stateCode: StateCode;
+  moveOutDate: string;
+  receivedNotice: 'yes' | 'no' | 'not_sure';
+  noticeSentDate: string | null;
+  totalDeposit: number;
+  amountWithheld: number;
+}
+
+export interface TimelineEvent {
+  date: Date;
+  label: string;
+  type: 'neutral' | 'violation' | 'compliant';
+}
+
+export interface DiagnosisResult {
+  noticeStatus: NoticeStatus;
+  caseStrength: CaseStrength;
+  daysLate: number | null;
+  daysRemaining: number | null;
+  recoveryEstimate: number;
+  maxRecovery: number | null;
+  recoveryBasis: 'forfeiture' | 'withheld_only';
+  deadlineDate: Date;
+  stateRules: StateRules;
+  timeline: TimelineEvent[];
+  roiMultiple: number;
+}

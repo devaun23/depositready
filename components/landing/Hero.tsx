@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { HeroCTA } from "./HeroCTA";
 
 export function Hero() {
@@ -25,9 +26,17 @@ export function Hero() {
         </p>
 
         {/* Trust Line */}
-        <p className="text-xs text-gray-500">
-          $79 one-time · Secure checkout via Stripe · Used in FL, CA, TX, NY, GA, IL
+        <p className="text-xs text-gray-500 mb-2">
+          Starting at $29 · Court-ready case files from $79 · Secure checkout via Stripe
         </p>
+
+        {/* Post-failure link */}
+        <Link
+          href="/next-steps"
+          className="text-xs text-gray-400 hover:text-gray-600 transition"
+        >
+          Already sent a letter? Get next steps →
+        </Link>
       </div>
     </section>
   );

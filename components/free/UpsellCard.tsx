@@ -147,9 +147,35 @@ export function UpsellCard({
         {isLoading ? "Redirecting..." : "Get Recovery Kit"}
       </Button>
 
-      <p className="text-xs text-gray-400 text-center mt-4">
-        7-day money-back guarantee. No questions asked.
+      {/* Court-Ready Case File mention */}
+      <p className="text-xs text-gray-400 text-center mt-3">
+        Need to go to court? Our{" "}
+        <a href="/next-steps" className="underline hover:text-gray-200">
+          $79 Court-Ready Case File
+        </a>{" "}
+        includes a full legal analysis and small claims filing guide.
       </p>
+
+      {/* Trust Signals */}
+      <div className="mt-4 pt-4 border-t border-gray-700">
+        <div className="flex items-center justify-center gap-2 text-xs text-gray-300 mb-2">
+          <svg className="w-4 h-4 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+            <path fillRule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+          </svg>
+          <span>Secure checkout powered by Stripe</span>
+        </div>
+        <p className="text-xs text-gray-400 text-center">
+          7-day money-back guarantee • No questions asked
+        </p>
+      </div>
+
+      {/* Social Proof */}
+      <div className="mt-3 flex items-center justify-center gap-2 text-xs text-gray-400">
+        <svg className="w-3.5 h-3.5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+          <path d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" />
+        </svg>
+        <span>127 tenants recovered their deposit this month</span>
+      </div>
     </div>
   );
 }

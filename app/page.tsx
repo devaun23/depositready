@@ -19,6 +19,11 @@ const Testimonials = dynamic(
   { ssr: true }
 );
 
+const AlreadySentLetter = dynamic(
+  () => import("@/components/landing/AlreadySentLetter").then(mod => mod.AlreadySentLetter),
+  { ssr: true }
+);
+
 const WhatWeDo = dynamic(
   () => import("@/components/landing/WhatWeDo").then(mod => mod.WhatWeDo),
   { ssr: true }
@@ -39,6 +44,7 @@ export default function Home() {
         <WhatsIncluded />
         <HowItWorks />
         <Testimonials />
+        <AlreadySentLetter />
         <WhatWeDo />
       </main>
       <Footer />
