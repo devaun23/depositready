@@ -109,7 +109,7 @@ export default function NextStepsPage() {
       stateCode: formData.stateCode as StateCode,
       moveOutDate: formData.moveOutDate,
       receivedNotice: formData.receivedNotice as "yes" | "no" | "not_sure",
-      noticeSentDate: formData.noticeSentDate || undefined,
+      noticeSentDate: formData.noticeSentDate || null,
       totalDeposit: parseFloat(formData.totalDeposit),
       amountWithheld: formData.amountWithheld
         ? parseFloat(formData.amountWithheld)
