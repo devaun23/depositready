@@ -37,7 +37,7 @@ export function PacketPreviewSection({
         <button
           onClick={onPurchaseClick}
           disabled={isLoading}
-          className="w-full bg-black text-white font-semibold py-3 px-6 rounded-lg hover:bg-gray-800 transition disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full bg-accent text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:bg-accent-hover hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none"
         >
           {isLoading ? (
             <span className="flex items-center justify-center">

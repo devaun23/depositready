@@ -70,7 +70,7 @@ export function CaseReviewIntakeShell() {
             <button
               onClick={nextStep}
               disabled={!canProceed}
-              className="bg-black text-white font-medium px-6 py-2.5 rounded-lg hover:bg-gray-800 transition disabled:bg-gray-300 disabled:cursor-not-allowed"
+              className="bg-accent text-white font-medium px-6 py-2.5 rounded-lg shadow-md hover:bg-accent-hover hover:shadow-lg transition-all disabled:bg-gray-300 disabled:cursor-not-allowed disabled:shadow-none"
             >
               Continue
             </button>

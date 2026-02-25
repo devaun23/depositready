@@ -79,14 +79,14 @@ export function FeedbackPanel({ pagePath, onClose }: FeedbackPanelProps) {
               value={text}
               onChange={(e) => setText(e.target.value)}
               placeholder="What's on your mind?"
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm resize-none focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm resize-none focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent"
               rows={3}
               autoFocus
             />
             <button
               onClick={handleSubmit}
               disabled={isSubmitting || !text.trim()}
-              className="w-full mt-3 bg-teal-500 text-white text-sm font-medium py-2 rounded-lg hover:bg-teal-600 transition disabled:bg-gray-300 disabled:cursor-not-allowed"
+              className="w-full mt-3 bg-brand text-white text-sm font-medium py-2 rounded-lg hover:bg-brand-light transition disabled:bg-gray-300 disabled:cursor-not-allowed"
             >
               {isSubmitting ? "Sending..." : "Submit"}
             </button>

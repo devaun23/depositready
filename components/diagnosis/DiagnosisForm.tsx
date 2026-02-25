@@ -79,7 +79,7 @@ export function DiagnosisFormFields({ formData, onChange }: DiagnosisFormProps) 
               onClick={() => update({ receivedNotice: opt.value })}
               className={`flex-1 py-2.5 px-3 rounded-lg border text-sm font-medium transition-colors min-h-[44px] ${
                 formData.receivedNotice === opt.value
-                  ? "border-black bg-black text-white"
+                  ? "border-brand bg-brand text-white"
                   : "border-gray-300 bg-white text-gray-700 hover:border-gray-400"
               }`}
             >

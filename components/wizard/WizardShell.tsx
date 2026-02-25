@@ -65,7 +65,7 @@ export function WizardShell({ children, onComplete }: WizardShellProps) {
         <div className="max-w-3xl mx-auto">
           <div className="h-1 bg-gray-100">
             <div
-              className="h-1 bg-black transition-all duration-300"
+              className="h-1 bg-brand transition-all duration-300"
               style={{ width: `${progress}%` }}
             />
           </div>
@@ -81,7 +81,7 @@ export function WizardShell({ children, onComplete }: WizardShellProps) {
                 key={step.id}
                 className={`text-xs sm:text-sm font-medium whitespace-nowrap px-1.5 py-0.5 sm:px-0 sm:py-0 rounded ${
                   step.id === currentStep
-                    ? "text-white bg-black sm:bg-transparent sm:text-black"
+                    ? "text-white bg-brand sm:bg-transparent sm:text-brand"
                     : step.id < currentStep
                     ? "text-gray-500"
                     : "text-gray-300"
@@ -131,7 +131,7 @@ export function WizardShell({ children, onComplete }: WizardShellProps) {
                 onClick={handleNext}
                 className={`px-6 py-3 min-h-[44px] rounded-lg font-medium transition-all ${
                   canProceed
-                    ? "bg-black text-white hover:bg-gray-800"
+                    ? "bg-accent text-white hover:bg-accent-hover shadow-md"
                     : "bg-gray-300 text-gray-600"
                 } ${isShaking ? "animate-shake" : ""}`}
               >

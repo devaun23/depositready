@@ -121,7 +121,7 @@ export function InlinePulse({
             <button
               onClick={handleFollowUp}
               disabled={isSubmitting}
-              className="bg-black text-white text-xs font-medium px-4 py-1.5 rounded-md hover:bg-gray-800 transition disabled:bg-gray-300"
+              className="bg-brand text-white text-xs font-medium px-4 py-1.5 rounded-md hover:bg-brand-light transition disabled:bg-gray-300"
             >
               {isSubmitting ? "..." : "Send"}
             </button>

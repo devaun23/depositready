@@ -308,7 +308,7 @@ export function EligibilityModal({ isOpen, onClose }: EligibilityModalProps) {
                     placeholder="2,000"
                     value={formData.depositAmount}
                     onChange={(e) => setFormData({ ...formData, depositAmount: e.target.value })}
-                    className="w-full pl-7 pr-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent text-gray-900"
+                    className="w-full pl-7 pr-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent text-gray-900"
                     min="0"
                     step="0.01"
                   />
@@ -584,7 +584,7 @@ export function EligibilityModal({ isOpen, onClose }: EligibilityModalProps) {
                       handleEmailSubmit();
                     }
                   }}
-                  className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent text-gray-900 ${
+                  className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent text-gray-900 ${
                     emailError ? "border-red-500" : "border-gray-300"
                   }`}
                 />

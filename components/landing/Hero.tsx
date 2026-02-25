@@ -6,8 +6,8 @@ export function Hero() {
     <section className="min-h-[calc(100dvh-64px)] sm:min-h-0 flex flex-col justify-center py-8 sm:py-12 md:py-16 px-4 sm:px-6 snap-start">
       <div className="max-w-3xl mx-auto text-center">
         {/* Headline */}
-        <h1 className="font-serif text-3xl md:text-5xl lg:text-6xl font-semibold text-black leading-tight mb-6 md:mb-8">
-          Your landlord missed a deadline.<br />
+        <h1 className="font-serif text-3xl md:text-5xl lg:text-6xl font-semibold leading-tight mb-6 md:mb-8">
+          <span className="text-brand">Your landlord missed a deadline.</span><br />
           That&apos;s not your problem.
         </h1>
 
@@ -27,7 +27,7 @@ export function Hero() {
 
         {/* Trust Line */}
         <p className="text-xs text-gray-500 mb-2">
-          Starting at $29 · Court-ready case files from $79 · Secure checkout via Stripe
+          Starting at <span className="text-brand font-medium">$29</span> · Court-ready case files from <span className="text-brand font-medium">$79</span> · Secure checkout via Stripe
         </p>
 
         {/* Post-failure link */}

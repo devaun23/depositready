@@ -143,7 +143,7 @@ export function LandlordWizardShell({
                 onClick={handleNext}
                 className={`px-6 py-3 min-h-[44px] rounded-lg font-medium transition-all ${
                   canProceed
-                    ? "bg-black text-white hover:bg-gray-800"
+                    ? "bg-accent text-white hover:bg-accent-hover shadow-md"
                     : "bg-gray-300 text-gray-600"
                 } ${isShaking ? "animate-shake" : ""}`}
               >

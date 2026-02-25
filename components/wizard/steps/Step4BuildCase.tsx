@@ -245,7 +245,7 @@ export const Step4BuildCase = memo(function Step4BuildCase() {
                 <button
                   onClick={handleAddDeduction}
                   disabled={!newDeduction.description || !newDeduction.amount}
-                  className="px-4 py-3 min-h-[48px] bg-black text-white rounded-lg hover:bg-gray-800 disabled:bg-gray-300 disabled:text-gray-600"
+                  className="px-4 py-3 min-h-[48px] bg-brand text-white rounded-lg hover:bg-brand-light disabled:bg-gray-300 disabled:text-gray-600"
                 >
                   Add Deduction
                 </button>

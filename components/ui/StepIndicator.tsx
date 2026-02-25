@@ -24,16 +24,16 @@ export function StepIndicator({
             <div
               className={`w-3 h-3 rounded-full transition-colors ${
                 index === currentStep
-                  ? "bg-black"
+                  ? "bg-brand"
                   : index < currentStep
-                  ? "bg-black"
+                  ? "bg-brand"
                   : "bg-gray-300"
               }`}
             />
             {index < steps.length - 1 && (
               <div
                 className={`w-8 h-0.5 mx-1 ${
-                  index < currentStep ? "bg-black" : "bg-gray-300"
+                  index < currentStep ? "bg-brand" : "bg-gray-300"
                 }`}
               />
             )}
@@ -48,7 +48,7 @@ export function StepIndicator({
             key={index}
             className={`${
               index === currentStep
-                ? "text-black font-medium"
+                ? "text-brand font-medium"
                 : index < currentStep
                 ? "text-gray-600"
                 : "text-gray-400"

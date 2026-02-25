@@ -25,7 +25,7 @@ export function LandlordHero() {
         {/* CTA to scroll to calculator */}
         <a
           href="#risk-calculator"
-          className="inline-flex items-center justify-center bg-black text-white px-6 py-3 text-lg font-medium rounded hover:bg-gray-800 transition-colors min-h-[48px] mb-6"
+          className="inline-flex items-center justify-center bg-accent text-white px-6 py-3 text-lg font-medium rounded shadow-md hover:bg-accent-hover hover:shadow-lg transition-all min-h-[48px] mb-6"
         >
           Check My Deadline & Respond Safely
         </a>

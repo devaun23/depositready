@@ -2,7 +2,7 @@ export function PMHero() {
   return (
     <section className="min-h-[calc(100dvh-64px)] sm:min-h-0 flex flex-col justify-center py-8 sm:py-12 md:py-16 px-4 sm:px-6 snap-start">
       <div className="max-w-3xl mx-auto text-center">
-        <div className="inline-block bg-black text-white text-xs font-medium px-3 py-1 rounded-full mb-6">
+        <div className="inline-block bg-brand text-white text-xs font-medium px-3 py-1 rounded-full mb-6">
           For Florida Property Managers
         </div>
 
@@ -22,7 +22,7 @@ export function PMHero() {
 
         <a
           href="/pm/wizard"
-          className="inline-flex items-center justify-center bg-black text-white px-8 py-4 text-lg font-medium rounded hover:bg-gray-800 transition-colors min-h-[48px] mb-6"
+          className="inline-flex items-center justify-center bg-accent text-white px-8 py-4 text-lg font-medium rounded shadow-md hover:bg-accent-hover hover:shadow-lg transition-all min-h-[48px] mb-6"
         >
           Generate My Packet — $29
         </a>

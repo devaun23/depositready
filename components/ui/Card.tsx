@@ -4,14 +4,16 @@ interface CardProps {
   children: ReactNode;
   className?: string;
   bordered?: boolean;
+  accent?: boolean;
 }
 
-export function Card({ children, className = "", bordered = true }: CardProps) {
+export function Card({ children, className = "", bordered = true, accent = false }: CardProps) {
   const baseStyles = "bg-white rounded-lg";
   const borderStyles = bordered ? "border border-gray-200" : "";
+  const accentStyles = accent ? "border-l-4 border-l-brand" : "";
 
   return (
-    <div className={`${baseStyles} ${borderStyles} ${className}`}>
+    <div className={`${baseStyles} ${borderStyles} ${accentStyles} ${className}`}>
       {children}
     </div>
   );

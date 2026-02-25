@@ -292,7 +292,7 @@ export function DiagnosisForm() {
               id="state-select"
               value={stateCode}
               onChange={(e) => setStateCode(e.target.value as StateCode)}
-              className="w-full px-3 py-3 min-h-[44px] border border-gray-300 rounded-lg bg-white text-base focus:ring-2 focus:ring-black focus:border-black transition-colors appearance-none cursor-pointer"
+              className="w-full px-3 py-3 min-h-[44px] border border-gray-300 rounded-lg bg-white text-base focus:ring-2 focus:ring-brand focus:border-brand transition-colors appearance-none cursor-pointer"
             >
               <option value="">Select your state</option>
               {STATE_OPTIONS.map((opt) => (
@@ -373,7 +373,7 @@ export function DiagnosisForm() {
                 }}
                 className={`px-4 py-3 min-h-[44px] rounded-lg border text-sm font-medium transition-colors ${
                   depositStatus === opt.value
-                    ? "bg-black text-white border-black"
+                    ? "bg-brand text-white border-brand"
                     : "bg-white text-gray-700 border-gray-300 hover:border-gray-400"
                 }`}
               >
@@ -472,7 +472,7 @@ export function DiagnosisForm() {
                 const raw = e.target.value.replace(/[^0-9.,]/g, "");
                 setDepositAmount(raw);
               }}
-              className="w-full pl-7 pr-3 py-3 min-h-[44px] border border-gray-300 rounded-lg bg-white text-base focus:ring-2 focus:ring-black focus:border-black transition-colors"
+              className="w-full pl-7 pr-3 py-3 min-h-[44px] border border-gray-300 rounded-lg bg-white text-base focus:ring-2 focus:ring-brand focus:border-brand transition-colors"
             />
           </div>
         </section>
@@ -540,11 +540,11 @@ export function DiagnosisForm() {
                     handleEmailSubmit();
                   }
                 }}
-                className={`flex-1 px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent text-gray-900 text-sm ${
+                className={`flex-1 px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent text-gray-900 text-sm ${
                   emailError ? "border-red-500" : "border-gray-300"
                 }`}
               />
-              <Button onClick={handleEmailSubmit} size="sm" variant="outline">
+              <Button onClick={handleEmailSubmit} size="sm" variant="secondary">
                 Send
               </Button>
             </div>

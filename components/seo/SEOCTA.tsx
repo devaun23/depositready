@@ -26,7 +26,7 @@ export function SEOCTA({ title, description, primaryButton, secondaryButtons }: 
         <div className="flex flex-col gap-3 sm:flex-row sm:justify-center sm:flex-wrap">
           <Link
             href={primaryButton.href}
-            className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-black text-white font-semibold rounded-lg hover:bg-gray-800 transition-colors shadow-lg text-lg btn-touch"
+            className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-accent text-white font-semibold rounded-lg hover:bg-accent-hover transition-all shadow-lg hover:shadow-xl text-lg btn-touch"
           >
             {primaryButton.text}
             <svg

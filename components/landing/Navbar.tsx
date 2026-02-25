@@ -7,7 +7,7 @@ export function Navbar() {
       <nav className="max-w-6xl mx-auto px-4 sm:px-6">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 text-xl font-semibold text-black">
+          <Link href="/" className="flex items-center gap-2 text-xl font-semibold text-brand">
             <Logo size="md" />
             <span className="font-serif">DepositReady</span>
           </Link>
@@ -31,7 +31,7 @@ export function Navbar() {
           {/* CTA */}
           <Link
             href="/wizard"
-            className="px-3 py-1.5 text-sm font-medium bg-black text-white rounded hover:bg-gray-800 transition-colors"
+            className="px-3 py-1.5 text-sm font-medium bg-accent text-white rounded hover:bg-accent-hover transition-colors"
           >
             Get Started
           </Link>

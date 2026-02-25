@@ -13,7 +13,7 @@ export function HeroCTA() {
         <Button onClick={() => router.push("/recover")} size="lg">
           See Your Letter Free
         </Button>
-        <Button onClick={() => router.push("/diagnose")} variant="outline" size="sm">
+        <Button onClick={() => router.push("/diagnose")} variant="secondary" size="sm">
           Check Eligibility First
         </Button>
       </div>

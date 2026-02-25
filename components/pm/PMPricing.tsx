@@ -9,7 +9,7 @@ export function PMPricing() {
           One price. One packet. Complete FL §83.49 compliance.
         </p>
 
-        <div className="bg-white border-2 border-black rounded-lg p-8">
+        <div className="bg-white border-2 border-brand rounded-lg p-8">
           <p className="text-sm font-medium text-gray-500 uppercase tracking-wide mb-2">
             Per Packet
           </p>
@@ -20,7 +20,7 @@ export function PMPricing() {
 
           <a
             href="/pm/wizard"
-            className="inline-flex items-center justify-center bg-black text-white px-8 py-4 text-lg font-medium rounded hover:bg-gray-800 transition-colors w-full min-h-[48px] mb-4"
+            className="inline-flex items-center justify-center bg-accent text-white px-8 py-4 text-lg font-medium rounded shadow-md hover:bg-accent-hover hover:shadow-lg transition-all w-full min-h-[48px] mb-4"
           >
             Generate My Packet
           </a>

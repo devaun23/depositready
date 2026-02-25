@@ -61,7 +61,7 @@ export default async function StateLandingPage({
               <Button href={`/${state}/wizard`} size="lg">
                 Start Your Recovery Package
               </Button>
-              <Button href="#whats-included" variant="outline" size="lg">
+              <Button href="#whats-included" variant="secondary" size="lg">
                 See what&apos;s included
               </Button>
             </div>

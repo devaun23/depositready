@@ -57,7 +57,7 @@ export function WhatWeDo() {
 function CheckIcon() {
   return (
     <svg
-      className="w-5 h-5 text-black flex-shrink-0 mt-0.5"
+      className="w-5 h-5 text-accent flex-shrink-0 mt-0.5"
       width="20"
       height="20"
       fill="none"

@@ -28,7 +28,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
       block px-3 py-3 text-base min-h-[44px]
       bg-white border rounded
       placeholder:text-gray-400
-      focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent
+      focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent
       disabled:bg-gray-50 disabled:text-gray-500 disabled:cursor-not-allowed
       ${error ? "border-red-500" : "border-gray-300"}
       ${fullWidth ? "w-full" : ""}

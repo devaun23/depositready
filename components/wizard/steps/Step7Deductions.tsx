@@ -232,7 +232,7 @@ export const Step7Deductions = memo(function Step7Deductions() {
             <button
               onClick={handleAddDeduction}
               disabled={!newDeduction.description || !newDeduction.amount}
-              className="px-4 py-3 min-h-[44px] bg-black text-white rounded-lg hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-4 py-3 min-h-[44px] bg-brand text-white rounded-lg hover:bg-brand-light disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Add Deduction
             </button>

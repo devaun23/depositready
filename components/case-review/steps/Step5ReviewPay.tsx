@@ -155,7 +155,7 @@ export function Step5ReviewPay() {
       <button
         onClick={handleCheckout}
         disabled={!canProceed || loading}
-        className="w-full bg-black text-white font-medium py-3 rounded-lg hover:bg-gray-800 transition disabled:bg-gray-300 disabled:cursor-not-allowed text-base"
+        className="w-full bg-accent text-white font-medium py-3 rounded-lg shadow-md hover:bg-accent-hover hover:shadow-lg transition-all disabled:bg-gray-300 disabled:cursor-not-allowed disabled:shadow-none text-base"
       >
         {loading ? "Redirecting to checkout..." : "Continue to Payment — $149"}
       </button>

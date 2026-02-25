@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { forwardRef, ButtonHTMLAttributes } from "react";
 
-type ButtonVariant = "primary" | "outline" | "ghost";
+type ButtonVariant = "primary" | "secondary" | "outline" | "ghost";
 type ButtonSize = "sm" | "md" | "lg";
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -16,11 +16,13 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 const variantStyles: Record<ButtonVariant, string> = {
   primary:
-    "bg-black text-white hover:bg-gray-800 disabled:bg-gray-300 disabled:text-gray-500",
+    "bg-accent text-white shadow-md hover:bg-accent-hover hover:shadow-lg disabled:bg-gray-300 disabled:text-gray-500 disabled:shadow-none",
+  secondary:
+    "bg-brand text-white hover:bg-brand-light disabled:bg-gray-300 disabled:text-gray-500",
   outline:
-    "bg-transparent text-black border border-black hover:bg-gray-50 disabled:border-gray-300 disabled:text-gray-400",
+    "bg-transparent text-brand border border-brand hover:bg-brand-bg disabled:border-gray-300 disabled:text-gray-400",
   ghost:
-    "bg-transparent text-black hover:bg-gray-100 disabled:text-gray-400",
+    "bg-transparent text-gray-600 hover:bg-gray-100 disabled:text-gray-400",
 };
 
 const sizeStyles: Record<ButtonSize, string> = {
@@ -45,7 +47,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     ref
   ) => {
     const baseStyles =
-      "inline-flex items-center justify-center font-medium transition-colors duration-150 rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2";
+      "inline-flex items-center justify-center font-medium transition-all duration-150 rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2";
 
     const combinedClassName = `${baseStyles} ${variantStyles[variant]} ${sizeStyles[size]} ${
       fullWidth ? "w-full" : ""

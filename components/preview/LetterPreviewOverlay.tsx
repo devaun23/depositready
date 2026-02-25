@@ -52,7 +52,7 @@ export function LetterPreviewOverlay({
         <div className="relative -mt-20 z-10 text-center pb-4">
           <button
             onClick={onUnlock}
-            className="inline-flex items-center gap-2 px-6 py-3 bg-black text-white rounded-lg font-medium hover:bg-gray-800 transition shadow-lg"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-accent text-white rounded-lg font-medium shadow-md hover:bg-accent-hover hover:shadow-lg transition-all"
           >
             <svg
               className="w-5 h-5"

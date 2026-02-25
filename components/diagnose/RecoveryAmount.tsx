@@ -59,15 +59,15 @@ export function RecoveryAmount({
           : "opacity-0 scale-95 pointer-events-none"
       }`}
     >
-      <div className="bg-green-50 border-2 border-green-300 rounded-2xl p-8 text-center">
-        <p className="text-sm text-green-700 mb-2">
+      <div className="bg-accent-light border-2 border-accent/30 rounded-2xl p-8 text-center">
+        <p className="text-sm text-accent mb-2">
           Under {stateName} law, you could recover up to
         </p>
-        <div className="text-6xl font-bold text-green-800">
+        <div className="text-6xl font-bold text-accent">
           ${displayValue.toLocaleString()}
         </div>
         {multiplier > 1 && (
-          <p className="text-sm text-green-700 mt-2">
+          <p className="text-sm text-accent mt-2">
             ${depositAmount.toLocaleString()} deposit &times; {multiplier}x{" "}
             {damagesDescription}
           </p>
