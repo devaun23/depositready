@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useMemo, useEffect } from "react";
+import { useCallback, useMemo, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Logo, Button } from "@/components/ui";
@@ -22,10 +22,7 @@ declare global {
 
 export function QuizResult() {
   const router = useRouter();
-  const { data, emailCaptured, captureEmail, prevStep } = useQuiz();
-  const [email, setEmail] = useState("");
-  const [emailError, setEmailError] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { data, prevStep } = useQuiz();
   const [isCheckoutLoading, setIsCheckoutLoading] = useState(false);
 
   // Get state rules and analyze deadlines
@@ -75,57 +72,6 @@ export function QuizResult() {
       });
     }
   }, [stateRules, analysis, caseStrength, data.stateCode, data.depositAmount, potentialRecovery]);
-
-  const handleEmailSubmit = useCallback(async () => {
-    if (!email.trim()) {
-      setEmailError("Please enter your email");
-      return;
-    }
-
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      setEmailError("Please enter a valid email");
-      return;
-    }
-
-    setIsSubmitting(true);
-    setEmailError("");
-
-    try {
-      // Save lead to database with quiz source
-      await fetch("/api/leads", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email: email.trim(),
-          stateCode: data.stateCode,
-          depositAmount: data.depositAmount,
-          landlordInViolation: analysis?.landlordInViolation || false,
-          potentialRecovery,
-          source: "quiz",
-        }),
-      });
-
-      // Track email capture
-      if (typeof window !== "undefined" && window.gtag) {
-        window.gtag("event", "email_captured", {
-          event_category: "conversion",
-          event_label: "quiz",
-          state: data.stateCode,
-          deposit_amount: data.depositAmount,
-          potential_recovery: potentialRecovery,
-        });
-      }
-
-      captureEmail(email.trim());
-    } catch (error) {
-      console.error("Failed to save lead:", error);
-      // Still capture email locally even if API fails
-      captureEmail(email.trim());
-    } finally {
-      setIsSubmitting(false);
-    }
-  }, [email, data, analysis, potentialRecovery, captureEmail]);
 
   const handleGetPackage = useCallback(() => {
     // Track conversion click
@@ -391,6 +337,20 @@ export function QuizResult() {
               )}
             </div>
 
+            {/* ROI Framing */}
+            {data.depositAmount && data.depositAmount > 0 && (
+              <div className="bg-gray-50 rounded-lg p-4 mb-6 text-center">
+                <p className="text-sm text-gray-600">
+                  Your deposit: <strong className="text-gray-900">${data.depositAmount.toLocaleString()}</strong>.
+                  {" "}Your letter: <strong className="text-gray-900">$29</strong>.
+                  {" "}That&apos;s a{" "}
+                  <strong className="text-brand">
+                    {Math.floor(potentialRecovery / 29)}x return
+                  </strong>.
+                </p>
+              </div>
+            )}
+
             {/* Social Proof */}
             <div className="flex items-center justify-center gap-2 text-sm text-gray-600 mb-6">
               <svg className="w-4 h-4 text-green-600" fill="currentColor" viewBox="0 0 20 20">
@@ -398,48 +358,6 @@ export function QuizResult() {
               </svg>
               <span>127 tenants recovered their deposit this month</span>
             </div>
-
-            {/* Optional Email Capture */}
-            {!emailCaptured && (
-              <div className="mb-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
-                <p className="text-sm text-gray-700 mb-2 text-center">
-                  Get your recovery timeline emailed to you
-                </p>
-                <div className="flex flex-col sm:flex-row gap-2 max-w-md mx-auto">
-                  <input
-                    type="email"
-                    inputMode="email"
-                    autoComplete="email"
-                    placeholder="you@example.com"
-                    value={email}
-                    onChange={(e) => {
-                      setEmail(e.target.value);
-                      setEmailError("");
-                    }}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter") {
-                        e.preventDefault();
-                        handleEmailSubmit();
-                      }
-                    }}
-                    className={`flex-1 px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent text-gray-900 text-sm ${
-                      emailError ? "border-red-500" : "border-gray-300"
-                    }`}
-                  />
-                  <Button
-                    onClick={handleEmailSubmit}
-                    disabled={isSubmitting}
-                    size="sm"
-                    variant="outline"
-                  >
-                    {isSubmitting ? "..." : "Send"}
-                  </Button>
-                </div>
-                {emailError && (
-                  <p className="text-xs text-red-600 mt-1 text-center">{emailError}</p>
-                )}
-              </div>
-            )}
 
             {/* Urgency - Deadline Warning */}
             {analysis && (

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 
 interface RecoveryAmountProps {
   depositAmount: number;
@@ -13,11 +13,13 @@ interface RecoveryAmountProps {
 
 function useCountUp(target: number, duration: number, active: boolean) {
   const [value, setValue] = useState(0);
+  const [done, setDone] = useState(false);
   const frameRef = useRef<number>(0);
 
   useEffect(() => {
     if (!active || target <= 0) {
       setValue(0);
+      setDone(false);
       return;
     }
 
@@ -31,6 +33,8 @@ function useCountUp(target: number, duration: number, active: boolean) {
 
       if (progress < 1) {
         frameRef.current = requestAnimationFrame(animate);
+      } else {
+        setDone(true);
       }
     };
 
@@ -38,7 +42,46 @@ function useCountUp(target: number, duration: number, active: boolean) {
     return () => cancelAnimationFrame(frameRef.current);
   }, [target, duration, active]);
 
-  return value;
+  return { value, done };
+}
+
+const CONFETTI_COLORS = [
+  "#059669", // emerald
+  "#10b981", // green
+  "#34d399", // light green
+  "#fbbf24", // amber
+  "#f59e0b", // yellow
+  "#3b82f6", // blue
+];
+
+function ConfettiBurst() {
+  const pieces = Array.from({ length: 20 }, (_, i) => ({
+    id: i,
+    left: `${10 + Math.random() * 80}%`,
+    top: `${Math.random() * 40}%`,
+    color: CONFETTI_COLORS[i % CONFETTI_COLORS.length],
+    delay: `${Math.random() * 0.3}s`,
+    size: 6 + Math.random() * 6,
+  }));
+
+  return (
+    <div className="confetti-container">
+      {pieces.map((p) => (
+        <div
+          key={p.id}
+          className="confetti-piece"
+          style={{
+            left: p.left,
+            top: p.top,
+            backgroundColor: p.color,
+            animationDelay: p.delay,
+            width: p.size,
+            height: p.size,
+          }}
+        />
+      ))}
+    </div>
+  );
 }
 
 export function RecoveryAmount({
@@ -49,7 +92,42 @@ export function RecoveryAmount({
   stateName,
   visible,
 }: RecoveryAmountProps) {
-  const displayValue = useCountUp(maxRecoverable, 600, visible);
+  const { value: displayValue, done: countUpDone } = useCountUp(
+    maxRecoverable,
+    600,
+    visible
+  );
+  const [showConfetti, setShowConfetti] = useState(false);
+  const hasTriggeredRef = useRef(false);
+
+  const triggerCelebration = useCallback(() => {
+    if (hasTriggeredRef.current) return;
+    hasTriggeredRef.current = true;
+
+    setShowConfetti(true);
+
+    // Haptic feedback on mobile
+    if (typeof navigator !== "undefined" && navigator.vibrate) {
+      navigator.vibrate([100]);
+    }
+
+    // Clean up confetti after animation
+    setTimeout(() => setShowConfetti(false), 1500);
+  }, []);
+
+  useEffect(() => {
+    if (countUpDone && visible) {
+      triggerCelebration();
+    }
+  }, [countUpDone, visible, triggerCelebration]);
+
+  // Reset when visibility changes
+  useEffect(() => {
+    if (!visible) {
+      hasTriggeredRef.current = false;
+      setShowConfetti(false);
+    }
+  }, [visible]);
 
   return (
     <div
@@ -59,7 +137,8 @@ export function RecoveryAmount({
           : "opacity-0 scale-95 pointer-events-none"
       }`}
     >
-      <div className="bg-accent-light border-2 border-accent/30 rounded-2xl p-8 text-center">
+      <div className="relative bg-accent-light border-2 border-accent/30 rounded-2xl p-8 text-center">
+        {showConfetti && <ConfettiBurst />}
         <p className="text-sm text-accent mb-2">
           Under {stateName} law, you could recover up to
         </p>

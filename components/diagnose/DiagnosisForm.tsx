@@ -14,6 +14,9 @@ import type { StateCode, StateRules, DeadlineAnalysis } from "@/lib/state-rules"
 import { InsightCard } from "./InsightCard";
 import { RecoveryAmount } from "./RecoveryAmount";
 import { PacketManifest } from "./PacketManifest";
+import { ShareButton } from "@/components/ui/ShareButton";
+import { trackConversion } from "@/lib/pixels";
+import { getAttribution } from "@/lib/attribution";
 
 declare global {
   interface Window {
@@ -42,6 +45,8 @@ export function DiagnosisForm() {
   const [isCheckoutLoading, setIsCheckoutLoading] = useState(false);
   const [emailCaptured, setEmailCaptured] = useState(false);
   const [emailError, setEmailError] = useState("");
+  const [shareUrl, setShareUrl] = useState<string | null>(null);
+  const [isCreatingShare, setIsCreatingShare] = useState(false);
 
   // ── Refs for auto-scroll and one-time events ────────────
   const moveOutRef = useRef<HTMLDivElement>(null);
@@ -132,9 +137,15 @@ export function DiagnosisForm() {
         has_violation: hasViolation,
         deposit_amount: parsedAmount,
       });
+      trackConversion("ViewContent", {
+        content_type: "diagnosis_result",
+        content_id: stateCode,
+        value: potentialRecovery,
+        currency: "USD",
+      });
       hasTrackedComplete.current = true;
     }
-  }, [hasViolation, resultActive, stateCode, parsedAmount]);
+  }, [hasViolation, resultActive, stateCode, parsedAmount, potentialRecovery]);
 
   // ── Handlers ────────────────────────────────────────────
   const handleCheckout = useCallback(async () => {
@@ -146,6 +157,11 @@ export function DiagnosisForm() {
       deposit_amount: parsedAmount,
       potential_recovery: potentialRecovery,
       value: 79,
+    });
+    trackConversion("InitiateCheckout", {
+      value: 79,
+      currency: "USD",
+      content_type: "diagnosis_packet",
     });
 
     // Derive noticeStatus and caseStrength for the diagnosis checkout endpoint
@@ -168,6 +184,7 @@ export function DiagnosisForm() {
     }
 
     try {
+      const attribution = getAttribution();
       const response = await fetch("/api/checkout-diagnosis", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -181,6 +198,7 @@ export function DiagnosisForm() {
           amountWithheld: parsedAmount,
           noticeSentDate: noticeDate || undefined,
           email: email || undefined,
+          ...attribution,
         }),
       });
 
@@ -219,6 +237,7 @@ export function DiagnosisForm() {
 
     setEmailError("");
     try {
+      const attribution = getAttribution();
       await fetch("/api/leads", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -229,13 +248,59 @@ export function DiagnosisForm() {
           landlordInViolation: hasViolation,
           potentialRecovery,
           source: "diagnose",
+          ...attribution,
         }),
+      });
+      trackConversion("CompleteRegistration", {
+        content_type: "email_capture",
+        value: potentialRecovery,
+        currency: "USD",
       });
       setEmailCaptured(true);
     } catch {
       setEmailCaptured(true);
     }
   }, [email, stateCode, parsedAmount, hasViolation, potentialRecovery]);
+
+  const handleShare = useCallback(async () => {
+    if (isCreatingShare || shareUrl) return;
+    setIsCreatingShare(true);
+    try {
+      const response = await fetch("/api/share", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          stateCode,
+          stateName: stateRules?.name ?? "",
+          depositAmount: parsedAmount,
+          potentialRecovery,
+          daysPastDeadline: deadlineAnalysis
+            ? Math.abs(deadlineAnalysis.daysUntilClaimDeadline)
+            : null,
+          landlordInViolation: hasViolation,
+          caseStrength: hasViolation ? "STRONG" : "MODERATE",
+          damagesMultiplier: stateRules?.damagesMultiplier ?? 1,
+        }),
+      });
+      const data = await response.json();
+      if (data.id) {
+        setShareUrl(`/r/${data.id}`);
+      }
+    } catch {
+      // Silently fail — sharing is non-critical
+    } finally {
+      setIsCreatingShare(false);
+    }
+  }, [
+    isCreatingShare,
+    shareUrl,
+    stateCode,
+    stateRules,
+    parsedAmount,
+    potentialRecovery,
+    deadlineAnalysis,
+    hasViolation,
+  ]);
 
   // ── Computed display values ─────────────────────────────
   const daysPastDeadline = deadlineAnalysis
@@ -503,6 +568,50 @@ export function DiagnosisForm() {
             </div>
           )}
         </div>
+
+        {/* ── Section 5b: Share Results ─────────────────── */}
+        {resultActive && (
+          <div className="transition-all duration-500">
+            {shareUrl ? (
+              <ShareButton
+                url={shareUrl}
+                title={
+                  hasViolation
+                    ? `I could recover $${potentialRecovery.toLocaleString()} from my landlord`
+                    : `My security deposit analysis: $${potentialRecovery.toLocaleString()}`
+                }
+                text={
+                  hasViolation
+                    ? `My landlord violated ${stateRules?.name ?? "state"} law. I could get $${potentialRecovery.toLocaleString()} back. Check yours free:`
+                    : `I just checked my security deposit status. Check yours free:`
+                }
+              />
+            ) : (
+              <button
+                onClick={handleShare}
+                disabled={isCreatingShare}
+                className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-brand text-white font-semibold rounded-lg hover:bg-brand-light transition-colors disabled:opacity-60"
+              >
+                {isCreatingShare ? (
+                  <>
+                    <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                    </svg>
+                    Creating share link...
+                  </>
+                ) : (
+                  <>
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+                    </svg>
+                    Share Your Results
+                  </>
+                )}
+              </button>
+            )}
+          </div>
+        )}
 
         {/* ── Section 6: Packet Manifest ───────────────── */}
         <PacketManifest

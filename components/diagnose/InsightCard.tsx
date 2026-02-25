@@ -29,7 +29,9 @@ export function InsightCard({ visible, variant, children }: InsightCardProps) {
       }`}
     >
       <div
-        className={`rounded-lg border px-4 py-3 text-sm ${variantStyles[variant]}`}
+        className={`rounded-lg border px-4 py-3 text-sm ${variantStyles[variant]} ${
+          variant === "violation" && visible ? "animate-slide-in" : ""
+        }`}
       >
         {children}
       </div>

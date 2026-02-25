@@ -7,6 +7,7 @@ import { Logo } from "@/components/ui";
 import { WizardData } from "@/types/dispute";
 import { PostPaymentForm } from "@/components/success/PostPaymentForm";
 import { trackDiagnosis } from "@/lib/analytics";
+import { trackConversion } from "@/lib/pixels";
 
 declare global {
   interface Window {
@@ -37,6 +38,8 @@ function SuccessContent() {
   const [downloadError, setDownloadError] = useState<string | null>(null);
   const [hasDownloaded, setHasDownloaded] = useState(false);
   const [postPaymentDone, setPostPaymentDone] = useState(false);
+  const [referralCode, setReferralCode] = useState<string | null>(null);
+  const [referralCopied, setReferralCopied] = useState(false);
 
   const isDiagnosis = paymentDetails?.productType === "diagnosis";
 
@@ -118,6 +121,13 @@ function SuccessContent() {
                   state: result.metadata?.state_code || "",
                 });
               }
+
+              // Fire TikTok + Meta pixel Purchase event
+              trackConversion("Purchase", {
+                value: result.amountTotal / 100,
+                currency: "USD",
+                content_type: productType,
+              });
             } catch (error) {
               console.error("[Conversion] Failed to fire conversion:", error);
             }
@@ -193,6 +203,24 @@ function SuccessContent() {
       setIsDownloading(false);
     }
   }, [wizardData, paymentDetails, isDownloading]);
+
+  // Fetch referral code once payment is verified
+  useEffect(() => {
+    if (status === "verified" && paymentDetails?.customerEmail && !referralCode) {
+      fetch("/api/referral", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: paymentDetails.customerEmail }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.code) setReferralCode(data.code);
+        })
+        .catch(() => {
+          // Non-critical — silently fail
+        });
+    }
+  }, [status, paymentDetails?.customerEmail, referralCode]);
 
   // Auto-download for non-diagnosis orders
   useEffect(() => {
@@ -456,6 +484,122 @@ function SuccessContent() {
                     </span>
                   </li>
                 </ol>
+              </div>
+
+              {/* Share & Referral Section */}
+              <div className="border-t border-gray-200 pt-6 mt-6 space-y-4">
+                <h2 className="text-lg font-semibold text-gray-900">
+                  Know someone whose landlord kept their deposit?
+                </h2>
+
+                {/* Referral card */}
+                {referralCode && (
+                  <div className="bg-accent-light border border-accent/20 rounded-lg p-4">
+                    <p className="text-sm text-gray-700 mb-3">
+                      Share your referral link &mdash; they get <strong>$5 off</strong>:
+                    </p>
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="text"
+                        readOnly
+                        value={`depositready.co/diagnose?ref=${referralCode}`}
+                        className="flex-1 px-3 py-2 bg-white border border-gray-300 rounded-lg text-sm text-gray-700 select-all"
+                        onClick={(e) => (e.target as HTMLInputElement).select()}
+                      />
+                      <button
+                        onClick={() => {
+                          navigator.clipboard.writeText(
+                            `https://depositready.co/diagnose?ref=${referralCode}`
+                          );
+                          setReferralCopied(true);
+                          setTimeout(() => setReferralCopied(false), 2000);
+                        }}
+                        className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                          referralCopied
+                            ? "bg-green-100 text-green-700"
+                            : "bg-brand text-white hover:bg-brand-light"
+                        }`}
+                      >
+                        {referralCopied ? "Copied!" : "Copy"}
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                {/* Pre-written social post */}
+                <div className="bg-gray-50 rounded-lg p-4">
+                  <p className="text-xs text-gray-500 mb-2 uppercase tracking-wide font-medium">
+                    Share on social
+                  </p>
+                  <p className="text-sm text-gray-700 mb-3 italic">
+                    &ldquo;Just found out my landlord violated state law. Getting my deposit back.
+                    Check yours free: depositready.co&rdquo;
+                  </p>
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => {
+                        const text = encodeURIComponent(
+                          "Just found out my landlord violated state law. Getting my deposit back 💰 Check yours free:\n\n"
+                        );
+                        const url = encodeURIComponent(
+                          referralCode
+                            ? `https://depositready.co/diagnose?ref=${referralCode}`
+                            : "https://depositready.co/diagnose"
+                        );
+                        window.open(
+                          `https://twitter.com/intent/tweet?text=${text}&url=${url}`,
+                          "_blank",
+                          "noopener,noreferrer"
+                        );
+                      }}
+                      className="flex items-center gap-1.5 px-3 py-2 bg-white border border-gray-300 rounded-lg text-sm hover:bg-gray-50 transition-colors"
+                    >
+                      <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                      </svg>
+                      Post
+                    </button>
+                    <button
+                      onClick={() => {
+                        const url = encodeURIComponent(
+                          referralCode
+                            ? `https://depositready.co/diagnose?ref=${referralCode}`
+                            : "https://depositready.co/diagnose"
+                        );
+                        window.open(
+                          `https://www.facebook.com/sharer/sharer.php?u=${url}`,
+                          "_blank",
+                          "noopener,noreferrer"
+                        );
+                      }}
+                      className="flex items-center gap-1.5 px-3 py-2 bg-white border border-gray-300 rounded-lg text-sm hover:bg-gray-50 transition-colors"
+                    >
+                      <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+                      </svg>
+                      Share
+                    </button>
+                    {typeof navigator !== "undefined" && navigator.share && (
+                      <button
+                        onClick={() => {
+                          navigator.share({
+                            title: "Check if your landlord owes you money",
+                            text: "Just found out my landlord violated state law. Check yours free:",
+                            url: referralCode
+                              ? `https://depositready.co/diagnose?ref=${referralCode}`
+                              : "https://depositready.co/diagnose",
+                          });
+                        }}
+                        className="flex items-center gap-1.5 px-3 py-2 bg-white border border-gray-300 rounded-lg text-sm hover:bg-gray-50 transition-colors"
+                      >
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+                        </svg>
+                        More
+                      </button>
+                    )}
+                  </div>
+                </div>
               </div>
             </div>
           )}
