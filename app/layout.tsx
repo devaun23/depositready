@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
 // Removed: import { Analytics } from "@vercel/analytics/react"; - reduces JS bundle
 import Script from "next/script";
-import { LazyExitIntentPopup } from "@/components/common/LazyExitIntentPopup";
+import { LazyFeedbackButton } from "@/components/feedback/LazyFeedbackButton";
 import "./globals.css";
 
 export const viewport: Viewport = {
@@ -104,7 +104,7 @@ export default function RootLayout({
           Skip to main content
         </a>
         {children}
-        <LazyExitIntentPopup />
+        <LazyFeedbackButton />
         {/* Delay analytics by 5s to reduce TBT - most real users stay longer */}
         <Script id="delayed-analytics" strategy="lazyOnload">
           {`
