@@ -1,13 +1,7 @@
-"use client";
-
-import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { Logo } from "@/components/ui";
 
 export function Footer() {
-  const pathname = usePathname();
-  const isHomepage = pathname === "/";
-
   return (
     <footer className="py-8 md:py-12 px-4 sm:px-6 border-t border-gray-100">
       <div className="max-w-5xl mx-auto">
@@ -29,28 +23,19 @@ export function Footer() {
             <h4 className="font-medium text-black mb-3 text-sm">Resources</h4>
             <ul className="space-y-2">
               <li>
-                {isHomepage ? (
-                  <a
-                    href="#how-it-works"
-                    className="text-gray-500 hover:text-black text-sm transition-colors"
-                  >
-                    How it works
-                  </a>
-                ) : (
-                  <Link
-                    href="/#how-it-works"
-                    className="text-gray-500 hover:text-black text-sm transition-colors"
-                  >
-                    How it works
-                  </Link>
-                )}
+                <Link
+                  href="/resources"
+                  className="text-gray-500 hover:text-black text-sm transition-colors"
+                >
+                  All guides
+                </Link>
               </li>
               <li>
                 <Link
-                  href="/florida-rules"
+                  href="/security-deposit-deadline"
                   className="text-gray-500 hover:text-black text-sm transition-colors"
                 >
-                  State deadlines
+                  Deposit deadlines
                 </Link>
               </li>
               <li>
@@ -63,28 +48,11 @@ export function Footer() {
               </li>
               <li>
                 <Link
-                  href="/security-deposit-deadline"
+                  href="/#how-it-works"
                   className="text-gray-500 hover:text-black text-sm transition-colors"
                 >
-                  Deposit deadlines
+                  How it works
                 </Link>
-              </li>
-              <li>
-                {isHomepage ? (
-                  <a
-                    href="#whats-included"
-                    className="text-gray-500 hover:text-black text-sm transition-colors"
-                  >
-                    FAQ
-                  </a>
-                ) : (
-                  <Link
-                    href="/#whats-included"
-                    className="text-gray-500 hover:text-black text-sm transition-colors"
-                  >
-                    FAQ
-                  </Link>
-                )}
               </li>
             </ul>
           </div>
