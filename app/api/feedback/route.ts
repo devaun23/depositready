@@ -1,7 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase";
+import { resend, EMAIL_CONFIG } from "@/lib/email";
 
 export const runtime = "nodejs";
+
+const FEEDBACK_RECIPIENT = "devaun@usf.edu";
 
 export async function POST(request: NextRequest) {
   try {
@@ -44,6 +47,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Save to Supabase (primary store)
     const { error: dbError } = await supabaseAdmin
       .from("feedback")
       .insert({
@@ -68,6 +72,31 @@ export async function POST(request: NextRequest) {
         { error: "Failed to save feedback" },
         { status: 500 }
       );
+    }
+
+    // Send email notification (best-effort, don't block response)
+    const feedbackText = improvement_suggestion || confusion_area || what_looking_for || "(no text)";
+    if (resend) {
+      try {
+        await resend.emails.send({
+          from: EMAIL_CONFIG.from,
+          to: FEEDBACK_RECIPIENT,
+          subject: `Site Feedback — ${page_path}`,
+          html: `
+            <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
+              <h2 style="margin: 0 0 16px;">New Feedback</h2>
+              <table style="width: 100%; border-collapse: collapse;">
+                <tr><td style="padding: 8px 0; color: #666; width: 100px;">Page</td><td style="padding: 8px 0;">${page_path}</td></tr>
+                <tr><td style="padding: 8px 0; color: #666;">Time</td><td style="padding: 8px 0;">${new Date().toISOString()}</td></tr>
+                <tr><td style="padding: 8px 0; color: #666;">Source</td><td style="padding: 8px 0;">${trigger_type}</td></tr>
+              </table>
+              <div style="margin-top: 16px; padding: 16px; background: #f9fafb; border-radius: 8px; white-space: pre-wrap;">${feedbackText}</div>
+            </div>
+          `,
+        });
+      } catch (emailErr) {
+        console.error("Failed to send feedback email:", emailErr);
+      }
     }
 
     return NextResponse.json({ success: true });
