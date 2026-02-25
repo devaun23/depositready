@@ -113,6 +113,39 @@ export async function POST(request: NextRequest) {
         break;
       }
 
+      // --- Case Review handling ---
+      if (session.metadata?.product_type === "case_review") {
+        const caseReviewId = session.metadata.case_review_id;
+        if (!caseReviewId) {
+          console.warn("Case review payment but no case_review_id in metadata");
+          break;
+        }
+
+        const { error: crError } = await supabaseAdmin
+          .from("case_reviews")
+          .update({
+            payment_status: "paid",
+            paid_at: new Date().toISOString(),
+            stripe_session_id: session.id,
+          })
+          .eq("id", caseReviewId);
+
+        if (crError) {
+          console.error("Failed to update case_reviews:", crError);
+          return NextResponse.json(
+            { error: "Database update failed" },
+            { status: 500 }
+          );
+        }
+
+        console.log("Case review marked as paid:", caseReviewId);
+
+        // TODO: Trigger AI generation after Task 11 is built
+        // Optionally send confirmation email after Task 13
+
+        break;
+      }
+
       // --- B2C order handling ---
       const orderId = session.metadata?.order_id;
 
@@ -191,6 +224,16 @@ export async function POST(request: NextRequest) {
         if (creditId) {
           await supabaseAdmin.from("b2b_credits").delete().eq("id", creditId);
           console.log("Deleted expired B2B credit:", creditId);
+        }
+        break;
+      }
+
+      // Clean up pending case reviews
+      if (session.metadata?.product_type === "case_review") {
+        const caseReviewId = session.metadata.case_review_id;
+        if (caseReviewId) {
+          await supabaseAdmin.from("case_reviews").delete().eq("id", caseReviewId);
+          console.log("Deleted expired case review:", caseReviewId);
         }
         break;
       }

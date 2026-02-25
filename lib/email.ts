@@ -349,6 +349,98 @@ export async function sendB2BWelcomeEmail(data: B2BWelcomeEmailData): Promise<{ 
   }
 }
 
+// --- Case Review Email Types ---
+
+export interface CaseReviewDeliveryEmailData {
+  email: string;
+  name: string;
+  downloadToken: string;
+  stateCode: string;
+}
+
+function getCaseReviewDeliveryEmailHtml(data: CaseReviewDeliveryEmailData): string {
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://depositready.com";
+  const downloadUrl = `${baseUrl}/api/case-review/download?token=${data.downloadToken}`;
+
+  return `<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Your Case Review is Ready</title></head>
+<body style="font-family: Georgia, serif; line-height: 1.6; color: #1a1a1a; max-width: 600px; margin: 0 auto; padding: 20px;">
+  <div style="text-align: center; margin-bottom: 30px;">
+    <h1 style="font-size: 24px; margin: 0;">DepositReady</h1>
+  </div>
+
+  <div style="background: #dcfce7; border-radius: 8px; padding: 20px; margin-bottom: 24px; text-align: center;">
+    <p style="margin: 0; color: #166534; font-size: 18px; font-weight: bold;">Your Case Review is Ready</p>
+  </div>
+
+  <p>Hi ${data.name},</p>
+
+  <p>Your personalized case review has been completed and is ready for download. A deposit recovery specialist has reviewed your ${data.stateCode} security deposit situation and prepared a detailed assessment.</p>
+
+  <div style="background: #f9fafb; border-radius: 8px; padding: 20px; margin: 24px 0; text-align: center;">
+    <a href="${downloadUrl}" style="display: inline-block; background: #000; color: #fff; padding: 14px 28px; border-radius: 6px; text-decoration: none; font-weight: 500; font-size: 16px;">Download Your Case Review</a>
+    <p style="margin: 12px 0 0 0; font-size: 12px; color: #666;">This link doesn't expire — you can download anytime.</p>
+  </div>
+
+  <h3 style="font-size: 16px; margin: 24px 0 12px;">Your Memo Includes:</h3>
+  <ul style="padding-left: 20px; color: #374151;">
+    <li>Your situation clearly restated</li>
+    <li>${data.stateCode} law applied to your specific facts</li>
+    <li>Honest case assessment — strengths and weaknesses</li>
+    <li>Step-by-step action plan with timeline</li>
+    <li>Key deadlines for your case</li>
+    <li>Guidance on when to escalate</li>
+  </ul>
+
+  <h3 style="font-size: 16px; margin: 24px 0 12px;">What to Do Next:</h3>
+  <ol style="padding-left: 20px;">
+    <li>Download and read through your case review</li>
+    <li>Follow the action plan section step by step</li>
+    <li>Note the key deadlines — some may be time-sensitive</li>
+    <li>Reply to this email if you have any questions</li>
+  </ol>
+
+  <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 30px 0;">
+
+  <p style="font-size: 14px; color: #666;">
+    Questions about your case review? Reply directly to this email — we're here to help.
+  </p>
+
+  <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 30px 0;">
+
+  <p style="font-size: 12px; color: #9ca3af; text-align: center;">
+    DepositReady provides informational case assessments, not legal advice. For legal representation, consult a licensed attorney.
+  </p>
+</body>
+</html>`.trim();
+}
+
+export async function sendCaseReviewDeliveryEmail(data: CaseReviewDeliveryEmailData): Promise<{ success: boolean; error?: string }> {
+  if (!resend) {
+    console.log("Email not configured, skipping case review delivery email to:", data.email);
+    return { success: false, error: "Email not configured" };
+  }
+  try {
+    const { error } = await resend.emails.send({
+      from: EMAIL_CONFIG.from,
+      replyTo: EMAIL_CONFIG.replyTo,
+      to: data.email,
+      subject: "Your Personalized Case Review is Ready — Download Now",
+      html: getCaseReviewDeliveryEmailHtml(data),
+    });
+    if (error) {
+      console.error("Failed to send case review delivery email:", error);
+      return { success: false, error: error.message };
+    }
+    console.log("Case review delivery email sent to:", data.email);
+    return { success: true };
+  } catch (error) {
+    console.error("Case review delivery email error:", error);
+    return { success: false, error: error instanceof Error ? error.message : "Unknown error" };
+  }
+}
+
 export async function sendB2BLetterGeneratedEmail(data: B2BLetterGeneratedEmailData): Promise<{ success: boolean; error?: string }> {
   if (!resend) {
     console.log("Email not configured, skipping B2B letter email to:", data.email);

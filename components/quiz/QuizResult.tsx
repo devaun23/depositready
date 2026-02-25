@@ -12,6 +12,7 @@ import {
   calculateCaseStrength,
 } from "@/lib/state-rules";
 import type { CaseStrength } from "@/lib/state-rules";
+import { InlinePulse } from "@/components/feedback/InlinePulse";
 
 declare global {
   interface Window {
@@ -487,6 +488,13 @@ export function QuizResult() {
               </p>
             </div>
 
+            {/* Inline Pulse — "Was this helpful?" */}
+            <InlinePulse
+              pagePath="/quiz"
+              question="Was this analysis helpful?"
+              context={{ caseStrength, stateCode: data.stateCode }}
+            />
+
             {/* Pricing Options */}
             <div className="space-y-4">
               {isViolation ? (
@@ -590,6 +598,23 @@ export function QuizResult() {
                   </div>
                 </>
               )}
+            </div>
+
+            {/* Case Review Upsell */}
+            <div className="mt-4 border border-amber-200 rounded-xl p-4 bg-amber-50">
+              <p className="text-sm font-medium text-gray-900 mb-1">
+                Want personalized guidance?
+              </p>
+              <p className="text-xs text-gray-600 mb-3">
+                Get a specialist to review your specific situation and
+                deliver a custom action plan.
+              </p>
+              <Link
+                href={`/case-review/intake?state=${data.stateCode || ""}&deposit=${data.depositAmount || ""}&moveOutDate=${data.moveOutDate || ""}`}
+                className="block w-full text-center bg-amber-600 text-white text-sm font-medium py-2.5 rounded-lg hover:bg-amber-700 transition"
+              >
+                Get My Case Reviewed — $149
+              </Link>
             </div>
 
             {/* Trust Signals */}
