@@ -2,26 +2,18 @@
 
 import { useCallback, useEffect, useRef } from "react";
 import Link from "next/link";
+import { useChat as useChatSDK } from "@ai-sdk/react";
+import { DefaultChatTransport } from "ai";
 import { useChat } from "./ChatContext";
 import { ChatMessage } from "./ChatMessage";
 import { ChatInput } from "./ChatInput";
 import { CaseSummaryCard } from "./CaseSummaryCard";
-import type { ToolResult, PurchaseOffer } from "./ChatContext";
 
 const GREETING =
   "Hi! I'm your deposit recovery assistant. Tell me what happened with your security deposit, and I'll help you understand your rights and options.\n\nFor example: *\"I moved out of my apartment 2 months ago and never got my deposit back.\"*";
 
 export function ChatShell() {
   const {
-    messages,
-    addUserMessage,
-    addAssistantMessage,
-    updateAssistantStream,
-    finalizeAssistantMessage,
-    isStreaming,
-    setIsStreaming,
-    streamingMessageId,
-    setStreamingMessageId,
     caseData,
     updateCaseData,
     sessionToken,
@@ -30,134 +22,48 @@ export function ChatShell() {
   } = useChat();
 
   const scrollRef = useRef<HTMLDivElement>(null);
-  const abortRef = useRef<AbortController | null>(null);
 
-  // Auto-scroll on new messages or streaming updates
-  useEffect(() => {
-    scrollRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages, streamingMessageId]);
-
-  // ── Send message → stream response ──────────────────────────────
-
-  const sendMessage = useCallback(
-    async (content: string) => {
-      if (isStreaming) return;
-
-      // Add user message to state
-      addUserMessage(content);
-
-      // Build message history for API
-      const history = [
-        ...messages.map((m) => ({
-          role: m.role as "user" | "assistant",
-          content: m.content,
-        })),
-        { role: "user" as const, content },
-      ];
-
-      // Create placeholder assistant message
-      const assistantId = crypto.randomUUID();
-      addAssistantMessage(assistantId, { content: "" });
-      setIsStreaming(true);
-      setStreamingMessageId(assistantId);
-
-      // Abort any previous request
-      abortRef.current?.abort();
-      const controller = new AbortController();
-      abortRef.current = controller;
-
-      let fullContent = "";
-      const toolResults: ToolResult[] = [];
-      let purchaseOffer: PurchaseOffer | undefined;
-
-      try {
-        const res = await fetch("/api/chat", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ messages: history, sessionToken }),
-          signal: controller.signal,
-        });
-
-        if (!res.ok) {
-          throw new Error(`Chat API error: ${res.status}`);
-        }
-
-        const reader = res.body?.getReader();
-        if (!reader) throw new Error("No response stream");
-
-        const decoder = new TextDecoder();
-        let buffer = "";
-
-        while (true) {
-          const { done, value } = await reader.read();
-          if (done) break;
-
-          buffer += decoder.decode(value, { stream: true });
-          const lines = buffer.split("\n");
-          buffer = lines.pop() || "";
-
-          for (const line of lines) {
-            if (!line.startsWith("data: ")) continue;
-            const data = line.slice(6);
-            if (data === "[DONE]") continue;
-
-            try {
-              const event = JSON.parse(data);
-
-              if (event.type === "text") {
-                fullContent += event.content;
-                updateAssistantStream(assistantId, fullContent);
-              } else if (event.type === "tool_result") {
-                toolResults.push({
-                  tool: event.tool,
-                  result: event.result,
-                });
-                // Update case data from tool results
-                applyToolResult(event.tool, event.result, updateCaseData, setShowSummary);
-              } else if (event.type === "purchase_offer") {
-                purchaseOffer = event.offer;
-              } else if (event.type === "error") {
-                fullContent += "\n\nI'm sorry, something went wrong. Please try again.";
-                updateAssistantStream(assistantId, fullContent);
-              }
-            } catch {
-              // Skip malformed JSON lines
-            }
-          }
-        }
-      } catch (err) {
-        if ((err as Error).name !== "AbortError") {
-          fullContent =
-            fullContent || "I'm sorry, I couldn't process that. Please try again.";
-          updateAssistantStream(assistantId, fullContent);
-        }
-      } finally {
-        finalizeAssistantMessage(
-          assistantId,
-          fullContent,
-          toolResults.length ? toolResults : undefined,
-          purchaseOffer
-        );
-        setIsStreaming(false);
-        setStreamingMessageId(null);
+  // ── AI SDK useChat ──────────────────────────────────────────────
+  const {
+    messages,
+    sendMessage,
+    status,
+    stop,
+  } = useChatSDK({
+    transport: new DefaultChatTransport({
+      api: "/api/chat",
+      body: { sessionToken },
+    }),
+    onData: (dataPart) => {
+      // Handle transient custom data parts for case data updates
+      if (dataPart.type === "data-tool-result") {
+        const { tool, result } = dataPart.data as {
+          tool: string;
+          result: Record<string, unknown>;
+        };
+        applyToolResult(tool, result, updateCaseData, setShowSummary);
       }
     },
-    [
-      messages,
-      isStreaming,
-      sessionToken,
-      addUserMessage,
-      addAssistantMessage,
-      updateAssistantStream,
-      finalizeAssistantMessage,
-      setIsStreaming,
-      setStreamingMessageId,
-      updateCaseData,
-      setShowSummary,
-    ]
+  });
+
+  const isLoading = status === "submitted" || status === "streaming";
+
+  // Auto-scroll on new messages
+  useEffect(() => {
+    scrollRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages, status]);
+
+  // ── Send handler for ChatInput ─────────────────────────────────
+  const handleSend = useCallback(
+    (content: string) => {
+      if (isLoading) return;
+      sendMessage({ text: content });
+    },
+    [isLoading, sendMessage]
   );
 
-  const hasCaseData = caseData.stateCode || caseData.depositAmount || caseData.violationDetected !== null;
+  const hasCaseData =
+    caseData.stateCode || caseData.depositAmount || caseData.violationDetected !== null;
 
   return (
     <div className="flex h-full flex-col lg:flex-row">
@@ -213,12 +119,12 @@ export function ChatShell() {
               <ChatMessage
                 key={msg.id}
                 message={msg}
-                isStreaming={msg.id === streamingMessageId}
+                isStreaming={isLoading && msg === messages[messages.length - 1] && msg.role === "assistant"}
               />
             ))}
 
             {/* Typing indicator */}
-            {isStreaming && streamingMessageId && messages.find(m => m.id === streamingMessageId)?.content === "" && (
+            {isLoading && (messages.length === 0 || messages[messages.length - 1]?.role === "user") && (
               <div className="flex justify-start mb-4">
                 <div className="rounded-2xl rounded-bl-md border border-gray-100 bg-white px-4 py-3 shadow-sm">
                   <div className="flex gap-1">
@@ -235,7 +141,7 @@ export function ChatShell() {
         </div>
 
         {/* Input */}
-        <ChatInput onSend={sendMessage} disabled={isStreaming} />
+        <ChatInput onSend={handleSend} disabled={isLoading} />
       </div>
 
       {/* ── Desktop sidebar (case summary) ─────────────────── */}
@@ -283,7 +189,6 @@ function applyToolResult(
       daysLate: result.daysLate as number,
       statute: result.statute as string,
     });
-    // Show summary on mobile when first analysis arrives
     setShowSummary(true);
   }
 

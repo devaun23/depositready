@@ -1,287 +1,161 @@
 import { NextRequest } from "next/server";
-import { buildChatSystemPrompt, CHAT_TOOLS } from "@/lib/chat/system-prompt";
+import {
+  streamText,
+  tool,
+  convertToModelMessages,
+  createUIMessageStream,
+  createUIMessageStreamResponse,
+  stepCountIs,
+} from "ai";
+import type { UIMessage } from "ai";
+import { anthropic } from "@ai-sdk/anthropic";
+import { z } from "zod";
+import { buildChatSystemPrompt } from "@/lib/chat/system-prompt";
 import { executeTool } from "@/lib/chat/extract-case-data";
+import { checkInput } from "@/lib/chat/guardrails";
 import { supabaseAdmin } from "@/lib/supabase";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
 
-const ANTHROPIC_API = "https://api.anthropic.com/v1/messages";
-const MODEL = "claude-sonnet-4-20250514";
-const MAX_TOKENS = 1024;
-
-interface ChatRequestBody {
-  messages: { role: "user" | "assistant"; content: string }[];
-  sessionToken: string;
-}
-
 export async function POST(request: NextRequest) {
-  try {
-    const body: ChatRequestBody = await request.json();
-    const { messages, sessionToken } = body;
+  const { messages, sessionToken } = await request.json();
 
-    if (!messages?.length || !sessionToken) {
-      return new Response(JSON.stringify({ error: "Missing messages or session token" }), {
-        status: 400,
-        headers: { "Content-Type": "application/json" },
-      });
-    }
-
-    const apiKey = process.env.ANTHROPIC_API_KEY?.trim();
-    if (!apiKey) {
-      return new Response(JSON.stringify({ error: "AI service not configured" }), {
-        status: 503,
-        headers: { "Content-Type": "application/json" },
-      });
-    }
-
-    const systemPrompt = buildChatSystemPrompt();
-
-    // Create the SSE stream
-    const stream = new ReadableStream({
-      async start(controller) {
-        const encoder = new TextEncoder();
-        const send = (data: Record<string, unknown>) => {
-          controller.enqueue(encoder.encode(`data: ${JSON.stringify(data)}\n\n`));
-        };
-
-        try {
-          let fullResponse = ""; // Current iteration's text
-          let totalResponse = ""; // All text across iterations
-          // We may need multiple API calls if Claude uses tools
-          let anthropicMessages = messages.map((m) => ({
-            role: m.role,
-            content: m.content,
-          }));
-
-          // Tool use loop: Claude may call tools, we execute and continue
-          let iterations = 0;
-          const MAX_ITERATIONS = 5; // Safety limit
-
-          while (iterations < MAX_ITERATIONS) {
-            iterations++;
-
-            const anthropicRes = await fetch(ANTHROPIC_API, {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-                "x-api-key": apiKey,
-                "anthropic-version": "2023-06-01",
-              },
-              body: JSON.stringify({
-                model: MODEL,
-                max_tokens: MAX_TOKENS,
-                system: systemPrompt,
-                messages: anthropicMessages,
-                tools: CHAT_TOOLS,
-                stream: true,
-              }),
-            });
-
-            if (!anthropicRes.ok) {
-              const errText = await anthropicRes.text();
-              console.error("Anthropic API error:", anthropicRes.status, errText);
-              send({ type: "error", message: "AI service error" });
-              break;
-            }
-
-            const reader = anthropicRes.body?.getReader();
-            if (!reader) {
-              send({ type: "error", message: "No response stream" });
-              break;
-            }
-
-            const decoder = new TextDecoder();
-            let buffer = "";
-            let currentToolUse: {
-              id: string;
-              name: string;
-              inputJson: string;
-            } | null = null;
-            let stopReason: string | null = null;
-            let assistantContentBlocks: Array<Record<string, unknown>> = [];
-
-            while (true) {
-              const { done, value } = await reader.read();
-              if (done) break;
-
-              buffer += decoder.decode(value, { stream: true });
-              const lines = buffer.split("\n");
-              buffer = lines.pop() || "";
-
-              for (const line of lines) {
-                if (!line.startsWith("data: ")) continue;
-                const data = line.slice(6).trim();
-                if (!data || data === "[DONE]") continue;
-
-                try {
-                  const event = JSON.parse(data);
-
-                  // Text delta — stream to client
-                  if (event.type === "content_block_delta") {
-                    if (event.delta?.type === "text_delta" && event.delta.text) {
-                      fullResponse += event.delta.text;
-                      send({ type: "text", content: event.delta.text });
-                    }
-                    // Tool input JSON accumulating
-                    if (event.delta?.type === "input_json_delta" && currentToolUse) {
-                      currentToolUse.inputJson += event.delta.partial_json || "";
-                    }
-                  }
-
-                  // Content block start — detect tool_use blocks
-                  if (event.type === "content_block_start") {
-                    if (event.content_block?.type === "tool_use") {
-                      currentToolUse = {
-                        id: event.content_block.id,
-                        name: event.content_block.name,
-                        inputJson: "",
-                      };
-                    }
-                    if (event.content_block?.type === "text") {
-                      // Track text blocks for message history
-                      assistantContentBlocks.push({
-                        type: "text",
-                        text: "",
-                      });
-                    }
-                  }
-
-                  // Content block stop — execute tool if it was a tool_use block
-                  if (event.type === "content_block_stop") {
-                    if (currentToolUse) {
-                      // Track tool_use block for message history
-                      let toolInput: Record<string, unknown> = {};
-                      try {
-                        toolInput = JSON.parse(currentToolUse.inputJson || "{}");
-                      } catch {
-                        toolInput = {};
-                      }
-                      assistantContentBlocks.push({
-                        type: "tool_use",
-                        id: currentToolUse.id,
-                        name: currentToolUse.name,
-                        input: toolInput,
-                      });
-                    }
-                    // Update last text block with accumulated text
-                    if (!currentToolUse) {
-                      const lastText = assistantContentBlocks.findLast(
-                        (b) => b.type === "text"
-                      );
-                      if (lastText) {
-                        lastText.text = fullResponse;
-                      }
-                    }
-                  }
-
-                  // Message delta with stop_reason
-                  if (event.type === "message_delta") {
-                    stopReason = event.delta?.stop_reason || null;
-                  }
-                } catch {
-                  // Skip malformed events
-                }
-              }
-            }
-
-            // If Claude stopped to use a tool, execute it and continue
-            if (stopReason === "tool_use" && currentToolUse) {
-              let toolInput: Record<string, unknown> = {};
-              try {
-                toolInput = JSON.parse(currentToolUse.inputJson || "{}");
-              } catch {
-                toolInput = {};
-              }
-
-              // Execute the tool
-              const { result, clientData } = executeTool(
-                currentToolUse.name,
-                toolInput
-              );
-
-              // Send tool result to client for CaseSummaryCard updates
-              send({
-                type: "tool_result",
-                tool: currentToolUse.name,
-                result: clientData,
-              });
-
-              // If it's a product recommendation, send purchase offer
-              if (currentToolUse.name === "recommend_product" && clientData.purchaseOffer) {
-                send({
-                  type: "purchase_offer",
-                  offer: clientData.purchaseOffer,
-                });
-              }
-
-              // Continue conversation with tool result
-              anthropicMessages = [
-                ...anthropicMessages,
-                {
-                  role: "assistant" as const,
-                  content: assistantContentBlocks as unknown as string,
-                },
-                {
-                  role: "user" as const,
-                  content: [
-                    {
-                      type: "tool_result",
-                      tool_use_id: currentToolUse.id,
-                      content: JSON.stringify(result),
-                    },
-                  ] as unknown as string,
-                },
-              ];
-
-              // Reset for next iteration
-              totalResponse += fullResponse;
-              fullResponse = "";
-              currentToolUse = null;
-              assistantContentBlocks = [];
-              continue;
-            }
-
-            // Normal stop — done
-            break;
-          }
-
-          // Save session to database (fire-and-forget)
-          totalResponse += fullResponse;
-          saveSession(sessionToken, messages, totalResponse).catch((err) =>
-            console.error("Failed to save chat session:", err)
-          );
-
-          send({ type: "done" });
-          controller.enqueue(encoder.encode("data: [DONE]\n\n"));
-        } catch (err) {
-          console.error("Chat stream error:", err);
-          const encoder = new TextEncoder();
-          controller.enqueue(
-            encoder.encode(
-              `data: ${JSON.stringify({ type: "error", message: "Stream error" })}\n\n`
-            )
-          );
-        } finally {
-          controller.close();
-        }
-      },
-    });
-
-    return new Response(stream, {
-      headers: {
-        "Content-Type": "text/event-stream",
-        "Cache-Control": "no-cache",
-        Connection: "keep-alive",
-      },
-    });
-  } catch (error) {
-    console.error("Chat route error:", error);
+  if (!messages?.length || !sessionToken) {
     return new Response(
-      JSON.stringify({ error: "Internal server error" }),
-      { status: 500, headers: { "Content-Type": "application/json" } }
+      JSON.stringify({ error: "Missing messages or session token" }),
+      { status: 400, headers: { "Content-Type": "application/json" } }
     );
   }
+
+  if (!process.env.ANTHROPIC_API_KEY?.trim()) {
+    return new Response(
+      JSON.stringify({ error: "AI service not configured" }),
+      { status: 503, headers: { "Content-Type": "application/json" } }
+    );
+  }
+
+  // Input guardrail: check last user message for prompt injection
+  const lastUser = [...messages].reverse().find((m: UIMessage) => m.role === "user");
+  if (lastUser) {
+    const text =
+      lastUser.parts?.find((p: { type: string }) => p.type === "text")?.text ??
+      (lastUser as { content?: string }).content ??
+      "";
+    const redirect = checkInput(text as string);
+    if (redirect) {
+      const id = crypto.randomUUID();
+      const stream = createUIMessageStream({
+        execute: ({ writer }) => {
+          writer.write({ type: "text-start", id });
+          writer.write({ type: "text-delta", id, delta: redirect });
+          writer.write({ type: "text-end", id });
+        },
+      });
+      return createUIMessageStreamResponse({ stream });
+    }
+  }
+
+  const stream = createUIMessageStream({
+    execute: async ({ writer }) => {
+      const result = streamText({
+        model: anthropic("claude-sonnet-4-20250514"),
+        system: buildChatSystemPrompt(),
+        messages: await convertToModelMessages(messages),
+        maxOutputTokens: 1024,
+        stopWhen: stepCountIs(5),
+        tools: {
+          analyze_deadline: tool({
+            description:
+              "Analyze whether the landlord has violated security deposit return deadlines based on the tenant's state and move-out date. Call this as soon as you know the state and move-out date.",
+            inputSchema: z.object({
+              state_code: z.string().describe("Two-letter state code (e.g., FL, CA, TX)"),
+              move_out_date: z.string().describe("Move-out date in YYYY-MM-DD format"),
+            }),
+            execute: async (input) => {
+              const { result, clientData } = executeTool("analyze_deadline", input);
+              writer.write({
+                type: "data-tool-result",
+                data: { tool: "analyze_deadline", result: clientData },
+                transient: true,
+              });
+              return result;
+            },
+          }),
+          calculate_damages: tool({
+            description:
+              "Calculate the potential recovery amount including penalty damages. Call this after you know the deposit amount and violation status.",
+            inputSchema: z.object({
+              state_code: z.string().describe("Two-letter state code"),
+              deposit_amount: z.number().describe("Total security deposit amount in dollars"),
+              claimed_deductions: z.number().describe("Amount the landlord claims in deductions (0 if no itemization)"),
+              bad_faith: z.boolean().describe("Whether the landlord acted in bad faith"),
+            }),
+            execute: async (input) => {
+              const { result, clientData } = executeTool("calculate_damages", input);
+              writer.write({
+                type: "data-tool-result",
+                data: { tool: "calculate_damages", result: clientData },
+                transient: true,
+              });
+              return result;
+            },
+          }),
+          assess_case_strength: tool({
+            description:
+              "Assess the overall strength of the tenant's case. Call this after deadline analysis and damages calculation.",
+            inputSchema: z.object({
+              state_code: z.string().describe("Two-letter state code"),
+              move_out_date: z.string().describe("Move-out date in YYYY-MM-DD format"),
+              deposit_amount: z.number().describe("Total security deposit amount"),
+              deposit_returned: z.enum(["yes", "no", "not_sure"]).describe("Whether the deposit has been returned"),
+            }),
+            execute: async (input) => {
+              const { result, clientData } = executeTool("assess_case_strength", input);
+              writer.write({
+                type: "data-tool-result",
+                data: { tool: "assess_case_strength", result: clientData },
+                transient: true,
+              });
+              return result;
+            },
+          }),
+          recommend_product: tool({
+            description:
+              "Recommend a document product to the tenant based on their situation. Only call this when the conversation naturally reaches next steps AND you've already provided analysis.",
+            inputSchema: z.object({
+              product: z.enum(["demand_letter", "legal_packet", "case_review"]).describe("Which product to recommend"),
+              reason: z.string().describe("Brief reason why this product fits their situation"),
+            }),
+            execute: async (input) => {
+              const { result, clientData } = executeTool("recommend_product", input);
+              writer.write({
+                type: "data-tool-result",
+                data: { tool: "recommend_product", result: clientData },
+                transient: true,
+              });
+              if (clientData.purchaseOffer) {
+                writer.write({
+                  type: "data-purchase-offer",
+                  data: clientData.purchaseOffer,
+                });
+              }
+              return result;
+            },
+          }),
+        },
+        onFinish: ({ text }) => {
+          saveSession(sessionToken, messages, text).catch((err) =>
+            console.error("Failed to save chat session:", err)
+          );
+        },
+      });
+
+      writer.merge(result.toUIMessageStream());
+    },
+  });
+
+  return createUIMessageStreamResponse({ stream });
 }
 
 /**
@@ -289,15 +163,24 @@ export async function POST(request: NextRequest) {
  */
 async function saveSession(
   sessionToken: string,
-  messages: { role: string; content: string }[],
+  messages: UIMessage[],
   lastResponse: string
 ) {
+  // Flatten UIMessage parts to simple { role, content } for storage
+  const simplified = messages.map((m: UIMessage) => ({
+    role: m.role,
+    content:
+      m.parts
+        ?.filter((p: { type: string }) => p.type === "text")
+        .map((p: { type: string; text?: string }) => p.text ?? "")
+        .join("") || "",
+  }));
+
   const allMessages = [
-    ...messages,
+    ...simplified,
     ...(lastResponse ? [{ role: "assistant", content: lastResponse }] : []),
   ];
 
-  // Upsert session
   const { error } = await supabaseAdmin
     .from("chat_sessions")
     .upsert(

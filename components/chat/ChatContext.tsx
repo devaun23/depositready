@@ -10,23 +10,7 @@ import {
 } from "react";
 import type { StateCode, CaseStrength } from "@/lib/state-rules/types";
 
-// ── Message types ───────────────────────────────────────────────────
-
-export interface ChatMessage {
-  id: string;
-  role: "user" | "assistant";
-  content: string;
-  /** Tool results embedded in the message (e.g., deadline analysis) */
-  toolResults?: ToolResult[];
-  /** In-chat purchase card to render */
-  purchaseOffer?: PurchaseOffer;
-  createdAt: number;
-}
-
-export interface ToolResult {
-  tool: string;
-  result: Record<string, unknown>;
-}
+// ── Types shared across chat components ──────────────────────────────
 
 export interface PurchaseOffer {
   product: "demand_letter" | "legal_packet" | "case_review";
@@ -70,19 +54,6 @@ const EMPTY_CASE_DATA: CaseData = {
 // ── Context shape ───────────────────────────────────────────────────
 
 interface ChatContextType {
-  // Messages
-  messages: ChatMessage[];
-  addUserMessage: (content: string) => void;
-  addAssistantMessage: (id: string, msg: Omit<ChatMessage, "id" | "role" | "createdAt">) => void;
-  updateAssistantStream: (id: string, content: string) => void;
-  finalizeAssistantMessage: (id: string, content: string, toolResults?: ToolResult[], purchaseOffer?: PurchaseOffer) => void;
-
-  // Streaming state
-  isStreaming: boolean;
-  setIsStreaming: (v: boolean) => void;
-  streamingMessageId: string | null;
-  setStreamingMessageId: (id: string | null) => void;
-
   // Case data (populated by tool calls)
   caseData: CaseData;
   updateCaseData: (updates: Partial<CaseData>) => void;
@@ -111,9 +82,6 @@ function getOrCreateSessionToken(): string {
 }
 
 export function ChatProvider({ children }: { children: React.ReactNode }) {
-  const [messages, setMessages] = useState<ChatMessage[]>([]);
-  const [isStreaming, setIsStreaming] = useState(false);
-  const [streamingMessageId, setStreamingMessageId] = useState<string | null>(null);
   const [caseData, setCaseData] = useState<CaseData>(EMPTY_CASE_DATA);
   const [showSummary, setShowSummary] = useState(false);
 
@@ -122,79 +90,19 @@ export function ChatProvider({ children }: { children: React.ReactNode }) {
     sessionTokenRef.current = getOrCreateSessionToken();
   }
 
-  const addUserMessage = useCallback((content: string) => {
-    const msg: ChatMessage = {
-      id: crypto.randomUUID(),
-      role: "user",
-      content,
-      createdAt: Date.now(),
-    };
-    setMessages((prev) => [...prev, msg]);
-  }, []);
-
-  const addAssistantMessage = useCallback(
-    (id: string, partial: Omit<ChatMessage, "id" | "role" | "createdAt">) => {
-      const msg: ChatMessage = {
-        ...partial,
-        id,
-        role: "assistant",
-        createdAt: Date.now(),
-      };
-      setMessages((prev) => [...prev, msg]);
-    },
-    []
-  );
-
-  const updateAssistantStream = useCallback((id: string, content: string) => {
-    setMessages((prev) =>
-      prev.map((m) => (m.id === id ? { ...m, content } : m))
-    );
-  }, []);
-
-  const finalizeAssistantMessage = useCallback(
-    (id: string, content: string, toolResults?: ToolResult[], purchaseOffer?: PurchaseOffer) => {
-      setMessages((prev) =>
-        prev.map((m) =>
-          m.id === id ? { ...m, content, toolResults, purchaseOffer } : m
-        )
-      );
-    },
-    []
-  );
-
   const updateCaseData = useCallback((updates: Partial<CaseData>) => {
     setCaseData((prev) => ({ ...prev, ...updates }));
   }, []);
 
   const value = useMemo(
     () => ({
-      messages,
-      addUserMessage,
-      addAssistantMessage,
-      updateAssistantStream,
-      finalizeAssistantMessage,
-      isStreaming,
-      setIsStreaming,
-      streamingMessageId,
-      setStreamingMessageId,
       caseData,
       updateCaseData,
       sessionToken: sessionTokenRef.current,
       showSummary,
       setShowSummary,
     }),
-    [
-      messages,
-      addUserMessage,
-      addAssistantMessage,
-      updateAssistantStream,
-      finalizeAssistantMessage,
-      isStreaming,
-      streamingMessageId,
-      caseData,
-      updateCaseData,
-      showSummary,
-    ]
+    [caseData, updateCaseData, showSummary]
   );
 
   return <ChatContext.Provider value={value}>{children}</ChatContext.Provider>;

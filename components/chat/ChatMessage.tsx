@@ -1,15 +1,25 @@
 "use client";
 
-import type { ChatMessage as ChatMessageType } from "./ChatContext";
+import type { UIMessage } from "ai";
 import { PurchaseCard } from "./PurchaseCard";
+import { StatuteCitation } from "./StatuteCitation";
+import type { PurchaseOffer } from "./ChatContext";
 
 interface ChatMessageProps {
-  message: ChatMessageType;
+  message: UIMessage;
   isStreaming?: boolean;
 }
 
 export function ChatMessage({ message, isStreaming }: ChatMessageProps) {
   const isUser = message.role === "user";
+
+  // Extract content from message parts
+  const textContent = getTextContent(message);
+  const toolNames = getToolNames(message);
+  const purchaseOffer = getPurchaseOffer(message);
+  const hasAnalysis = toolNames.some((t) =>
+    ["analyze_deadline", "calculate_damages", "assess_case_strength"].includes(t)
+  );
 
   return (
     <div
@@ -23,17 +33,19 @@ export function ChatMessage({ message, isStreaming }: ChatMessageProps) {
         }`}
       >
         {/* Message content — render with basic formatting */}
-        <div className="whitespace-pre-wrap break-words">
-          {formatContent(message.content)}
-          {isStreaming && (
-            <span className="inline-block w-1.5 h-4 bg-accent ml-0.5 animate-pulse rounded-full" />
-          )}
-        </div>
+        {textContent && (
+          <div className="whitespace-pre-wrap break-words">
+            {formatContent(textContent)}
+            {isStreaming && (
+              <span className="inline-block w-1.5 h-4 bg-accent ml-0.5 animate-pulse rounded-full" />
+            )}
+          </div>
+        )}
 
         {/* Tool result badges (e.g., "Analyzed Florida deadlines") */}
-        {message.toolResults && message.toolResults.length > 0 && (
+        {toolNames.length > 0 && (
           <div className="mt-2 flex flex-wrap gap-1.5">
-            {message.toolResults.map((tr, i) => (
+            {toolNames.map((name, i) => (
               <span
                 key={i}
                 className="inline-flex items-center gap-1 rounded-full bg-accent/10 px-2.5 py-0.5 text-xs font-medium text-accent"
@@ -41,23 +53,23 @@ export function ChatMessage({ message, isStreaming }: ChatMessageProps) {
                 <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                 </svg>
-                {formatToolName(tr.tool)}
+                {formatToolName(name)}
               </span>
             ))}
           </div>
         )}
 
         {/* Contextual legal disclaimer after analysis results */}
-        {!isUser && hasAnalysisResults(message) && (
+        {!isUser && hasAnalysis && (
           <p className="mt-2.5 text-[11px] leading-relaxed text-gray-400 border-t border-gray-100 pt-2">
             Estimates based on general state law. Consult an attorney for advice specific to your situation.
           </p>
         )}
 
         {/* In-chat purchase card */}
-        {message.purchaseOffer && (
+        {purchaseOffer && (
           <div className="mt-3">
-            <PurchaseCard offer={message.purchaseOffer} />
+            <PurchaseCard offer={purchaseOffer} />
           </div>
         )}
       </div>
@@ -65,31 +77,77 @@ export function ChatMessage({ message, isStreaming }: ChatMessageProps) {
   );
 }
 
-/** Check if message contains analysis tool results (not just product recommendations) */
-function hasAnalysisResults(message: ChatMessageType): boolean {
-  if (!message.toolResults?.length) return false;
-  const analysisTools = ["analyze_deadline", "calculate_damages", "assess_case_strength"];
-  return message.toolResults.some((tr) => analysisTools.includes(tr.tool));
+// ── Part extraction helpers ──────────────────────────────────────────
+
+/** Get combined text content from message parts */
+function getTextContent(message: UIMessage): string {
+  if (!message.parts?.length) return "";
+  return message.parts
+    .filter((p): p is { type: "text"; text: string } => p.type === "text")
+    .map((p) => p.text)
+    .join("");
 }
+
+/** Get tool names from completed tool invocations (AI SDK v6 format) */
+function getToolNames(message: UIMessage): string[] {
+  if (!message.parts?.length) return [];
+  const TOOL_PREFIX = "tool-";
+  const TOOL_NAMES = ["analyze_deadline", "calculate_damages", "assess_case_strength", "recommend_product"];
+  return message.parts
+    .filter((p) => {
+      if (!p.type.startsWith(TOOL_PREFIX)) return false;
+      const name = p.type.slice(TOOL_PREFIX.length);
+      if (!TOOL_NAMES.includes(name)) return false;
+      return (p as { state?: string }).state === "output-available";
+    })
+    .map((p) => p.type.slice(TOOL_PREFIX.length));
+}
+
+/** Extract purchase offer from custom data parts */
+function getPurchaseOffer(message: UIMessage): PurchaseOffer | null {
+  if (!message.parts?.length) return null;
+  const part = message.parts.find((p) => p.type === "data-purchase-offer");
+  if (!part) return null;
+  return (part as { data: PurchaseOffer }).data;
+}
+
+// ── Formatting helpers ───────────────────────────────────────────────
 
 /** Format tool names for display */
 function formatToolName(tool: string): string {
   const names: Record<string, string> = {
     analyze_deadline: "Deadline analysis",
     calculate_damages: "Recovery calculation",
-    lookup_statute: "Statute lookup",
     assess_case_strength: "Case strength assessment",
+    recommend_product: "Product recommendation",
   };
   return names[tool] || tool;
 }
+
+/**
+ * Regex matching statute citation formats across all 16 supported states.
+ *
+ * Matches patterns like:
+ *   F.S. 83.49(3)(a)           — Florida
+ *   Cal. Civ. Code § 1950.5    — California
+ *   765 ILCS 710/1             — Illinois
+ *   RCW 59.18.280(1)           — Washington
+ *   ORC § 5321.16(B)           — Ohio
+ *   M.G.L. c. 186 § 15B(4)    — Massachusetts
+ *
+ * Structure: abbreviated prefix + optional § + section number + optional sub-sections
+ */
+const STATUTE_RE =
+  /(?:(?:[A-Z][A-Za-z.]{1,20}(?:\s+[A-Za-z.]+){0,4})\s*§\s*[\d][\w.:-]*(?:\([^)]*\))*|F\.S\.\s*[\d]+\.[\d]+(?:\([^)]*\))*|\d+\s+(?:ILCS|Pa\.\s*Stat\.)\s*[\d]+(?:\/[\d]+)?(?:\([^)]*\))*|(?:RCW|MCL)\s*[\d]+\.[\d]+\.[\d]+(?:\([^)]*\))*)/g;
 
 /** Basic markdown-lite formatting for chat messages */
 function formatContent(content: string): React.ReactNode {
   if (!content) return null;
 
-  // Split by **bold** markers and render
-  const parts = content.split(/(\*\*[^*]+\*\*)/g);
-  return parts.map((part, i) => {
+  // First pass: split by **bold** markers
+  const boldParts = content.split(/(\*\*[^*]+\*\*)/g);
+
+  return boldParts.map((part, i) => {
     if (part.startsWith("**") && part.endsWith("**")) {
       return (
         <strong key={i} className="font-semibold">
@@ -97,6 +155,39 @@ function formatContent(content: string): React.ReactNode {
         </strong>
       );
     }
-    return part;
+
+    // Second pass on plain text: detect statute citations
+    const segments = splitByCitations(part);
+    if (segments.length === 1 && !segments[0].isCitation) {
+      return part;
+    }
+    return segments.map((seg, j) =>
+      seg.isCitation ? (
+        <StatuteCitation key={`${i}-${j}`} citation={seg.text} />
+      ) : (
+        <span key={`${i}-${j}`}>{seg.text}</span>
+      )
+    );
   });
+}
+
+/** Split text into segments of plain text and statute citations */
+function splitByCitations(text: string): { text: string; isCitation: boolean }[] {
+  const segments: { text: string; isCitation: boolean }[] = [];
+  let lastIndex = 0;
+
+  for (const match of text.matchAll(STATUTE_RE)) {
+    const start = match.index;
+    if (start > lastIndex) {
+      segments.push({ text: text.slice(lastIndex, start), isCitation: false });
+    }
+    segments.push({ text: match[0], isCitation: true });
+    lastIndex = start + match[0].length;
+  }
+
+  if (lastIndex < text.length) {
+    segments.push({ text: text.slice(lastIndex), isCitation: false });
+  }
+
+  return segments.length ? segments : [{ text, isCitation: false }];
 }
