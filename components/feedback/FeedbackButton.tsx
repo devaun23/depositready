@@ -20,7 +20,7 @@ export function FeedbackButton() {
       {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
-          className="fixed bottom-4 left-4 z-40 bg-brand text-white text-sm font-semibold px-4 py-2.5 rounded-full shadow-lg hover:bg-brand-light hover:shadow-xl transition-all animate-feedback-pulse"
+          className="fixed bottom-20 sm:bottom-4 left-4 z-40 bg-brand text-white text-sm font-semibold px-4 py-2.5 rounded-full shadow-lg hover:bg-brand-light hover:shadow-xl transition-all animate-feedback-pulse"
           aria-label="Send feedback"
         >
           <span className="flex items-center gap-2">

@@ -55,7 +55,7 @@ export function FeedbackPanel({ pagePath, onClose }: FeedbackPanelProps) {
   }, [submitted, onClose]);
 
   return (
-    <div className="fixed bottom-16 left-4 z-50 w-80 bg-white rounded-xl shadow-2xl border border-gray-200 overflow-hidden">
+    <div className="fixed bottom-32 sm:bottom-16 left-4 z-50 w-80 bg-white rounded-xl shadow-2xl border border-gray-200 overflow-hidden">
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-3 bg-gray-50 border-b border-gray-200">
         <span className="text-sm font-medium text-gray-900">
