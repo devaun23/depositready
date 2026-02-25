@@ -8,7 +8,7 @@ export function FeedbackBanner() {
   if (dismissed) return null;
 
   return (
-    <div className="bg-gray-100 text-center py-2 px-4 text-sm text-gray-600">
+    <div className="bg-gray-100 flex items-center justify-center py-2 px-4 text-sm text-gray-600">
       <span>
         Got feedback?{" "}
         <a
@@ -20,7 +20,7 @@ export function FeedbackBanner() {
       </span>
       <button
         onClick={() => setDismissed(true)}
-        className="ml-3 text-gray-400 hover:text-gray-600 transition-colors"
+        className="ml-3 p-2 min-w-[44px] min-h-[44px] inline-flex items-center justify-center text-gray-400 hover:text-gray-600 transition-colors"
         aria-label="Dismiss feedback banner"
       >
         &times;

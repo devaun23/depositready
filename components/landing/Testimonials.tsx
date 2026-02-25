@@ -40,7 +40,7 @@ export function Testimonials() {
           {testimonials.map((t) => (
             <div
               key={t.name}
-              className="border border-gray-200 rounded-xl p-6 flex flex-col"
+              className="border border-gray-200 rounded-xl p-4 sm:p-6 flex flex-col"
             >
               <p className="text-gray-700 text-sm leading-relaxed flex-1">
                 &ldquo;{t.quote}&rdquo;
