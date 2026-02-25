@@ -33,7 +33,7 @@ export function Navbar() {
             href="/wizard"
             className="px-3 py-1.5 text-sm font-medium bg-accent text-white rounded hover:bg-accent-hover transition-colors"
           >
-            Get Started
+            Start Free
           </Link>
         </div>
       </nav>

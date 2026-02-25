@@ -2,30 +2,30 @@ import { Card, CardContent, CardTitle } from "@/components/ui";
 
 const features = [
   {
-    title: "Photo checklist and labeling guide",
+    title: "Evidence checklist",
     description:
-      "Know exactly what to photograph and how to organize your evidence for maximum impact.",
+      "Know exactly what to photograph and how to organize it for maximum impact.",
     secondary:
-      "Reduces disputes by showing condition clearly and chronologically.",
+      "Clear, chronological evidence reduces disputes.",
   },
   {
-    title: "State deadline timeline",
+    title: "State deadline tracker",
     description:
-      "Your state's specific deadlines and notice requirements, so you never miss a critical date.",
+      "Your state's deadlines and notice requirements — so you never miss a critical date.",
     secondary:
-      "Missed deadlines are the most common reason tenants lose disputes.",
+      "Missed deadlines are the #1 reason tenants lose.",
   },
   {
-    title: "Notice letter template",
+    title: "Ready-to-send demand letter",
     description:
-      "A professionally formatted, state-compliant letter ready to send to your landlord.",
-    secondary: "Uses neutral, professional language landlords recognize.",
+      "State-compliant, professionally formatted, and addressed to your landlord.",
+    secondary: "Written in language landlords take seriously.",
   },
   {
-    title: "Dispute packet summary page",
+    title: "Complete dispute packet",
     description:
-      "A comprehensive summary tying together your photos, timeline, and documentation.",
-    secondary: "Creates a single document you can reuse if you escalate.",
+      "Your photos, timeline, and letter — organized into one packet.",
+    secondary: "One document, ready to send or escalate.",
   },
 ];
 
@@ -36,15 +36,10 @@ export function WhatsIncluded() {
         {/* Header */}
         <div className="text-center mb-8 md:mb-12">
           <h2 className="font-serif text-2xl md:text-4xl font-semibold text-black mb-4">
-            What&apos;s included
+            Your move-out toolkit
           </h2>
           <p className="text-gray-600 text-base md:text-lg max-w-2xl mx-auto">
-            Everything you need to document your move-out and protect your
-            deposit.
-          </p>
-          <p className="text-gray-500 text-sm mt-2">
-            Each piece helps you document your move-out, notify your landlord,
-            and escalate if needed.
+            Everything you need to protect your deposit.
           </p>
         </div>
 

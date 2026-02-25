@@ -1,21 +1,21 @@
 const steps = [
   {
     number: "01",
-    title: "Set your legal timeline",
+    title: "Set your timeline",
     description:
-      "Tell us your state and move-out date. We'll calculate your deadlines and requirements.",
+      "Enter your state and move-out date. We calculate your deadlines automatically.",
   },
   {
     number: "02",
     title: "Lock in your evidence",
     description:
-      "Upload your move-out photos. We'll help you label and organize them properly.",
+      "Upload your move-out photos. We help you label and organize them.",
   },
   {
     number: "03",
-    title: "Send a professional dispute",
+    title: "Send your dispute",
     description:
-      "Download your complete packet with notice letter, timeline, and documentation.",
+      "Download your complete packet — demand letter, timeline, and documentation included.",
   },
 ];
 
@@ -26,7 +26,7 @@ export function HowItWorks() {
         {/* Header */}
         <div className="text-center mb-8 md:mb-12">
           <h2 className="font-serif text-2xl md:text-4xl font-semibold text-black mb-4">
-            How it works
+            Three steps. No lawyer.
           </h2>
         </div>
 
@@ -47,7 +47,7 @@ export function HowItWorks() {
 
         {/* Supporting Line */}
         <p className="text-center text-gray-500 mt-8 md:mt-12">
-          Most renters complete their packet in under 10 minutes.
+          Most renters finish in under 10 minutes.
         </p>
       </div>
     </section>

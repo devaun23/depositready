@@ -38,11 +38,10 @@ export function Testimonials() {
         {/* Header */}
         <div className="text-center mb-8 md:mb-12">
           <h2 className="font-serif text-2xl md:text-4xl font-semibold text-black mb-4">
-            What renters are saying
+            Renters getting results
           </h2>
           <p className="text-gray-600 text-sm md:text-base max-w-2xl mx-auto">
-            DepositReady helps renters document and dispute charges. Outcomes
-            depend on facts, timing, and local law.
+            Outcomes depend on facts, timing, and local law. These reflect real experiences.
           </p>
         </div>
 

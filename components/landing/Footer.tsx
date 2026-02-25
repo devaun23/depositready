@@ -13,8 +13,7 @@ export function Footer() {
               <h3 className="font-semibold text-black">DepositReady</h3>
             </div>
             <p className="text-gray-500 text-sm">
-              Build a landlord-proof move-out packet with state-specific
-              documentation and ready-to-send notice templates.
+              State-specific tools to protect your deposit and hold your landlord accountable.
             </p>
           </div>
 

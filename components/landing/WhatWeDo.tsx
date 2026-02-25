@@ -7,20 +7,20 @@ export function WhatWeDo() {
         <div className="grid md:grid-cols-2 gap-6">
           {/* What we do */}
           <Card className="p-6 cursor-default">
-            <CardTitle className="mb-4">What DepositReady does</CardTitle>
+            <CardTitle className="mb-4">What you get</CardTitle>
             <CardContent className="p-0">
               <ul className="space-y-3 text-gray-600">
                 <li className="flex items-start gap-3">
                   <CheckIcon />
-                  <span>Helps you organize evidence</span>
+                  <span>Organized evidence documentation</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <CheckIcon />
-                  <span>Generates state-specific timelines</span>
+                  <span>State-specific legal timelines</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <CheckIcon />
-                  <span>Provides professional notice templates</span>
+                  <span>Professional demand letter templates</span>
                 </li>
               </ul>
             </CardContent>
@@ -29,21 +29,21 @@ export function WhatWeDo() {
           {/* What we don't do */}
           <Card className="p-6 cursor-default">
             <CardTitle className="mb-4">
-              What DepositReady isn&apos;t designed for
+              What this isn&apos;t
             </CardTitle>
             <CardContent className="p-0">
               <ul className="space-y-3 text-gray-600">
                 <li className="flex items-start gap-3">
                   <XIcon />
-                  <span>Provide legal advice</span>
+                  <span>Legal advice</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <XIcon />
-                  <span>Contact landlords for you</span>
+                  <span>Landlord contact on your behalf</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <XIcon />
-                  <span>Guarantee outcomes</span>
+                  <span>Guaranteed outcomes</span>
                 </li>
               </ul>
             </CardContent>
