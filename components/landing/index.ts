@@ -1,9 +1,10 @@
 export { Navbar } from "./Navbar";
 export { Hero } from "./Hero";
-export { WhatWeDo } from "./WhatWeDo";
-export { WhatsIncluded } from "./WhatsIncluded";
+export { FeedbackBanner } from "./FeedbackBanner";
 export { HowItWorks } from "./HowItWorks";
 export { Testimonials } from "./Testimonials";
+export { Pricing } from "./Pricing";
+export { FAQ } from "./FAQ";
 export { Footer } from "./Footer";
+export { MobileCTA } from "./MobileCTA";
 export { EligibilityModal } from "./EligibilityModal";
-export { AlreadySentLetter } from "./AlreadySentLetter";

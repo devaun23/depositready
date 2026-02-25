@@ -3,100 +3,89 @@ import { Logo } from "@/components/ui";
 
 export function Footer() {
   return (
-    <footer className="py-8 md:py-12 px-4 sm:px-6 border-t border-gray-100">
-      <div className="max-w-5xl mx-auto">
-        <div className="grid md:grid-cols-3 gap-8">
-          {/* Brand */}
-          <div>
+    <footer className="bg-[#1e3a5f] text-white py-12 md:py-16 px-4 sm:px-6">
+      <div className="max-w-6xl mx-auto">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-8">
+          {/* Brand description — full width on mobile, first col on desktop */}
+          <div className="col-span-2 md:col-span-1">
             <div className="flex items-center gap-2 mb-3">
-              <Logo size="sm" />
-              <h3 className="font-semibold text-black">DepositReady</h3>
+              <Logo size="sm" className="text-white" />
+              <span className="font-serif font-semibold">DepositReady</span>
             </div>
-            <p className="text-gray-500 text-sm">
-              State-specific tools to protect your deposit and hold your landlord accountable.
+            <p className="text-gray-300 text-sm leading-relaxed max-w-xs">
+              Tools to help renters understand their rights and recover their
+              security deposits.
             </p>
           </div>
 
-          {/* Resources */}
+          {/* Product links */}
           <div>
-            <h4 className="font-medium text-black mb-3 text-sm">Resources</h4>
+            <h4 className="font-medium text-sm mb-4">Product</h4>
             <ul className="space-y-2">
               <li>
                 <Link
-                  href="/resources"
-                  className="text-gray-500 hover:text-black text-sm transition-colors"
-                >
-                  All guides
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/security-deposit-deadline"
-                  className="text-gray-500 hover:text-black text-sm transition-colors"
-                >
-                  Deposit deadlines
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/landlord-kept-security-deposit"
-                  className="text-gray-500 hover:text-black text-sm transition-colors"
-                >
-                  Landlord kept deposit?
-                </Link>
-              </li>
-              <li>
-                <Link
                   href="/#how-it-works"
-                  className="text-gray-500 hover:text-black text-sm transition-colors"
+                  className="text-gray-300 hover:text-white text-sm transition-colors"
                 >
                   How it works
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/#pricing"
+                  className="text-gray-300 hover:text-white text-sm transition-colors"
+                >
+                  Pricing
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/chat"
+                  className="text-gray-300 hover:text-white text-sm transition-colors"
+                >
+                  Free Chat
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Legal */}
+          {/* Legal links */}
           <div>
-            <h4 className="font-medium text-black mb-3 text-sm">Legal</h4>
+            <h4 className="font-medium text-sm mb-4">Legal</h4>
             <ul className="space-y-2">
               <li>
                 <Link
                   href="/terms"
-                  className="text-gray-500 hover:text-black text-sm transition-colors"
+                  className="text-gray-300 hover:text-white text-sm transition-colors"
                 >
-                  Terms of Service
+                  Terms
                 </Link>
               </li>
               <li>
                 <Link
                   href="/privacy"
-                  className="text-gray-500 hover:text-black text-sm transition-colors"
+                  className="text-gray-300 hover:text-white text-sm transition-colors"
                 >
-                  Privacy Policy
+                  Privacy
                 </Link>
               </li>
               <li>
-                <span className="text-gray-400 text-sm">
-                  Not legal advice
-                </span>
-              </li>
-              <li>
-                <a
-                  href="mailto:devaun0506@gmail.com?subject=DepositReady%20Feedback"
-                  className="text-gray-500 hover:text-black text-sm transition-colors"
+                <Link
+                  href="/terms"
+                  className="text-gray-300 hover:text-white text-sm transition-colors"
                 >
-                  Send Feedback
-                </a>
+                  Disclaimer
+                </Link>
               </li>
             </ul>
           </div>
         </div>
 
         {/* Copyright */}
-        <div className="mt-10 pt-6 border-t border-gray-100">
+        <div className="mt-10 pt-6 border-t border-white/20">
           <p className="text-gray-400 text-sm text-center">
-            &copy; {new Date().getFullYear()} DepositReady. All rights reserved.
+            &copy; {new Date().getFullYear()} depositready.co &middot;
+            DepositReady is not a law firm and does not provide legal advice.
           </p>
         </div>
       </div>

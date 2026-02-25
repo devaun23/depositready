@@ -1,68 +1,60 @@
-import { Card, CardContent } from "@/components/ui";
-
 const testimonials = [
   {
     quote:
-      "My landlord tried to keep $1,200 for 'cleaning fees.' I sent the demand letter and got a check for $1,050 within 10 days.",
-    name: "Jessica T.",
-    location: "Florida",
-    amount: "$1,050 recovered",
-  },
-  {
-    quote:
-      "The deadline calculator showed my landlord was 3 weeks late. I cited the statute in my letter and got my full $1,800 back.",
-    name: "Marcus W.",
-    location: "Texas",
-    amount: "$1,800 recovered",
-  },
-  {
-    quote:
-      "I was ready to give up on my $900 deposit. The packet gave me confidence to push back. Settled for $750.",
-    name: "Amanda K.",
+      "DepositReady found a violation I didn't even know about. Got my full deposit back within two weeks.",
+    name: "Sarah M.",
     location: "California",
-    amount: "$750 recovered",
+    amount: "$2,400",
   },
   {
     quote:
-      "Landlord claimed $400 in damages that didn't exist. The evidence checklist helped me prove it. Full deposit returned.",
-    name: "David R.",
-    location: "Georgia",
-    amount: "$1,400 recovered",
+      "I was so stressed about confronting my landlord. The demand letter made it professional and easy.",
+    name: "Michael R.",
+    location: "Texas",
+    amount: "$1,800",
+  },
+  {
+    quote:
+      "I found out my landlord was already 15 days late returning my deposit. That changed everything.",
+    name: "Jessica L.",
+    location: "New York",
+    amount: "$3,200",
   },
 ];
 
 export function Testimonials() {
   return (
-    <section id="testimonials" className="py-10 md:py-16 px-4 sm:px-6">
-      <div className="max-w-5xl mx-auto">
-        {/* Header */}
-        <div className="text-center mb-8 md:mb-12">
-          <h2 className="font-serif text-2xl md:text-4xl font-semibold text-black mb-4">
-            Renters getting results
+    <section id="testimonials" className="py-16 md:py-24 px-4 sm:px-6">
+      <div className="max-w-6xl mx-auto">
+        <div className="text-center mb-12">
+          <h2 className="font-serif text-3xl md:text-4xl font-semibold text-brand mb-3">
+            What renters are saying
           </h2>
-          <p className="text-gray-600 text-sm md:text-base max-w-2xl mx-auto">
-            Outcomes depend on facts, timing, and local law. These reflect real experiences.
+          <p className="text-gray-500 text-sm md:text-base max-w-2xl mx-auto">
+            Outcomes depend on facts, timing, and local law. These reflect
+            personal experiences.
           </p>
         </div>
 
-        {/* Testimonial Cards */}
-        <div className="grid md:grid-cols-2 gap-6">
-          {testimonials.map((testimonial, index) => (
-            <Card key={index} className="p-6 cursor-default">
-              <CardContent className="p-0">
-                <div className="flex justify-between items-start mb-3">
-                  <span className="text-sm font-medium text-accent bg-accent-light rounded-full px-2.5 py-0.5">
-                    {testimonial.amount}
-                  </span>
+        <div className="grid md:grid-cols-3 gap-6">
+          {testimonials.map((t) => (
+            <div
+              key={t.name}
+              className="border border-gray-200 rounded-xl p-6 flex flex-col"
+            >
+              <p className="text-gray-700 text-sm leading-relaxed flex-1">
+                &ldquo;{t.quote}&rdquo;
+              </p>
+              <div className="flex items-center justify-between mt-4 pt-4 border-t border-gray-100">
+                <div>
+                  <p className="font-semibold text-sm text-black">{t.name}</p>
+                  <p className="text-xs text-gray-500">{t.location}</p>
                 </div>
-                <blockquote className="font-serif text-lg text-black mb-4">
-                  &ldquo;{testimonial.quote}&rdquo;
-                </blockquote>
-                <p className="text-gray-500 text-sm">
-                  &mdash; {testimonial.name}, {testimonial.location}
-                </p>
-              </CardContent>
-            </Card>
+                <span className="text-accent font-semibold text-sm">
+                  {t.amount}
+                </span>
+              </div>
+            </div>
           ))}
         </div>
       </div>

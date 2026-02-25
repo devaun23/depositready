@@ -1,43 +1,49 @@
 import Link from "next/link";
-import { DeadlineCalculator } from "./DeadlineCalculator";
 
 export function Hero() {
   return (
-    <section className="min-h-[calc(100dvh-64px)] sm:min-h-0 flex flex-col justify-center py-8 sm:py-12 md:py-16 px-4 sm:px-6 snap-start">
+    <section className="py-16 md:py-24 px-4 sm:px-6 bg-white">
       <div className="max-w-3xl mx-auto text-center">
-        {/* Headline — matches "how to get security deposit back" intent */}
-        <h1 className="font-serif text-3xl md:text-5xl lg:text-6xl font-semibold leading-tight mb-4 md:mb-6">
-          <span className="text-brand">Get your deposit back.</span>
+        <h1 className="font-serif text-3xl md:text-5xl lg:text-6xl font-semibold text-brand leading-tight">
+          Did your landlord keep your security deposit?
         </h1>
 
-        {/* Subheadline */}
-        <p className="text-gray-600 text-base md:text-lg mb-6 md:mb-8 max-w-2xl mx-auto">
-          Enter your state and move-out date. We&apos;ll show you exactly what your landlord owes.
+        <p className="mt-4 text-gray-500 text-base md:text-lg max-w-xl mx-auto">
+          Get a free case analysis in under 2 minutes. No sign-up required.
         </p>
 
-        {/* Inline Calculator */}
-        <DeadlineCalculator />
-
-        {/* Testimonial */}
-        <p className="text-sm text-gray-500 italic mt-8 mb-3">
-          &quot;Landlord was 3 weeks late. I got my full $2,300 back.&quot;
-          <span className="not-italic"> — Marcus W., Georgia</span>
-        </p>
-
-        {/* Trust Line */}
-        <p className="text-xs text-gray-500 mb-2">
-          Starting at <span className="text-brand font-medium">$29</span> · Court-ready documents from <span className="text-brand font-medium">$79</span> · Secure checkout
-        </p>
-
-        {/* Post-failure link */}
         <Link
-          href="/next-steps"
-          className="text-xs text-gray-400 hover:text-gray-600 transition"
+          href="/chat"
+          className="inline-flex items-center gap-2 mt-8 px-8 py-4 bg-accent text-white text-lg font-medium rounded-xl hover:bg-accent-hover transition-colors shadow-md hover:shadow-lg"
         >
-          Already sent a letter? See what&apos;s next →
+          Start Free Chat
+          <svg
+            className="w-5 h-5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M17 8l4 4m0 0l-4 4m4-4H3"
+            />
+          </svg>
         </Link>
-      </div>
 
+        {/* Social proof */}
+        <p className="mt-6 text-sm text-gray-500 flex items-center justify-center gap-1.5">
+          <span aria-hidden="true">👥</span>
+          Joined by <span className="font-semibold text-black">2,400+</span> renters
+        </p>
+
+        {/* Disclaimer */}
+        <p className="mt-4 text-xs text-gray-400 max-w-md mx-auto">
+          Not a law firm. No legal advice. No guaranteed outcomes.
+        </p>
+      </div>
     </section>
   );
 }
