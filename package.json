@@ -12,9 +12,11 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@ai-sdk/anthropic": "^3.0.47",
     "@react-pdf/renderer": "^4.3.2",
     "@supabase/supabase-js": "^2.90.0",
     "@vercel/analytics": "^1.6.1",
+    "ai": "^6.0.99",
     "next": "16.1.1",
     "react": "19.2.3",
     "react-dom": "19.2.3",

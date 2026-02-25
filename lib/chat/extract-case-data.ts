@@ -70,12 +70,13 @@ function handleAnalyzeDeadline(input: Record<string, unknown>) {
     itemizedDeductionsRequired: rules.itemizedDeductionsRequired,
     damagesMultiplier: rules.damagesMultiplier,
     damagesDescription: rules.damagesDescription,
-    returnDeadlineCitation: rules.statuteSections.returnDeadline,
-    claimDeadlineCitation: rules.statuteSections.claimDeadline,
-    forfeitureProvision: rules.statuteSections.forfeitureProvision,
     maxSmallClaims: rules.maxSmallClaims,
     filingFee: rules.filingFee,
     courtName: rules.courtName,
+    // Exact statute citations — Claude MUST use these instead of citing from memory
+    statuteSections: rules.statuteSections,
+    // Verbatim statutory language — Claude should quote from these
+    statutoryLanguage: rules.statutoryLanguage,
   };
 
   // Client-facing subset for CaseSummaryCard
@@ -118,6 +119,12 @@ function handleCalculateDamages(input: Record<string, unknown>) {
     smallClaimsEligible: damages.smallClaimsEligible,
     damagesDescription: damages.damagesDescription,
     damagesMultiplier: rules.damagesMultiplier,
+    // Exact statute citations for damages — Claude MUST use these
+    damagesProvision: rules.statuteSections.damagesProvision,
+    forfeitureProvision: rules.statuteSections.forfeitureProvision,
+    // Verbatim statutory language for damages
+    damagesClause: rules.statutoryLanguage.damagesClause,
+    forfeitureClause: rules.statutoryLanguage.forfeitureClause,
   };
 
   const clientData = {

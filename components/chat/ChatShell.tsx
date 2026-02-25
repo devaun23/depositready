@@ -190,12 +190,20 @@ export function ChatShell() {
           {!hasCaseData && <div className="w-16" />}
         </header>
 
+        {/* Legal disclaimer banner */}
+        <div className="border-b border-gray-100 bg-gray-50 px-4 py-2 text-center text-xs text-gray-500 leading-relaxed">
+          This tool provides general information about security deposit laws, not legal advice. Not a substitute for consultation with a{" "}
+          <a href="https://www.findlegalhelp.org/" target="_blank" rel="noopener noreferrer" className="underline hover:text-gray-700">
+            licensed attorney
+          </a>.
+        </div>
+
         {/* Messages */}
-        <div className="flex-1 overflow-y-auto px-4 py-6">
+        <div className="flex-1 overflow-y-auto bg-stone-50 px-4 py-6">
           <div className="mx-auto max-w-3xl">
             {/* Greeting message */}
             <div className="mb-4 flex justify-start animate-fadeIn">
-              <div className="max-w-[85%] rounded-2xl rounded-bl-md border border-gray-100 bg-white px-4 py-3 text-[15px] leading-relaxed text-gray-900 shadow-sm">
+              <div className="max-w-[80%] rounded-2xl rounded-bl-md border border-gray-100/80 bg-white px-4 py-3 text-[15px] leading-relaxed text-gray-900 shadow-sm">
                 <div className="whitespace-pre-wrap">{formatGreeting(GREETING)}</div>
               </div>
             </div>

@@ -13,13 +13,13 @@ export function ChatMessage({ message, isStreaming }: ChatMessageProps) {
 
   return (
     <div
-      className={`flex ${isUser ? "justify-end" : "justify-start"} mb-4 animate-fadeSlideUp`}
+      className={`flex ${isUser ? "justify-end" : "justify-start"} mb-5 animate-fadeSlideUp`}
     >
       <div
-        className={`max-w-[85%] rounded-2xl px-4 py-3 text-[15px] leading-relaxed ${
+        className={`max-w-[80%] rounded-2xl px-4 py-3 text-[15px] leading-relaxed ${
           isUser
-            ? "bg-brand/10 text-gray-900 rounded-br-md"
-            : "bg-white text-gray-900 shadow-sm border border-gray-100 rounded-bl-md"
+            ? "bg-brand/8 text-gray-900 rounded-br-md"
+            : "bg-white text-gray-900 shadow-sm border border-gray-100/80 rounded-bl-md"
         }`}
       >
         {/* Message content — render with basic formatting */}
@@ -47,6 +47,13 @@ export function ChatMessage({ message, isStreaming }: ChatMessageProps) {
           </div>
         )}
 
+        {/* Contextual legal disclaimer after analysis results */}
+        {!isUser && hasAnalysisResults(message) && (
+          <p className="mt-2.5 text-[11px] leading-relaxed text-gray-400 border-t border-gray-100 pt-2">
+            Estimates based on general state law. Consult an attorney for advice specific to your situation.
+          </p>
+        )}
+
         {/* In-chat purchase card */}
         {message.purchaseOffer && (
           <div className="mt-3">
@@ -56,6 +63,13 @@ export function ChatMessage({ message, isStreaming }: ChatMessageProps) {
       </div>
     </div>
   );
+}
+
+/** Check if message contains analysis tool results (not just product recommendations) */
+function hasAnalysisResults(message: ChatMessageType): boolean {
+  if (!message.toolResults?.length) return false;
+  const analysisTools = ["analyze_deadline", "calculate_damages", "assess_case_strength"];
+  return message.toolResults.some((tr) => analysisTools.includes(tr.tool));
 }
 
 /** Format tool names for display */

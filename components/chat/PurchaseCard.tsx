@@ -56,10 +56,13 @@ export function PurchaseCard({ offer }: PurchaseCardProps) {
           </p>
         </div>
       </div>
+      <p className="mt-2.5 text-[10px] leading-relaxed text-gray-400">
+        Documents are based on general state law and do not constitute legal advice.
+      </p>
       <button
         onClick={handlePurchase}
         disabled={loading}
-        className="mt-3 flex w-full items-center justify-center gap-2 rounded-lg bg-accent py-2.5 text-sm font-semibold text-white shadow-sm transition-all hover:bg-accent/90 hover:shadow-md disabled:opacity-50 min-h-[44px]"
+        className="mt-2 flex w-full items-center justify-center gap-2 rounded-lg bg-accent py-2.5 text-sm font-semibold text-white shadow-sm transition-all hover:bg-accent/90 hover:shadow-md disabled:opacity-50 min-h-[44px]"
       >
         {loading ? (
           <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
