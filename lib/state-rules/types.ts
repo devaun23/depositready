@@ -93,6 +93,18 @@ export interface DamagesCalculation {
 export type NoticeStatus = 'NOTICE_MISSED' | 'NOTICE_PENDING' | 'NOTICE_LATE' | 'NOTICE_TIMELY' | 'NOTICE_UNCLEAR';
 export type CaseStrength = 'STRONG' | 'MODERATE' | 'WEAK';
 
+export interface CaseStrengthFactor {
+  name: string;
+  impact: 'positive' | 'negative' | 'neutral';
+  detail: string;
+}
+
+export interface CaseStrengthAssessment {
+  score: number;          // 0-100
+  label: CaseStrength;    // >=70 STRONG, >=40 MODERATE, <40 WEAK
+  factors: CaseStrengthFactor[];
+}
+
 export interface DiagnosisInput {
   stateCode: StateCode;
   moveOutDate: string;

@@ -1,15 +1,8 @@
 import dynamic from "next/dynamic";
 import { Navbar, Hero } from "@/components/landing";
-import { FeedbackBanner } from "@/components/landing/FeedbackBanner";
 import { ViewLandingTracker } from "@/components/tracking";
 
 // Below-fold sections — lazy loaded for faster initial paint
-const HowItWorks = dynamic(
-  () =>
-    import("@/components/landing/HowItWorks").then((mod) => mod.HowItWorks),
-  { ssr: true }
-);
-
 const Testimonials = dynamic(
   () =>
     import("@/components/landing/Testimonials").then(
@@ -18,8 +11,34 @@ const Testimonials = dynamic(
   { ssr: true }
 );
 
+const HowItWorks = dynamic(
+  () =>
+    import("@/components/landing/HowItWorks").then((mod) => mod.HowItWorks),
+  { ssr: true }
+);
+
+const ChatPreview = dynamic(
+  () =>
+    import("@/components/landing/ChatPreview").then((mod) => mod.ChatPreview),
+  { ssr: true }
+);
+
+const TrustBullets = dynamic(
+  () =>
+    import("@/components/landing/TrustBullets").then(
+      (mod) => mod.TrustBullets
+    ),
+  { ssr: true }
+);
+
 const Pricing = dynamic(
   () => import("@/components/landing/Pricing").then((mod) => mod.Pricing),
+  { ssr: true }
+);
+
+const BlogPreview = dynamic(
+  () =>
+    import("@/components/landing/BlogPreview").then((mod) => mod.BlogPreview),
   { ssr: true }
 );
 
@@ -41,12 +60,14 @@ export default function Home() {
     <div className="min-h-screen bg-white">
       <ViewLandingTracker />
       <Navbar />
-      <FeedbackBanner />
       <main id="main-content">
         <Hero />
-        <HowItWorks />
         <Testimonials />
+        <HowItWorks />
+        <ChatPreview />
+        <TrustBullets />
         <Pricing />
+        <BlogPreview />
         <FAQ />
       </main>
       <Footer />

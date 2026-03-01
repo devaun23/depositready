@@ -23,16 +23,19 @@ export function Navbar() {
           {/* Center links — desktop */}
           <div className="hidden md:flex items-center gap-8">
             <Link
-              href="/#how-it-works"
+              href="/blog"
               className="text-sm text-gray-600 hover:text-black transition-colors"
             >
-              How It Works
+              Blog
             </Link>
             <Link
-              href="/#pricing"
-              className="text-sm text-gray-600 hover:text-black transition-colors"
+              href="/landlord"
+              className="text-sm text-gray-600 hover:text-black transition-colors inline-flex items-center gap-1.5"
             >
-              Pricing
+              For Landlords
+              <span className="text-[10px] font-medium text-gray-400 border border-gray-200 rounded px-1 py-0.5 leading-none">
+                Coming Soon
+              </span>
             </Link>
           </div>
 
@@ -87,18 +90,21 @@ export function Navbar() {
         {menuOpen && (
           <div className="md:hidden border-t border-gray-100 pb-4 pt-2 space-y-1">
             <Link
-              href="/#how-it-works"
+              href="/blog"
               onClick={() => setMenuOpen(false)}
               className="block px-2 py-3 text-sm text-gray-600 hover:text-black transition-colors"
             >
-              How It Works
+              Blog
             </Link>
             <Link
-              href="/#pricing"
+              href="/landlord"
               onClick={() => setMenuOpen(false)}
               className="block px-2 py-3 text-sm text-gray-600 hover:text-black transition-colors"
             >
-              Pricing
+              For Landlords
+              <span className="ml-1.5 text-[10px] font-medium text-gray-400 border border-gray-200 rounded px-1 py-0.5">
+                Coming Soon
+              </span>
             </Link>
             <Link
               href="/chat"

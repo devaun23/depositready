@@ -17,7 +17,7 @@ function ChatBubbleIcon() {
   );
 }
 
-function DocumentIcon() {
+function MagnifyingGlassIcon() {
   return (
     <svg
       className="w-7 h-7 text-brand"
@@ -36,46 +36,72 @@ function DocumentIcon() {
   );
 }
 
+function SendIcon() {
+  return (
+    <svg
+      className="w-7 h-7 text-brand"
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={1.5}
+        d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+      />
+    </svg>
+  );
+}
+
 const steps = [
   {
     icon: ChatBubbleIcon,
     title: "Tell us what happened",
     description:
-      "Answer a few questions about your situation and get a personalized case analysis based on your state's laws.",
+      "Chat with our AI about your situation. It only takes a couple of minutes.",
   },
   {
-    icon: DocumentIcon,
-    title: "Get your documents",
+    icon: MagnifyingGlassIcon,
+    title: "Get your case analysis",
     description:
-      "Download a state-specific demand letter, dispute packet, or full case memo — ready to send.",
+      "We check your state's laws, calculate deadlines, and assess your case strength.",
+  },
+  {
+    icon: SendIcon,
+    title: "Send your demand packet",
+    description:
+      "Download a state-specific demand letter and evidence checklist — ready to send.",
   },
 ];
 
 export function HowItWorks() {
   return (
-    <section id="how-it-works" className="py-16 md:py-24 px-4 sm:px-6 bg-gray-50">
-      <div className="max-w-4xl mx-auto">
-        <div className="text-center mb-12">
-          <h2 className="font-serif text-3xl md:text-4xl font-semibold text-brand mb-3">
-            How it works
-          </h2>
-          <p className="text-gray-500 text-base md:text-lg">
-            Two steps to protect your deposit — no lawyer needed.
-          </p>
-        </div>
+    <section id="how-it-works" className="py-16 md:py-24 px-4 sm:px-6 bg-white">
+      <div className="max-w-2xl mx-auto">
+        <h2 className="font-serif text-3xl md:text-4xl font-semibold text-brand mb-10">
+          How it works
+        </h2>
 
-        <div className="grid md:grid-cols-2 gap-8 md:gap-12">
-          {steps.map((step) => (
-            <div key={step.title} className="text-center">
-              <div className="mx-auto w-16 h-16 rounded-full bg-gray-200 flex items-center justify-center mb-4">
+        <div className="space-y-5">
+          {steps.map((step, i) => (
+            <div
+              key={step.title}
+              className="flex gap-4 items-start bg-[var(--section-bg-alt)] rounded-xl p-5"
+            >
+              <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center flex-shrink-0 shadow-[var(--shadow-card)]">
                 <step.icon />
               </div>
-              <h3 className="text-lg font-medium text-black mb-2">
-                {step.title}
-              </h3>
-              <p className="text-gray-600 text-sm leading-relaxed max-w-sm mx-auto">
-                {step.description}
-              </p>
+              <div>
+                <h3 className="text-base font-semibold text-black mb-1">
+                  <span className="text-brand mr-1.5">{i + 1}.</span>
+                  {step.title}
+                </h3>
+                <p className="text-gray-600 text-sm leading-relaxed">
+                  {step.description}
+                </p>
+              </div>
             </div>
           ))}
         </div>

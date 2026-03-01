@@ -8,7 +8,7 @@ import {
   useRef,
   useState,
 } from "react";
-import type { StateCode, CaseStrength } from "@/lib/state-rules/types";
+import type { StateCode, CaseStrength, CaseStrengthFactor } from "@/lib/state-rules/types";
 
 // ── Types shared across chat components ──────────────────────────────
 
@@ -17,23 +17,51 @@ export interface PurchaseOffer {
   headline: string;
   description: string;
   price: number; // cents
+  features: string[];
+  stateName: string | null;
+  statute: string | null;
+  recoveryAmount: number | null;
 }
 
 // ── Case data (extracted from conversation) ─────────────────────────
 
 export interface CaseData {
+  // Core
   stateCode: StateCode | null;
   stateName: string | null;
   depositAmount: number | null;
   moveOutDate: string | null;
+
+  // Case strength (scored assessment)
   caseStrength: CaseStrength | null;
+  caseScore: number | null;
+  caseFactors: CaseStrengthFactor[];
+
+  // Deadline analysis
   violationDetected: boolean | null;
   violationType: string | null;
-  recoveryAmount: number | null;
   deadlineDate: string | null;
   daysLate: number | null;
   statute: string | null;
+
+  // State law details
+  returnDeadlineDays: number | null;
+  claimDeadlineDays: number | null;
+  certifiedMailRequired: boolean | null;
   damagesMultiplier: number | null;
+  damagesDescription: string | null;
+
+  // Recovery details
+  recoveryAmount: number | null;
+  amountOwed: number | null;
+  multiplierDamagesEligible: boolean | null;
+  multiplierDamagesAmount: number | null;
+  smallClaimsEligible: boolean | null;
+
+  // Court info
+  courtName: string | null;
+  filingFee: { min: number; max: number } | null;
+  maxSmallClaims: number | null;
 }
 
 const EMPTY_CASE_DATA: CaseData = {
@@ -42,13 +70,26 @@ const EMPTY_CASE_DATA: CaseData = {
   depositAmount: null,
   moveOutDate: null,
   caseStrength: null,
+  caseScore: null,
+  caseFactors: [],
   violationDetected: null,
   violationType: null,
-  recoveryAmount: null,
   deadlineDate: null,
   daysLate: null,
   statute: null,
+  returnDeadlineDays: null,
+  claimDeadlineDays: null,
+  certifiedMailRequired: null,
   damagesMultiplier: null,
+  damagesDescription: null,
+  recoveryAmount: null,
+  amountOwed: null,
+  multiplierDamagesEligible: null,
+  multiplierDamagesAmount: null,
+  smallClaimsEligible: null,
+  courtName: null,
+  filingFee: null,
+  maxSmallClaims: null,
 };
 
 // ── Context shape ───────────────────────────────────────────────────

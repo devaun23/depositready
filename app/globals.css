@@ -14,6 +14,14 @@
   --accent: #059669;          /* 10% — Emerald: CTAs only, "go" signal */
   --accent-hover: #047857;    /* Accent hover state */
   --accent-light: #ecfdf5;   /* Light emerald for badges */
+
+  /* Elevation */
+  --shadow-card: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-card-hover: 0 4px 12px rgba(0,0,0,0.08), 0 2px 4px rgba(0,0,0,0.04);
+  --shadow-elevated: 0 8px 24px rgba(0,0,0,0.1), 0 4px 8px rgba(0,0,0,0.06);
+
+  /* Section backgrounds */
+  --section-bg-alt: #f9fafb;
 }
 
 @theme {
@@ -27,6 +35,10 @@
   --color-accent: var(--accent);
   --color-accent-hover: var(--accent-hover);
   --color-accent-light: var(--accent-light);
+  --color-section-bg-alt: var(--section-bg-alt);
+  --shadow-card: var(--shadow-card);
+  --shadow-card-hover: var(--shadow-card-hover);
+  --shadow-elevated: var(--shadow-elevated);
   --font-family-sans: var(--font-inter), Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --font-family-serif: var(--font-playfair), "Playfair Display", ui-serif, Georgia, "Times New Roman", serif;
 }
@@ -228,6 +240,28 @@ button {
 
 .animate-pulse-alert {
   animation: pulse-alert 1.5s ease-in-out infinite;
+}
+
+/* Milestone celebration glow */
+@keyframes milestone-glow {
+  0% { box-shadow: 0 0 0 0 rgba(5, 150, 105, 0.3); }
+  50% { box-shadow: 0 0 0 6px rgba(5, 150, 105, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(5, 150, 105, 0); }
+}
+
+.animate-milestone-glow {
+  animation: milestone-glow 0.8s ease-out;
+}
+
+/* Value emphasis pulse */
+@keyframes value-pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+.animate-value-pulse {
+  animation: value-pulse 0.5s ease-in-out;
 }
 
 /* Smooth scrolling */

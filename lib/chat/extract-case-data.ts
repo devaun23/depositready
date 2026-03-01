@@ -3,7 +3,7 @@ import {
   isValidStateCode,
   analyzeDeadlines,
   calculateDamages,
-  calculateCaseStrength,
+  assessCaseStrength,
 } from "@/lib/state-rules";
 import type { StateCode } from "@/lib/state-rules/types";
 
@@ -79,7 +79,7 @@ function handleAnalyzeDeadline(input: Record<string, unknown>) {
     statutoryLanguage: rules.statutoryLanguage,
   };
 
-  // Client-facing subset for CaseSummaryCard
+  // Richer client-facing data for CaseSummaryCard
   const clientData = {
     stateCode: result.stateCode,
     stateName: result.stateName,
@@ -88,6 +88,14 @@ function handleAnalyzeDeadline(input: Record<string, unknown>) {
     violationType: result.violationType,
     claimDeadline: result.claimDeadline,
     daysLate: result.daysLate,
+    returnDeadlineDays: result.returnDeadlineDays,
+    claimDeadlineDays: result.claimDeadlineDays,
+    certifiedMailRequired: result.certifiedMailRequired,
+    maxSmallClaims: result.maxSmallClaims,
+    filingFee: result.filingFee,
+    courtName: result.courtName,
+    damagesMultiplier: result.damagesMultiplier,
+    damagesDescription: result.damagesDescription,
   };
 
   return { result, clientData };
@@ -97,7 +105,7 @@ function handleCalculateDamages(input: Record<string, unknown>) {
   const stateCode = (input.state_code as string)?.toUpperCase();
   const depositAmount = input.deposit_amount as number;
   const claimedDeductions = (input.claimed_deductions as number) || 0;
-  const badFaith = (input.bad_faith as boolean) ?? true;
+  const badFaith = (input.bad_faith as boolean) ?? false;
 
   if (!isValidStateCode(stateCode)) {
     return {
@@ -127,10 +135,15 @@ function handleCalculateDamages(input: Record<string, unknown>) {
     forfeitureClause: rules.statutoryLanguage.forfeitureClause,
   };
 
+  // Richer client data
   const clientData = {
     depositAmount: result.depositAmount,
     maxRecoverable: result.maxRecoverable,
     damagesMultiplier: rules.damagesMultiplier,
+    amountOwed: result.amountOwed,
+    multiplierDamagesEligible: result.multiplierDamagesEligible,
+    multiplierDamagesAmount: result.multiplierDamagesAmount,
+    smallClaimsEligible: result.smallClaimsEligible,
   };
 
   return { result, clientData };
@@ -151,10 +164,19 @@ function handleAssessCaseStrength(input: Record<string, unknown>) {
 
   const rules = getStateRulesByCode(stateCode as StateCode);
   const analysis = analyzeDeadlines(new Date(moveOutDate), rules);
-  const strength = calculateCaseStrength(analysis, depositReturned, depositAmount);
+  const assessment = assessCaseStrength(analysis, depositReturned, depositAmount, rules);
 
-  const result = { caseStrength: strength };
-  const clientData = { caseStrength: strength };
+  const result = {
+    caseStrength: assessment.label,
+    caseScore: assessment.score,
+    caseFactors: assessment.factors,
+  };
+
+  const clientData = {
+    caseStrength: assessment.label,
+    caseScore: assessment.score,
+    caseFactors: assessment.factors,
+  };
 
   return { result, clientData };
 }
@@ -162,22 +184,58 @@ function handleAssessCaseStrength(input: Record<string, unknown>) {
 function handleRecommendProduct(input: Record<string, unknown>) {
   const product = input.product as string;
   const reason = input.reason as string;
+  const stateCode = (input.state_code as string)?.toUpperCase() || null;
+  const recoveryAmount = (input.recovery_amount as number) || null;
 
-  const products: Record<string, { headline: string; description: string; price: number }> = {
+  // Look up state name and statute if state_code provided
+  let stateName: string | null = null;
+  let statute: string | null = null;
+  if (stateCode && isValidStateCode(stateCode)) {
+    const rules = getStateRulesByCode(stateCode as StateCode);
+    stateName = rules.name;
+    statute = rules.statuteTitle;
+  }
+
+  const products: Record<string, {
+    headline: string;
+    description: string;
+    price: number;
+    features: string[];
+  }> = {
     demand_letter: {
       headline: "Personalized Demand Letter",
       description: "A formal legal demand letter citing your state's specific statutes, personalized with your case details. Demand letters recover deposits 60-70% of the time without court.",
       price: 2900,
+      features: [
+        "Personalized demand letter citing statute",
+        "State-specific deadlines & penalties",
+        "Evidence documentation checklist",
+        "Small claims court reference",
+      ],
     },
     legal_packet: {
       headline: "Complete Legal Packet",
       description: "Demand letter + evidence checklist + small claims filing guide + landlord response templates. Everything you need if your landlord doesn't cooperate.",
       price: 7900,
+      features: [
+        "Everything in the Demand Letter, plus:",
+        "Small claims court filing guide",
+        "Evidence organization template",
+        "Landlord response letter templates",
+        "Court hearing preparation checklist",
+      ],
     },
     case_review: {
       headline: "Personalized Case Review",
       description: "Our team analyzes your specific situation and produces a detailed memo with customized strategy, specific deadlines, and step-by-step action plan.",
       price: 14900,
+      features: [
+        "Detailed case analysis memo",
+        "Customized legal strategy",
+        "Specific deadline calendar",
+        "Step-by-step action plan",
+        "Priority email support",
+      ],
     },
   };
 
@@ -190,7 +248,9 @@ function handleRecommendProduct(input: Record<string, unknown>) {
     result: {
       product,
       reason,
-      ...productInfo,
+      headline: productInfo.headline,
+      description: productInfo.description,
+      price: productInfo.price,
     },
     clientData: {
       purchaseOffer: {
@@ -198,6 +258,10 @@ function handleRecommendProduct(input: Record<string, unknown>) {
         headline: productInfo.headline,
         description: productInfo.description,
         price: productInfo.price,
+        features: productInfo.features,
+        stateName,
+        statute,
+        recoveryAmount,
       },
     },
   };

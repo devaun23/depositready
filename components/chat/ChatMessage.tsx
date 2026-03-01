@@ -2,7 +2,9 @@
 
 import type { UIMessage } from "ai";
 import { PurchaseCard } from "./PurchaseCard";
+import { MilestoneCard } from "./MilestoneCard";
 import { StatuteCitation } from "./StatuteCitation";
+import { useChat } from "./ChatContext";
 import type { PurchaseOffer } from "./ChatContext";
 
 interface ChatMessageProps {
@@ -10,16 +12,18 @@ interface ChatMessageProps {
   isStreaming?: boolean;
 }
 
+const MILESTONE_TOOLS = ["analyze_deadline", "calculate_damages", "assess_case_strength"];
+
 export function ChatMessage({ message, isStreaming }: ChatMessageProps) {
   const isUser = message.role === "user";
+  const { caseData } = useChat();
 
   // Extract content from message parts
   const textContent = getTextContent(message);
   const toolNames = getToolNames(message);
   const purchaseOffer = getPurchaseOffer(message);
-  const hasAnalysis = toolNames.some((t) =>
-    ["analyze_deadline", "calculate_damages", "assess_case_strength"].includes(t)
-  );
+  const hasAnalysis = toolNames.some((t) => MILESTONE_TOOLS.includes(t));
+  const milestoneTools = toolNames.filter((t) => MILESTONE_TOOLS.includes(t));
 
   return (
     <div
@@ -39,6 +43,15 @@ export function ChatMessage({ message, isStreaming }: ChatMessageProps) {
             {isStreaming && (
               <span className="inline-block w-1.5 h-4 bg-accent ml-0.5 animate-pulse rounded-full" />
             )}
+          </div>
+        )}
+
+        {/* Milestone cards for significant tool findings */}
+        {milestoneTools.length > 0 && (
+          <div className="mt-2 space-y-2">
+            {milestoneTools.map((name) => (
+              <MilestoneCard key={name} toolName={name} caseData={caseData} />
+            ))}
           </div>
         )}
 

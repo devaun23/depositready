@@ -24,26 +24,26 @@ export function Footer() {
             <ul className="space-y-2">
               <li>
                 <Link
-                  href="/#how-it-works"
-                  className="text-gray-300 hover:text-white text-sm transition-colors"
-                >
-                  How it works
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/#pricing"
-                  className="text-gray-300 hover:text-white text-sm transition-colors"
-                >
-                  Pricing
-                </Link>
-              </li>
-              <li>
-                <Link
                   href="/chat"
                   className="text-gray-300 hover:text-white text-sm transition-colors"
                 >
                   Free Chat
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/blog"
+                  className="text-gray-300 hover:text-white text-sm transition-colors"
+                >
+                  Blog
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/resources"
+                  className="text-gray-300 hover:text-white text-sm transition-colors"
+                >
+                  Legal Guides
                 </Link>
               </li>
             </ul>
