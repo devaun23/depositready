@@ -8,9 +8,9 @@ import { StyleSheet } from "@react-pdf/renderer";
  */
 
 export const MEMO_COLORS = {
-  teal: "#059669",
-  tealLight: "#d1fae5",
-  tealDark: "#065f46",
+  teal: "#6366f1",
+  tealLight: "#eef2ff",
+  tealDark: "#4338ca",
   navy: "#1e3a5f",
   navyLight: "#e8edf4",
   black: "#111827",

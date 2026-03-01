@@ -1,62 +1,121 @@
 "use client";
 
-import Link from "next/link";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 
-const intents = [
-  { label: "Landlord kept it", value: "kept" },
-  { label: "Unfair deductions", value: "deductions" },
-  { label: "Never returned", value: "never-returned" },
-  { label: "Not sure", value: "unsure" },
+const suggestions = [
+  "My landlord kept my deposit",
+  "Unfair deductions from my deposit",
+  "Landlord never returned my deposit",
+  "How much can I recover?",
 ];
 
 export function Hero() {
+  const router = useRouter();
+  const [input, setInput] = useState("");
+
+  function go(message: string) {
+    if (!message.trim()) return;
+    router.push(`/chat?message=${encodeURIComponent(message.trim())}`);
+  }
+
   return (
-    <section className="py-16 md:py-24 px-4 sm:px-6 bg-gradient-to-b from-brand-bg/40 to-white">
-      <div className="max-w-3xl mx-auto">
-        <h1 className="font-serif text-display font-semibold text-brand leading-tight animate-gradient-text">
-          Get your security deposit back.
+    <section className="relative min-h-[85vh] flex items-center justify-center px-4 sm:px-6 bg-gradient-to-b from-brand-bg/30 via-white to-white overflow-hidden">
+      {/* Subtle grid overlay — Superdesign atmosphere */}
+      <div
+        className="pointer-events-none absolute inset-0"
+        style={{
+          backgroundImage:
+            "linear-gradient(rgba(0,0,0,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.03) 1px, transparent 1px)",
+          backgroundSize: "60px 60px",
+        }}
+      />
+
+      <div className="relative z-10 w-full max-w-2xl mx-auto text-center">
+        {/* Badge */}
+        <div className="inline-flex items-center gap-2 rounded-full bg-accent-light px-4 py-1.5 text-sm font-medium text-accent mb-6">
+          <span className="relative flex h-2 w-2">
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-60" />
+            <span className="relative inline-flex h-2 w-2 rounded-full bg-accent" />
+          </span>
+          Free AI-Powered Analysis
+        </div>
+
+        {/* Headline */}
+        <h1 className="font-serif text-5xl sm:text-6xl md:text-7xl font-semibold text-brand tracking-tight leading-[1.1]">
+          Get your deposit{" "}
+          <span className="animate-gradient-text">back.</span>
         </h1>
 
-        <p className="mt-4 text-gray-500 text-base md:text-lg max-w-xl">
-          Free AI guidance. State-specific law. No sign-up required.
+        {/* Subtitle */}
+        <p className="mt-4 text-gray-500 text-base md:text-lg max-w-lg mx-auto">
+          Describe your situation. Get instant legal guidance.
         </p>
 
-        {/* Intent pills — TurboTax-style guided entry */}
-        <div className="mt-8 flex flex-wrap gap-2.5">
-          {intents.map((intent) => (
-            <Link
-              key={intent.value}
-              href={`/chat?intent=${intent.value}`}
-              className="rounded-full border border-gray-200 bg-white px-5 py-3 text-sm font-medium text-gray-700 shadow-sm transition-all hover:border-accent hover:bg-accent/5 hover:text-accent active:scale-[0.97] min-h-[44px] inline-flex items-center"
+        {/* ── THE INPUT BOX ─────────────────────────────────── */}
+        <div className="relative mt-8 mx-auto max-w-xl">
+          {/* Glow layer */}
+          <div
+            className="absolute -inset-1 rounded-2xl blur-lg animate-glow-pulse"
+            style={{ background: "var(--glow-gradient)" }}
+            aria-hidden="true"
+          />
+
+          {/* Input container */}
+          <div className="relative rounded-2xl bg-white shadow-elevated p-1">
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                go(input);
+              }}
+              className="flex items-center gap-2"
             >
-              {intent.label}
-            </Link>
+              <input
+                type="text"
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                placeholder="My landlord kept my security deposit..."
+                className="flex-1 rounded-xl bg-transparent px-4 py-4 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none min-h-[44px]"
+              />
+              <button
+                type="submit"
+                className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-accent text-white hover:bg-accent-hover transition-colors mr-0.5"
+                aria-label="Send message"
+              >
+                <svg
+                  className="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M5 12h14M12 5l7 7-7 7"
+                  />
+                </svg>
+              </button>
+            </form>
+          </div>
+        </div>
+
+        {/* Suggestion chips */}
+        <div className="mt-4 flex flex-wrap justify-center gap-2">
+          {suggestions.map((chip) => (
+            <button
+              key={chip}
+              onClick={() => go(chip)}
+              className="rounded-full border border-gray-200 bg-white px-4 py-2.5 text-sm text-gray-600 shadow-sm transition-all hover:border-accent hover:bg-accent/5 hover:text-accent active:scale-[0.97] min-h-[44px]"
+            >
+              {chip}
+            </button>
           ))}
         </div>
 
-        <Link
-          href="/chat"
-          className="inline-flex items-center justify-center gap-2 mt-6 w-full sm:w-auto px-8 py-4 bg-accent text-white text-lg font-medium rounded-xl hover:bg-accent-hover transition-colors shadow-md hover:shadow-lg"
-        >
-          Start Free Chat
-          <svg
-            className="w-5 h-5"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            aria-hidden="true"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M17 8l4 4m0 0l-4 4m4-4H3"
-            />
-          </svg>
-        </Link>
-
-        {/* Star rating row */}
-        <div className="mt-6 flex items-center gap-2">
+        {/* Star rating */}
+        <div className="mt-8 flex items-center justify-center gap-2">
           <div className="flex" aria-label="4.9 out of 5 stars">
             {[...Array(5)].map((_, i) => (
               <svg
@@ -71,12 +130,13 @@ export function Hero() {
             ))}
           </div>
           <span className="text-sm text-gray-500">
-            <span className="font-semibold text-black">4.9</span> from 180+ reviews
+            <span className="font-semibold text-black">4.9</span> from 180+
+            reviews
           </span>
         </div>
 
         {/* Disclaimer */}
-        <p className="mt-4 text-xs text-gray-400 max-w-md">
+        <p className="mt-4 text-xs text-gray-400 max-w-md mx-auto">
           Not a law firm. No legal advice. No guaranteed outcomes.
         </p>
       </div>

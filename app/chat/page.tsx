@@ -1,12 +1,26 @@
 "use client";
 
+import { Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import { ChatProvider } from "@/components/chat/ChatContext";
 import { ChatShell } from "@/components/chat/ChatShell";
 
-export default function ChatPage() {
+function ChatPageInner() {
+  const searchParams = useSearchParams();
+  const initialMessage =
+    searchParams.get("message") || searchParams.get("intent") || undefined;
+
   return (
     <ChatProvider>
-      <ChatShell />
+      <ChatShell initialMessage={initialMessage} />
     </ChatProvider>
+  );
+}
+
+export default function ChatPage() {
+  return (
+    <Suspense>
+      <ChatPageInner />
+    </Suspense>
   );
 }

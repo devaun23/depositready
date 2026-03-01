@@ -46,9 +46,9 @@ function useCountUp(target: number, duration: number, active: boolean) {
 }
 
 const CONFETTI_COLORS = [
-  "#059669", // emerald
-  "#10b981", // green
-  "#34d399", // light green
+  "#6366f1", // indigo
+  "#818cf8", // indigo light
+  "#a78bfa", // violet
   "#fbbf24", // amber
   "#f59e0b", // yellow
   "#3b82f6", // blue

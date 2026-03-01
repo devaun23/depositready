@@ -103,14 +103,14 @@ export default async function OGImage({
             style={{
               fontSize: 120,
               fontWeight: 800,
-              color: result.landlord_in_violation ? "#059669" : "#92400e",
+              color: result.landlord_in_violation ? "#6366f1" : "#92400e",
               lineHeight: 1,
             }}
           >
             ${recovery}
           </div>
           {result.landlord_in_violation && result.damages_multiplier > 1 && (
-            <div style={{ fontSize: 22, color: "#059669", marginTop: 12 }}>
+            <div style={{ fontSize: 22, color: "#6366f1", marginTop: 12 }}>
               ${deposit} deposit × {result.damages_multiplier}x statutory damages
             </div>
           )}

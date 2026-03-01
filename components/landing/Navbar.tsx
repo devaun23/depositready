@@ -4,6 +4,12 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Logo } from "@/components/ui";
 
+const NAV_LINKS = [
+  { href: "#how-it-works", label: "How It Works" },
+  { href: "#pricing", label: "Pricing" },
+  { href: "/blog", label: "Blog" },
+];
+
 export function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -31,20 +37,23 @@ export function Navbar() {
             <span className="font-serif">DepositReady</span>
           </Link>
 
-          {/* Center links — desktop */}
-          <div className="hidden md:flex items-center gap-8">
-            <Link
-              href="/blog"
-              className="text-sm text-gray-600 hover:text-black transition-colors"
-            >
-              Blog
-            </Link>
+          {/* Center — capsule pill nav (desktop) */}
+          <div className="hidden md:flex items-center bg-slate-100/80 backdrop-blur-md rounded-full px-1 py-1">
+            {NAV_LINKS.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="rounded-full px-4 py-1.5 text-sm font-medium text-gray-600 hover:bg-white/80 hover:text-black transition-all"
+              >
+                {link.label}
+              </Link>
+            ))}
           </div>
 
-          {/* CTA — desktop */}
+          {/* CTA — desktop with indigo glow */}
           <Link
             href="/chat"
-            className="hidden md:inline-flex items-center gap-2 px-4 py-2 text-sm font-medium bg-accent text-white rounded-full hover:bg-accent-hover transition-colors min-h-[44px]"
+            className="hidden md:inline-flex items-center gap-2 px-4 py-2 text-sm font-medium bg-accent text-white rounded-full hover:bg-accent-hover transition-colors min-h-[44px] shadow-[0_0_20px_rgba(99,102,241,0.25)]"
           >
             <span className="relative flex h-2 w-2">
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-white opacity-60" />
@@ -95,13 +104,16 @@ export function Navbar() {
         {/* Mobile dropdown */}
         {menuOpen && (
           <div className="md:hidden border-t border-gray-100 pb-4 pt-2 space-y-1">
-            <Link
-              href="/blog"
-              onClick={() => setMenuOpen(false)}
-              className="block px-2 py-3 text-sm text-gray-600 hover:text-black transition-colors"
-            >
-              Blog
-            </Link>
+            {NAV_LINKS.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                onClick={() => setMenuOpen(false)}
+                className="block px-2 py-3 text-sm text-gray-600 hover:text-black transition-colors"
+              >
+                {link.label}
+              </Link>
+            ))}
             <Link
               href="/chat"
               onClick={() => setMenuOpen(false)}

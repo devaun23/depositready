@@ -3,7 +3,6 @@ export { Hero } from "./Hero";
 export { FeedbackBanner } from "./FeedbackBanner";
 export { HowItWorks } from "./HowItWorks";
 export { Testimonials } from "./Testimonials";
-export { ChatPreview } from "./ChatPreview";
 export { TrustBullets } from "./TrustBullets";
 export { Pricing } from "./Pricing";
 export { BlogPreview } from "./BlogPreview";

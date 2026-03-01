@@ -91,7 +91,7 @@ export function Testimonials() {
           {testimonials.map((t, i) => (
             <div
               key={t.name}
-              className={`w-[85vw] flex-shrink-0 snap-center md:w-auto bg-white rounded-2xl p-6 shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-card-hover)] transition-all ${
+              className={`w-[85vw] flex-shrink-0 snap-center md:w-auto bg-white/70 backdrop-blur-sm border border-white/50 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all ${
                 visible ? "animate-fadeSlideUp" : "opacity-0"
               }`}
               style={{ animationDelay: visible ? `${i * 100}ms` : undefined, animationFillMode: "both" }}

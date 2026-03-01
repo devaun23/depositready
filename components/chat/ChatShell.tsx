@@ -26,7 +26,7 @@ const TOOL_LABELS: Record<string, string> = {
   recommend_product: "Finding best option",
 };
 
-export function ChatShell() {
+export function ChatShell({ initialMessage }: { initialMessage?: string }) {
   const {
     caseData,
     updateCaseData,
@@ -95,6 +95,17 @@ export function ChatShell() {
       })
       .finally(() => setSessionLoading(false));
   }, [sessionToken]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // ── Auto-send initialMessage after session loads ─────────────
+  const initialSentRef = useRef(false);
+  useEffect(() => {
+    if (sessionLoading || !initialMessage || initialSentRef.current) return;
+    initialSentRef.current = true;
+    const timer = setTimeout(() => {
+      sendMessage({ text: initialMessage });
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [sessionLoading, initialMessage, sendMessage]);
 
   const isLoading = status === "submitted" || status === "streaming";
 

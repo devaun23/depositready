@@ -17,12 +17,6 @@ const HowItWorks = dynamic(
   { ssr: true }
 );
 
-const ChatPreview = dynamic(
-  () =>
-    import("@/components/landing/ChatPreview").then((mod) => mod.ChatPreview),
-  { ssr: true }
-);
-
 const TrustBullets = dynamic(
   () =>
     import("@/components/landing/TrustBullets").then(
@@ -63,10 +57,9 @@ export default function Home() {
       <main id="main-content">
         <Hero />
         <SocialProofBar />
-        <Testimonials />
         <HowItWorks />
-        <ChatPreview />
         <TrustBullets />
+        <Testimonials />
         <Pricing />
         <BlogPreview />
         <FAQ />
