@@ -34,7 +34,7 @@ export interface OrderConfirmationEmailData {
   email: string;
   orderId: string;
   downloadToken: string;
-  productType: "basic" | "full" | "landlord" | "pm";
+  productType: "basic" | "full" | "pm";
   amountPaid: number;
   tenantName?: string;
   stateName?: string;
@@ -99,7 +99,6 @@ function getOrderConfirmationHtml(data: OrderConfirmationEmailData): string {
   const productName = {
     basic: "Recovery Kit",
     full: "Full Recovery Package",
-    landlord: "Landlord Response Kit",
     pm: "Deposit Disposition Packet",
   }[data.productType];
 
@@ -215,7 +214,6 @@ export async function sendOrderConfirmationEmail(data: OrderConfirmationEmailDat
   const productName = {
     basic: "Recovery Kit",
     full: "Full Recovery Package",
-    landlord: "Landlord Response Kit",
     pm: "Deposit Disposition Packet",
   }[data.productType];
 

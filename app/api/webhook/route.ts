@@ -188,7 +188,7 @@ export async function POST(request: NextRequest) {
               .single();
 
             if (orderData?.download_token) {
-              const productType = (session.metadata?.product_type || "full") as "basic" | "full" | "landlord";
+              const productType = (session.metadata?.product_type || "full") as "basic" | "full";
               const formData = orderData.form_data as { stateCode?: string } | null;
 
               // Fire and forget email
