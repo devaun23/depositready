@@ -40,8 +40,8 @@ export function ChatInput({ onSend, disabled }: ChatInputProps) {
   }, []);
 
   return (
-    <div className="border-t border-gray-100 bg-stone-50 px-4 py-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))]">
-      <div className="mx-auto flex max-w-3xl items-end gap-2">
+    <div className="bg-white px-4 py-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))] shadow-[0_-1px_3px_rgba(0,0,0,0.04)]">
+      <div className="relative mx-auto max-w-3xl">
         <textarea
           ref={textareaRef}
           value={value}
@@ -51,26 +51,26 @@ export function ChatInput({ onSend, disabled }: ChatInputProps) {
           placeholder="Tell me what happened with your deposit..."
           disabled={disabled}
           rows={1}
-          className="flex-1 resize-none rounded-xl border border-gray-300 bg-gray-50 px-4 py-3 text-[15px] leading-relaxed text-gray-900 placeholder:text-gray-400 focus:border-brand focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand/20 disabled:opacity-50"
+          className="w-full resize-none rounded-2xl border border-gray-200 bg-white px-4 py-3 pr-12 text-[15px] leading-relaxed text-gray-900 shadow-sm placeholder:text-gray-400 transition-shadow focus:shadow-md focus:border-gray-300 focus:outline-none disabled:opacity-50"
           style={{ minHeight: "44px", maxHeight: "120px" }}
         />
         <button
           onClick={handleSend}
           disabled={disabled || !value.trim()}
           aria-label="Send message"
-          className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-accent text-white shadow-sm transition-all hover:bg-accent/90 hover:shadow-md disabled:bg-gray-200 disabled:text-gray-400 disabled:shadow-none"
+          className="absolute right-2 bottom-2 flex h-9 w-9 items-center justify-center rounded-xl bg-accent text-white shadow-sm transition-all hover:bg-accent/90 hover:shadow-md disabled:bg-gray-200 disabled:text-gray-400 disabled:shadow-none"
         >
           <svg
-            className="h-5 w-5"
+            className="h-4 w-4"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
-            strokeWidth={2}
+            strokeWidth={2.5}
           >
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
-              d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5"
+              d="M4.5 10.5L12 3m0 0l7.5 7.5M12 3v18"
             />
           </svg>
         </button>

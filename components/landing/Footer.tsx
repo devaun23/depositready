@@ -3,7 +3,31 @@ import { Logo } from "@/components/ui";
 
 export function Footer() {
   return (
-    <footer className="bg-[#1e3a5f] text-white py-12 md:py-16 px-4 sm:px-6">
+    <footer className="bg-[#1e3a5f] text-white pt-0 pb-12 md:pb-16 px-4 sm:px-6">
+      {/* CTA banner */}
+      <div className="max-w-6xl mx-auto py-10 mb-10 border-b border-white/20">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div>
+            <p className="text-lg font-serif font-semibold">
+              Start your free case analysis
+            </p>
+            <p className="text-gray-300 text-sm mt-1">
+              Currently supporting: FL, CA, TX, NY, GA, IL, OH, PA, NC, VA, WA, MA, MI, NJ, CO, AZ
+            </p>
+          </div>
+          <Link
+            href="/chat"
+            className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-accent text-white font-medium rounded-xl hover:bg-accent-hover transition-colors min-h-[44px] flex-shrink-0"
+          >
+            <span className="relative flex h-2 w-2">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-white opacity-60" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-white" />
+            </span>
+            Chat Free
+          </Link>
+        </div>
+      </div>
+
       <div className="max-w-6xl mx-auto">
         <div className="grid grid-cols-2 md:grid-cols-3 gap-8">
           {/* Brand description — full width on mobile, first col on desktop */}

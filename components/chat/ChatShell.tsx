@@ -10,11 +10,21 @@ import { ChatInput } from "./ChatInput";
 import { CaseSummaryCard } from "./CaseSummaryCard";
 import { ChatTestimonials } from "./ChatTestimonials";
 
-const GREETING =
-  "Hi! I'm your deposit recovery assistant. Tell me what happened with your security deposit, and I'll help you understand your rights and options.\n\nFor example: *\"I moved out of my apartment 2 months ago and never got my deposit back.\"*";
-
 const RETURNING_GREETING =
   "Welcome back! I still have your case details from our last conversation. Feel free to pick up where we left off, or ask me anything about your deposit situation.";
+
+const SUGGESTION_CHIPS = [
+  "My landlord kept my deposit",
+  "Unfair deductions on my deposit",
+  "How much can I recover?",
+];
+
+const TOOL_LABELS: Record<string, string> = {
+  analyze_deadline: "Checking deadlines",
+  calculate_damages: "Calculating recovery",
+  assess_case_strength: "Assessing case strength",
+  recommend_product: "Finding best option",
+};
 
 export function ChatShell() {
   const {
@@ -102,8 +112,24 @@ export function ChatShell() {
     [isLoading, sendMessage]
   );
 
+  // ── Detect active tool from streaming message parts ─────
+  const activeToolName = (() => {
+    if (!isLoading || messages.length === 0) return null;
+    const lastMsg = messages[messages.length - 1];
+    if (lastMsg.role !== "assistant" || !lastMsg.parts) return null;
+    for (const part of lastMsg.parts) {
+      if (part.type.startsWith("tool-") && (part as { state?: string }).state !== "output-available") {
+        return part.type.slice(5); // strip "tool-" prefix
+      }
+    }
+    return null;
+  })();
+
   const hasCaseData =
     caseData.stateCode || caseData.depositAmount || caseData.violationDetected !== null;
+
+  const hasMessages = messages.length > 0;
+  const showEmptyState = !sessionLoading && !hasMessages && !isReturningUser;
 
   return (
     <div className="flex h-full flex-col lg:flex-row">
@@ -117,9 +143,15 @@ export function ChatShell() {
           >
             &larr; DepositReady
           </Link>
-          <h1 className="font-serif text-lg font-semibold text-brand">
-            Deposit Recovery Chat
-          </h1>
+          <div className="flex items-center gap-2">
+            <span className="relative flex h-2 w-2">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-75" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-accent" />
+            </span>
+            <h1 className="font-serif text-lg font-semibold text-brand">
+              Deposit Recovery Chat
+            </h1>
+          </div>
           {/* Mobile summary toggle */}
           {hasCaseData && (
             <button
@@ -136,16 +168,16 @@ export function ChatShell() {
           {!hasCaseData && <div className="w-16" />}
         </header>
 
-        {/* Legal disclaimer banner */}
-        <div className="flex items-center justify-center gap-1.5 border-b border-gray-100 bg-gray-50 px-4 py-2 text-center text-xs text-gray-500 leading-relaxed">
-          <svg className="h-3.5 w-3.5 shrink-0 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        {/* Collapsed legal disclaimer — shield icon + tooltip */}
+        <div className="flex items-center justify-center gap-1.5 border-b border-gray-100 bg-gray-50/80 px-4 py-1.5 text-center text-[11px] text-gray-400">
+          <svg className="h-3.5 w-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
           </svg>
           <span>
-            General information about security deposit laws, not legal advice. Not a substitute for a{" "}
-            <a href="https://www.findlegalhelp.org/" target="_blank" rel="noopener noreferrer" className="underline hover:text-gray-700">
-              licensed attorney
-            </a>.
+            General information, not legal advice.{" "}
+            <a href="https://www.findlegalhelp.org/" target="_blank" rel="noopener noreferrer" className="underline hover:text-gray-500">
+              Find an attorney
+            </a>
           </span>
         </div>
 
@@ -154,20 +186,48 @@ export function ChatShell() {
           <div className="mx-auto max-w-3xl">
             {/* Loading skeleton while restoring session */}
             {sessionLoading && (
-              <div className="mb-4 flex justify-start animate-pulse">
+              <div className="mb-4 flex justify-start animate-messageEnter">
                 <div className="max-w-[60%] rounded-2xl rounded-bl-md border border-gray-100 bg-white px-4 py-3 shadow-sm space-y-2">
-                  <div className="h-3 bg-gray-200 rounded w-3/4" />
-                  <div className="h-3 bg-gray-200 rounded w-1/2" />
+                  <div className="shimmer-line w-3/4" />
+                  <div className="shimmer-line w-1/2" />
                 </div>
               </div>
             )}
 
-            {/* Greeting message (hidden while loading) */}
-            {!sessionLoading && (
+            {/* ── Empty state with suggestion chips ─────────── */}
+            {showEmptyState && (
+              <div className="flex flex-col items-center justify-center py-12 animate-fadeIn">
+                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-brand/10 mb-5">
+                  <svg className="h-7 w-7 text-brand" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                  </svg>
+                </div>
+                <h2 className="font-serif text-xl font-semibold text-brand mb-2">
+                  What happened with your deposit?
+                </h2>
+                <p className="text-sm text-gray-400 mb-8">
+                  Free analysis. No sign-up.
+                </p>
+                <div className="flex flex-wrap justify-center gap-2">
+                  {SUGGESTION_CHIPS.map((chip) => (
+                    <button
+                      key={chip}
+                      onClick={() => handleSend(chip)}
+                      className="rounded-full border border-gray-200 bg-white px-4 py-2.5 text-sm text-gray-700 shadow-sm transition-all hover:border-accent hover:bg-accent/5 hover:text-accent active:scale-[0.97] min-h-[44px]"
+                    >
+                      {chip}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Returning user greeting */}
+            {!sessionLoading && !showEmptyState && !hasMessages && (
               <div className="mb-4 flex justify-start animate-fadeIn">
                 <div className="max-w-[80%] rounded-2xl rounded-bl-md border border-gray-100/80 bg-white px-4 py-3 text-[15px] leading-relaxed text-gray-900 shadow-sm">
                   <div className="whitespace-pre-wrap">
-                    {formatGreeting(isReturningUser ? RETURNING_GREETING : GREETING)}
+                    {formatGreeting(RETURNING_GREETING)}
                   </div>
                 </div>
               </div>
@@ -182,16 +242,40 @@ export function ChatShell() {
               />
             ))}
 
-            {/* Typing indicator */}
+            {/* ── Shimmer thinking indicator ──────────────────── */}
             {isLoading && (messages.length === 0 || messages[messages.length - 1]?.role === "user") && (
-              <div className="flex justify-start mb-4">
-                <div className="rounded-2xl rounded-bl-md border border-gray-100 bg-white px-4 py-3 shadow-sm">
-                  <div className="flex gap-1">
-                    <span className="h-2 w-2 rounded-full bg-gray-400 animate-bounce" style={{ animationDelay: "0ms" }} />
-                    <span className="h-2 w-2 rounded-full bg-gray-400 animate-bounce" style={{ animationDelay: "150ms" }} />
-                    <span className="h-2 w-2 rounded-full bg-gray-400 animate-bounce" style={{ animationDelay: "300ms" }} />
+              <div className="flex justify-start mb-4 animate-messageEnter">
+                <div className="rounded-2xl rounded-bl-md border border-gray-100 bg-white px-4 py-3 shadow-sm min-w-[200px]">
+                  {/* Status label */}
+                  <div className="flex items-center gap-1.5 mb-2.5">
+                    <span className="relative flex h-1.5 w-1.5">
+                      <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-75" />
+                      <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-accent" />
+                    </span>
+                    <span className="text-xs text-gray-400">
+                      {activeToolName ? (TOOL_LABELS[activeToolName] || "Processing") : "Analyzing"}...
+                    </span>
+                  </div>
+                  {/* Shimmer bars */}
+                  <div className="space-y-2">
+                    <div className="shimmer-line" style={{ width: "85%" }} />
+                    <div className="shimmer-line" style={{ width: "70%", animationDelay: "0.15s" }} />
+                    <div className="shimmer-line" style={{ width: "78%", animationDelay: "0.3s" }} />
                   </div>
                 </div>
+              </div>
+            )}
+
+            {/* ── Tool execution indicator (mid-stream) ───────── */}
+            {isLoading && activeToolName && messages[messages.length - 1]?.role === "assistant" && (
+              <div className="flex items-center gap-2 mb-3 ml-1 animate-fadeIn">
+                <svg className="h-3.5 w-3.5 text-accent animate-spin" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                </svg>
+                <span className="text-xs text-gray-400">
+                  {TOOL_LABELS[activeToolName] || "Processing"}...
+                </span>
               </div>
             )}
 

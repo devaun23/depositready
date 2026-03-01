@@ -11,3 +11,4 @@ export { FAQ } from "./FAQ";
 export { Footer } from "./Footer";
 export { MobileCTA } from "./MobileCTA";
 export { EligibilityModal } from "./EligibilityModal";
+export { SocialProofBar } from "./SocialProofBar";

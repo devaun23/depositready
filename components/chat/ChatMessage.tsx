@@ -27,7 +27,7 @@ export function ChatMessage({ message, isStreaming }: ChatMessageProps) {
 
   return (
     <div
-      className={`flex ${isUser ? "justify-end" : "justify-start"} mb-5 animate-fadeSlideUp`}
+      className={`flex ${isUser ? "justify-end" : "justify-start"} mb-5 animate-messageEnter`}
     >
       <div
         className={`max-w-[80%] rounded-2xl px-4 py-3 text-[15px] leading-relaxed ${
@@ -41,14 +41,14 @@ export function ChatMessage({ message, isStreaming }: ChatMessageProps) {
           <div className="whitespace-pre-wrap break-words">
             {formatContent(textContent)}
             {isStreaming && (
-              <span className="inline-block w-1.5 h-4 bg-accent ml-0.5 animate-pulse rounded-full" />
+              <span className="inline-block w-0.5 h-[1.1em] bg-accent ml-0.5 rounded-sm animate-cursor-blink align-text-bottom" />
             )}
           </div>
         )}
 
         {/* Milestone cards for significant tool findings */}
         {milestoneTools.length > 0 && (
-          <div className="mt-2 space-y-2">
+          <div className="mt-2 space-y-2 stagger-children">
             {milestoneTools.map((name) => (
               <MilestoneCard key={name} toolName={name} caseData={caseData} />
             ))}
@@ -57,7 +57,7 @@ export function ChatMessage({ message, isStreaming }: ChatMessageProps) {
 
         {/* Tool result badges (e.g., "Analyzed Florida deadlines") */}
         {toolNames.length > 0 && (
-          <div className="mt-2 flex flex-wrap gap-1.5">
+          <div className="mt-2 flex flex-wrap gap-1.5 stagger-children">
             {toolNames.map((name, i) => (
               <span
                 key={i}

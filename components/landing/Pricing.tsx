@@ -1,9 +1,9 @@
 import Link from "next/link";
 
-function CheckIcon() {
+function CheckIcon({ className = "text-accent" }: { className?: string }) {
   return (
     <svg
-      className="w-5 h-5 text-accent flex-shrink-0"
+      className={`w-4 h-4 flex-shrink-0 ${className}`}
       fill="none"
       stroke="currentColor"
       viewBox="0 0 24 24"
@@ -12,24 +12,65 @@ function CheckIcon() {
       <path
         strokeLinecap="round"
         strokeLinejoin="round"
-        strokeWidth={2}
+        strokeWidth={2.5}
         d="M5 13l4 4L19 7"
       />
     </svg>
   );
 }
 
-const features = [
-  "Custom demand letter for your state",
-  "State law breakdown and deadlines",
-  "Legal timeline with key dates",
-  "Evidence checklist",
+const tiers = [
+  {
+    name: "AI Chat Analysis",
+    price: "Free",
+    priceDetail: null,
+    description: "Understand your rights in minutes",
+    cta: "Start Free Chat",
+    href: "/chat",
+    popular: false,
+    features: [
+      "State-specific deadline check",
+      "Violation detection",
+      "Recovery estimate",
+      "Case strength assessment",
+    ],
+  },
+  {
+    name: "Demand Letter",
+    price: "$29",
+    priceDetail: "one-time",
+    description: "Professional letter ready to send",
+    cta: "Get My Letter",
+    href: "/quiz?product=basic",
+    popular: true,
+    features: [
+      "Custom demand letter for your state",
+      "State law breakdown and deadlines",
+      "Legal timeline with key dates",
+      "Evidence checklist",
+    ],
+  },
+  {
+    name: "Full Legal Packet",
+    price: "$79",
+    priceDetail: "one-time",
+    description: "Complete dispute documentation",
+    cta: "Get Full Packet",
+    href: "/quiz?product=full",
+    popular: false,
+    features: [
+      "Everything in Demand Letter",
+      "Case review memo",
+      "Small claims filing guide",
+      "Follow-up letter templates",
+    ],
+  },
 ];
 
 export function Pricing() {
   return (
     <section id="pricing" className="py-16 md:py-24 px-4 sm:px-6 bg-[var(--section-bg-alt)]">
-      <div className="max-w-2xl mx-auto">
+      <div className="max-w-5xl mx-auto">
         <h2 className="font-serif text-3xl md:text-4xl font-semibold text-brand mb-3">
           Simple, transparent pricing
         </h2>
@@ -37,71 +78,82 @@ export function Pricing() {
           Start free. Pay only when you need legal documents.
         </p>
 
-        {/* Primary card */}
-        <div className="bg-white rounded-2xl p-6 md:p-8 shadow-[var(--shadow-elevated)]">
-          <h3 className="font-serif text-xl font-semibold text-brand">
-            Demand Letter Package
-          </h3>
-          <p className="mt-2 mb-6">
-            <span className="text-4xl font-bold text-black">$29</span>
-            <span className="text-gray-400 text-sm ml-1">one-time</span>
-          </p>
+        {/* 3-tier card grid */}
+        <div className="grid gap-6 md:grid-cols-3">
+          {tiers.map((tier) => (
+            <div
+              key={tier.name}
+              className={`relative bg-white rounded-2xl p-6 transition-shadow hover:shadow-elevated ${
+                tier.popular
+                  ? "ring-2 ring-accent shadow-elevated"
+                  : "shadow-[var(--shadow-card)]"
+              }`}
+            >
+              {/* Most Popular badge */}
+              {tier.popular && (
+                <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-accent px-3 py-1 text-xs font-semibold text-white shadow-sm">
+                  Most Popular
+                </span>
+              )}
 
-          <ul className="space-y-3 mb-8">
-            {features.map((feature) => (
-              <li
-                key={feature}
-                className="flex items-start gap-2 text-sm text-gray-700"
+              <h3 className="font-serif text-lg font-semibold text-brand">
+                {tier.name}
+              </h3>
+              <p className="mt-1 text-sm text-gray-500">{tier.description}</p>
+
+              <p className="mt-4 mb-6">
+                <span className="text-3xl font-bold text-black">
+                  {tier.price}
+                </span>
+                {tier.priceDetail && (
+                  <span className="text-gray-400 text-sm ml-1">
+                    {tier.priceDetail}
+                  </span>
+                )}
+              </p>
+
+              <ul className="space-y-2.5 mb-8">
+                {tier.features.map((feature) => (
+                  <li
+                    key={feature}
+                    className="flex items-start gap-2 text-sm text-gray-700"
+                  >
+                    <CheckIcon />
+                    {feature}
+                  </li>
+                ))}
+              </ul>
+
+              <Link
+                href={tier.href}
+                className={`block text-center py-3 px-4 rounded-xl font-medium transition-colors min-h-[44px] ${
+                  tier.popular
+                    ? "bg-accent text-white hover:bg-accent-hover"
+                    : "bg-brand/5 text-brand hover:bg-brand/10"
+                }`}
               >
-                <CheckIcon />
-                {feature}
-              </li>
-            ))}
-          </ul>
-
-          <Link
-            href="/quiz?product=basic"
-            className="block text-center py-3 px-4 rounded-xl font-medium bg-accent text-white hover:bg-accent-hover transition-colors min-h-[44px]"
-          >
-            Get My Letter
-          </Link>
+                {tier.cta}
+              </Link>
+            </div>
+          ))}
         </div>
 
-        {/* Secondary options */}
-        <div className="mt-8 space-y-4">
-          <div className="flex items-baseline justify-between border-b border-gray-200 pb-4">
-            <div>
-              <p className="font-semibold text-sm text-black">
-                Full Dispute Package
-              </p>
-              <p className="text-xs text-gray-500 mt-0.5">
-                Complete dispute documentation with case review memo
-              </p>
-            </div>
-            <Link
-              href="/quiz?product=full"
-              className="text-sm font-medium text-brand hover:text-brand-light transition-colors flex-shrink-0 ml-4"
-            >
-              $79 &rarr;
-            </Link>
+        {/* Case Review premium callout */}
+        <div className="mt-8 rounded-2xl border border-gray-200 bg-white p-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div>
+            <p className="font-semibold text-black">
+              Priority Case Review
+            </p>
+            <p className="text-sm text-gray-500 mt-0.5">
+              Enhanced analysis with personalized follow-up support
+            </p>
           </div>
-
-          <div className="flex items-baseline justify-between">
-            <div>
-              <p className="font-semibold text-sm text-black">
-                Priority Case Review
-              </p>
-              <p className="text-xs text-gray-500 mt-0.5">
-                Enhanced analysis with follow-up support
-              </p>
-            </div>
-            <Link
-              href="/case-review"
-              className="text-sm font-medium text-brand hover:text-brand-light transition-colors flex-shrink-0 ml-4"
-            >
-              $149 &rarr;
-            </Link>
-          </div>
+          <Link
+            href="/case-review"
+            className="inline-flex items-center justify-center gap-1 rounded-xl border border-brand px-5 py-2.5 text-sm font-medium text-brand hover:bg-brand-bg transition-colors min-h-[44px] flex-shrink-0"
+          >
+            $149 &rarr;
+          </Link>
         </div>
       </div>
     </section>

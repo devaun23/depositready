@@ -1,5 +1,5 @@
 import dynamic from "next/dynamic";
-import { Navbar, Hero } from "@/components/landing";
+import { Navbar, Hero, SocialProofBar } from "@/components/landing";
 import { ViewLandingTracker } from "@/components/tracking";
 
 // Below-fold sections — lazy loaded for faster initial paint
@@ -62,6 +62,7 @@ export default function Home() {
       <Navbar />
       <main id="main-content">
         <Hero />
+        <SocialProofBar />
         <Testimonials />
         <HowItWorks />
         <ChatPreview />

@@ -84,18 +84,31 @@ export function HowItWorks() {
           How it works
         </h2>
 
-        <div className="space-y-5">
+        <div className="relative space-y-5">
+          {/* Vertical dashed connecting line */}
+          <div
+            className="absolute left-6 top-6 bottom-6 border-l-2 border-dashed border-gray-200 pointer-events-none"
+            aria-hidden="true"
+          />
+
           {steps.map((step, i) => (
             <div
               key={step.title}
-              className="flex gap-4 items-start bg-[var(--section-bg-alt)] rounded-xl p-5"
+              className="relative flex gap-4 items-start bg-[var(--section-bg-alt)] rounded-xl p-5 hover:shadow-[var(--shadow-card-hover)] transition-shadow"
             >
-              <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center flex-shrink-0 shadow-[var(--shadow-card)]">
-                <step.icon />
+              {/* Icon with numbered badge */}
+              <div className="relative flex-shrink-0">
+                <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center shadow-[var(--shadow-card)]">
+                  <step.icon />
+                </div>
+                {/* Number badge */}
+                <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-brand text-[11px] font-bold text-white">
+                  {i + 1}
+                </span>
               </div>
+
               <div>
                 <h3 className="text-base font-semibold text-black mb-1">
-                  <span className="text-brand mr-1.5">{i + 1}.</span>
                   {step.title}
                 </h3>
                 <p className="text-gray-600 text-sm leading-relaxed">

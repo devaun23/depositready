@@ -5,15 +5,19 @@ interface CardProps {
   className?: string;
   bordered?: boolean;
   accent?: boolean;
+  hoverable?: boolean;
+  highlighted?: boolean;
 }
 
-export function Card({ children, className = "", bordered = true, accent = false }: CardProps) {
-  const baseStyles = "bg-white rounded-lg";
+export function Card({ children, className = "", bordered = true, accent = false, hoverable = false, highlighted = false }: CardProps) {
+  const baseStyles = "bg-white rounded-2xl";
   const borderStyles = bordered ? "border border-gray-200" : "";
   const accentStyles = accent ? "border-l-4 border-l-brand" : "";
+  const hoverStyles = hoverable ? "hover:shadow-[var(--shadow-card-hover)] transition-shadow" : "";
+  const highlightStyles = highlighted ? "ring-2 ring-accent" : "";
 
   return (
-    <div className={`${baseStyles} ${borderStyles} ${accentStyles} ${className}`}>
+    <div className={`${baseStyles} ${borderStyles} ${accentStyles} ${hoverStyles} ${highlightStyles} ${className}`}>
       {children}
     </div>
   );
