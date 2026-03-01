@@ -383,6 +383,16 @@ button {
   border: 1px solid var(--glass-border);
 }
 
+/* ── Ticker scroll (vertical marquee) ──────────────── */
+@keyframes ticker-scroll {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-50%); }
+}
+
+.animate-ticker-scroll {
+  animation: ticker-scroll 24s linear infinite;
+}
+
 /* Smooth scrolling */
 html {
   scroll-behavior: smooth;

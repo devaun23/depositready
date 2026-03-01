@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useScrollReveal } from "@/lib/useScrollReveal";
 
 const testimonials = [
   {
@@ -56,28 +56,11 @@ function StarRow() {
 }
 
 export function Testimonials() {
-  const sectionRef = useRef<HTMLElement>(null);
-  const [visible, setVisible] = useState(false);
-
-  useEffect(() => {
-    const el = sectionRef.current;
-    if (!el) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setVisible(true);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.15 }
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
+  const { ref: sectionRef, visible } = useScrollReveal();
 
   return (
     <section
-      ref={sectionRef}
+      ref={sectionRef as React.RefObject<HTMLElement>}
       id="testimonials"
       className="py-16 md:py-24 px-4 sm:px-6 bg-[var(--section-bg-alt)]"
     >

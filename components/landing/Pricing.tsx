@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { useScrollReveal } from "@/lib/useScrollReveal";
 
 function CheckIcon({ className = "text-accent" }: { className?: string }) {
   return (
@@ -68,8 +71,14 @@ const tiers = [
 ];
 
 export function Pricing() {
+  const { ref, visible } = useScrollReveal();
+
   return (
-    <section id="pricing" className="py-16 md:py-24 px-4 sm:px-6 bg-[var(--section-bg-alt)]">
+    <section
+      ref={ref as React.RefObject<HTMLElement>}
+      id="pricing"
+      className="py-16 md:py-24 px-4 sm:px-6 bg-[var(--section-bg-alt)]"
+    >
       <div className="max-w-5xl mx-auto">
         <h2 className="font-serif text-3xl md:text-4xl font-semibold text-brand mb-3">
           Simple, transparent pricing
@@ -80,14 +89,15 @@ export function Pricing() {
 
         {/* 3-tier card grid */}
         <div className="grid gap-6 md:grid-cols-3">
-          {tiers.map((tier) => (
+          {tiers.map((tier, i) => (
             <div
               key={tier.name}
-              className={`relative bg-white rounded-2xl p-6 transition-shadow ${
+              className={`relative bg-white rounded-2xl p-6 hover:-translate-y-0.5 transition-all duration-200 ${
                 tier.popular
-                  ? "ring-2 ring-accent shadow-elevated bg-gradient-to-b from-accent-light/50 to-white"
-                  : "shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-card-hover)]"
-              }`}
+                  ? "ring-2 ring-accent shadow-elevated bg-gradient-to-b from-accent-light/50 to-white hover:shadow-[0_12px_32px_rgba(0,0,0,0.12)]"
+                  : "shadow-[var(--shadow-card)] hover:shadow-elevated"
+              } ${visible ? "animate-fadeSlideUp" : "opacity-0"}`}
+              style={{ animationDelay: visible ? `${i * 100}ms` : undefined, animationFillMode: "both" }}
             >
               {/* Most Popular badge */}
               {tier.popular && (

@@ -1,3 +1,7 @@
+"use client";
+
+import { useScrollReveal } from "@/lib/useScrollReveal";
+
 const bullets = [
   {
     title: "State-specific statutes",
@@ -18,8 +22,13 @@ const bullets = [
 ];
 
 export function TrustBullets() {
+  const { ref, visible } = useScrollReveal();
+
   return (
-    <section className="py-16 md:py-24 px-4 sm:px-6 bg-white">
+    <section
+      ref={ref as React.RefObject<HTMLElement>}
+      className="py-16 md:py-24 px-4 sm:px-6 bg-white"
+    >
       <div className="max-w-3xl mx-auto">
         <h2 className="font-serif text-3xl md:text-4xl font-semibold text-brand mb-8">
           Built on real rental law
@@ -27,10 +36,13 @@ export function TrustBullets() {
 
         {/* 2x2 card grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-          {bullets.map((bullet) => (
+          {bullets.map((bullet, i) => (
             <div
               key={bullet.title}
-              className="border-l-4 border-accent bg-white rounded-r-xl p-5 shadow-sm"
+              className={`border-l-4 border-accent bg-white rounded-r-xl p-5 shadow-sm hover:shadow-md transition-all duration-200 ${
+                visible ? "animate-fadeSlideUp" : "opacity-0"
+              }`}
+              style={{ animationDelay: visible ? `${i * 100}ms` : undefined, animationFillMode: "both" }}
             >
               <p className="font-semibold text-base text-black mb-1">
                 {bullet.title}

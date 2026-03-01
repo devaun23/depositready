@@ -59,11 +59,8 @@ export default function BlogPage() {
             Guides &amp; Resources
           </span>
           <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl font-semibold text-gray-900 tracking-tight">
-            The Blog
+            The Deposit Digest
           </h1>
-          <p className="text-lg md:text-xl text-gray-500 leading-relaxed mt-3">
-            Plain-English guides on security deposit law and tenant rights.
-          </p>
         </div>
 
         {/* Category filter bar */}
@@ -92,7 +89,7 @@ export default function BlogPage() {
 
             return (
               <Link key={post.slug} href={post.seoPagePath} className="group">
-                <div className="rounded-xl border border-gray-200 overflow-hidden hover:border-gray-400 transition-all duration-200">
+                <div className="rounded-xl border border-gray-200 overflow-hidden hover:border-gray-400 hover:-translate-y-0.5 hover:shadow-md transition-all duration-200">
                   {/* Image placeholder area */}
                   <div className={`bg-gray-50 ${height} flex items-center justify-center`}>
                     <Icon />

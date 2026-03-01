@@ -1,6 +1,7 @@
 interface LogoProps {
   size?: "sm" | "md" | "lg";
   className?: string;
+  checkColor?: string;
 }
 
 const sizeClasses = {
@@ -15,7 +16,7 @@ const sizePx = {
   lg: 32,
 };
 
-export function Logo({ size = "md", className = "" }: LogoProps) {
+export function Logo({ size = "md", className = "", checkColor = "#6366f1" }: LogoProps) {
   return (
     <svg
       viewBox="0 0 32 32"
@@ -25,21 +26,21 @@ export function Logo({ size = "md", className = "" }: LogoProps) {
       xmlns="http://www.w3.org/2000/svg"
       aria-hidden="true"
     >
-      {/* Document */}
+      {/* Shield body */}
       <path
-        d="M6 4C6 2.89543 6.89543 2 8 2H18L26 10V28C26 29.1046 25.1046 30 24 30H8C6.89543 30 6 29.1046 6 28V4Z"
+        d="M16 2L4 7v7c0 7.5 5.1 14.5 12 16 6.9-1.5 12-8.5 12-16V7L16 2z"
         fill="currentColor"
       />
-      {/* Folded corner */}
+      {/* Inner lighter shield (depth layer) */}
       <path
-        d="M18 2V8C18 9.10457 18.8954 10 20 10H26L18 2Z"
+        d="M16 4.5L6 8.7v5.8c0 6.3 4.3 12.2 10 13.5 5.7-1.3 10-7.2 10-13.5V8.7L16 4.5z"
         fill="currentColor"
-        opacity="0.6"
+        opacity="0.7"
       />
       {/* Checkmark */}
       <path
-        d="M12 18L15 21L21 14"
-        stroke="white"
+        d="M11 15l3.5 3.5L21 12"
+        stroke={checkColor}
         strokeWidth="2.5"
         strokeLinecap="round"
         strokeLinejoin="round"

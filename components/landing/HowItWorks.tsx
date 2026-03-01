@@ -1,3 +1,7 @@
+"use client";
+
+import { useScrollReveal } from "@/lib/useScrollReveal";
+
 function ChatBubbleIcon() {
   return (
     <svg
@@ -77,8 +81,14 @@ const steps = [
 ];
 
 export function HowItWorks() {
+  const { ref, visible } = useScrollReveal();
+
   return (
-    <section id="how-it-works" className="py-16 md:py-24 px-4 sm:px-6 bg-white">
+    <section
+      ref={ref as React.RefObject<HTMLElement>}
+      id="how-it-works"
+      className="py-16 md:py-24 px-4 sm:px-6 bg-white"
+    >
       <div className="max-w-2xl mx-auto">
         <h2 className="font-serif text-3xl md:text-4xl font-semibold text-brand mb-10">
           How it works
@@ -94,7 +104,10 @@ export function HowItWorks() {
           {steps.map((step, i) => (
             <div
               key={step.title}
-              className="relative flex gap-4 items-start bg-[var(--section-bg-alt)] rounded-xl p-6 hover:shadow-[var(--shadow-card-hover)] transition-shadow"
+              className={`relative flex gap-4 items-start bg-[var(--section-bg-alt)] rounded-xl p-6 hover:shadow-[var(--shadow-card-hover)] hover:-translate-y-0.5 transition-all duration-200 ${
+                visible ? "animate-fadeSlideUp" : "opacity-0"
+              }`}
+              style={{ animationDelay: visible ? `${i * 100}ms` : undefined, animationFillMode: "both" }}
             >
               {/* Icon with numbered badge */}
               <div className="relative flex-shrink-0">

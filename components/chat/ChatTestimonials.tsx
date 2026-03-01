@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useRef } from "react";
 
 interface ChatTestimonial {
   quote: string;
@@ -8,7 +8,7 @@ interface ChatTestimonial {
   location: string;
   amount: string;
   initials: string;
-  color: string; // tailwind bg class for avatar
+  color: string;
 }
 
 const TESTIMONIALS: ChatTestimonial[] = [
@@ -46,81 +46,57 @@ const TESTIMONIALS: ChatTestimonial[] = [
   },
 ];
 
-const ROTATION_INTERVAL = 8000;
+// Doubled for seamless loop
+const TICKER_ITEMS = [...TESTIMONIALS, ...TESTIMONIALS];
 
 export function ChatTestimonials() {
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
-  const [isTransitioning, setIsTransitioning] = useState(false);
+  const innerRef = useRef<HTMLDivElement>(null);
 
-  const advance = useCallback(() => {
-    setIsTransitioning(true);
-    setTimeout(() => {
-      setActiveIndex((prev) => (prev + 1) % TESTIMONIALS.length);
-      setIsTransitioning(false);
-    }, 200);
-  }, []);
-
-  useEffect(() => {
-    if (isPaused) return;
-    const timer = setInterval(advance, ROTATION_INTERVAL);
-    return () => clearInterval(timer);
-  }, [isPaused, advance]);
-
-  const t = TESTIMONIALS[activeIndex];
+  const handleMouseEnter = () => {
+    if (innerRef.current) innerRef.current.style.animationPlayState = "paused";
+  };
+  const handleMouseLeave = () => {
+    if (innerRef.current) innerRef.current.style.animationPlayState = "running";
+  };
 
   return (
-    <div
-      className="p-5 space-y-3"
-      onMouseEnter={() => setIsPaused(true)}
-      onMouseLeave={() => setIsPaused(false)}
-    >
+    <div className="p-5 space-y-3">
       <h3 className="text-[11px] font-semibold uppercase tracking-wider text-gray-400">
         What renters are saying
       </h3>
 
       <div
-        className={`transition-opacity duration-200 ${isTransitioning ? "opacity-0" : "opacity-100"}`}
+        className="overflow-hidden"
+        style={{ height: 280 }}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
       >
-        <p className="text-sm text-gray-600 leading-relaxed">
-          &ldquo;{t.quote}&rdquo;
-        </p>
-
-        <div className="flex items-center justify-between mt-3 pt-3 border-t border-gray-100">
-          <div className="flex items-center gap-2.5">
-            {/* Avatar */}
-            <div className={`flex items-center justify-center h-8 w-8 rounded-full text-xs font-semibold ring-2 ring-accent/20 ${t.color}`}>
-              {t.initials}
+        <div ref={innerRef} className="animate-ticker-scroll">
+          {TICKER_ITEMS.map((t, i) => (
+            <div
+              key={`${t.initials}-${i}`}
+              className="py-3 border-b border-gray-100 last:border-b-0"
+            >
+              <p className="text-sm text-gray-600 leading-relaxed">
+                &ldquo;{t.quote}&rdquo;
+              </p>
+              <div className="flex items-center justify-between mt-2">
+                <div className="flex items-center gap-2">
+                  <div className={`flex items-center justify-center h-7 w-7 rounded-full text-[10px] font-semibold ring-2 ring-accent/20 ${t.color}`}>
+                    {t.initials}
+                  </div>
+                  <div>
+                    <p className="font-semibold text-xs text-gray-900">{t.name}</p>
+                    <p className="text-[10px] text-gray-500">{t.location}</p>
+                  </div>
+                </div>
+                <span className="text-accent font-semibold text-sm">
+                  {t.amount}
+                </span>
+              </div>
             </div>
-            <div>
-              <p className="font-semibold text-sm text-gray-900">{t.name}</p>
-              <p className="text-xs text-gray-500">{t.location}</p>
-            </div>
-          </div>
-          <span className="text-accent font-semibold text-sm">
-            {t.amount}
-          </span>
+          ))}
         </div>
-      </div>
-
-      {/* Dots */}
-      <div className="flex justify-center gap-1.5 pt-1">
-        {TESTIMONIALS.map((_, i) => (
-          <button
-            key={i}
-            onClick={() => {
-              setIsTransitioning(true);
-              setTimeout(() => {
-                setActiveIndex(i);
-                setIsTransitioning(false);
-              }, 200);
-            }}
-            className={`h-1.5 rounded-full transition-all ${
-              i === activeIndex ? "w-4 bg-accent" : "w-1.5 bg-gray-200 hover:bg-gray-300"
-            }`}
-            aria-label={`Testimonial ${i + 1}`}
-          />
-        ))}
       </div>
 
       <p className="text-[10px] text-gray-400 text-center leading-relaxed">

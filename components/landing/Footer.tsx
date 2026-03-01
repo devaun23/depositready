@@ -33,7 +33,7 @@ export function Footer() {
           {/* Brand description — full width on mobile, first col on desktop */}
           <div className="col-span-2 md:col-span-1">
             <div className="flex items-center gap-2 mb-3">
-              <Logo size="sm" className="text-white" />
+              <Logo size="md" className="text-white drop-shadow-[0_0_8px_rgba(99,102,241,0.3)]" checkColor="white" />
               <span className="font-serif font-semibold tracking-tight">DepositReady</span>
             </div>
             <p className="text-gray-300 text-sm leading-relaxed max-w-xs">

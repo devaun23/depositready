@@ -5,8 +5,8 @@ import Link from "next/link";
 import { Logo } from "@/components/ui";
 
 const NAV_LINKS = [
-  { href: "#how-it-works", label: "How It Works" },
-  { href: "#pricing", label: "Pricing" },
+  { href: "/#how-it-works", label: "How It Works" },
+  { href: "/#pricing", label: "Pricing" },
   { href: "/blog", label: "Blog" },
 ];
 
@@ -31,9 +31,9 @@ export function Navbar() {
           {/* Logo */}
           <Link
             href="/"
-            className="flex items-center gap-2.5 text-xl font-semibold text-brand"
+            className="group flex items-center gap-2.5 text-xl font-semibold text-brand"
           >
-            <Logo size="lg" />
+            <Logo size="lg" className="group-hover:scale-105 group-hover:drop-shadow-[0_0_6px_rgba(99,102,241,0.4)] transition-all duration-200" />
             <span className="font-serif tracking-tight">DepositReady</span>
           </Link>
 
