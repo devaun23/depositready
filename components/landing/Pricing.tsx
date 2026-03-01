@@ -36,7 +36,7 @@ const tiers = [
     ],
   },
   {
-    name: "Demand Letter",
+    name: "Recovery Letter",
     price: "$29",
     priceDetail: "one-time",
     description: "Professional letter ready to send",
@@ -44,22 +44,22 @@ const tiers = [
     href: "/quiz?product=basic",
     popular: true,
     features: [
-      "Custom demand letter for your state",
+      "Custom recovery letter for your state",
       "State law breakdown and deadlines",
       "Legal timeline with key dates",
       "Evidence checklist",
     ],
   },
   {
-    name: "Full Legal Packet",
+    name: "Recovery Kit",
     price: "$79",
     priceDetail: "one-time",
     description: "Complete dispute documentation",
-    cta: "Get Full Packet",
+    cta: "Get Recovery Kit",
     href: "/quiz?product=full",
     popular: false,
     features: [
-      "Everything in Demand Letter",
+      "Everything in Recovery Letter",
       "Case review memo",
       "Small claims filing guide",
       "Follow-up letter templates",
@@ -74,7 +74,7 @@ export function Pricing() {
         <h2 className="font-serif text-3xl md:text-4xl font-semibold text-brand mb-3">
           Simple, transparent pricing
         </h2>
-        <p className="text-gray-500 text-base md:text-lg mb-10">
+        <p className="text-gray-600 text-base md:text-lg mb-10">
           Start free. Pay only when you need legal documents.
         </p>
 
@@ -83,10 +83,10 @@ export function Pricing() {
           {tiers.map((tier) => (
             <div
               key={tier.name}
-              className={`relative bg-white rounded-2xl p-6 transition-shadow hover:shadow-elevated ${
+              className={`relative bg-white rounded-2xl p-6 transition-shadow ${
                 tier.popular
-                  ? "ring-2 ring-accent shadow-elevated"
-                  : "shadow-[var(--shadow-card)]"
+                  ? "ring-2 ring-accent shadow-elevated bg-gradient-to-b from-accent-light/50 to-white"
+                  : "shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-card-hover)]"
               }`}
             >
               {/* Most Popular badge */}
@@ -99,20 +99,20 @@ export function Pricing() {
               <h3 className="font-serif text-lg font-semibold text-brand">
                 {tier.name}
               </h3>
-              <p className="mt-1 text-sm text-gray-500">{tier.description}</p>
+              <p className="mt-1 text-sm text-gray-600">{tier.description}</p>
 
               <p className="mt-4 mb-6">
                 <span className="text-3xl font-bold text-black">
                   {tier.price}
                 </span>
                 {tier.priceDetail && (
-                  <span className="text-gray-400 text-sm ml-1">
+                  <span className="text-gray-500 text-sm ml-1">
                     {tier.priceDetail}
                   </span>
                 )}
               </p>
 
-              <ul className="space-y-2.5 mb-8">
+              <ul className="space-y-3 mb-8">
                 {tier.features.map((feature) => (
                   <li
                     key={feature}
@@ -144,7 +144,7 @@ export function Pricing() {
             <p className="font-semibold text-black">
               Priority Case Review
             </p>
-            <p className="text-sm text-gray-500 mt-0.5">
+            <p className="text-sm text-gray-600 mt-0.5">
               Enhanced analysis with personalized follow-up support
             </p>
           </div>

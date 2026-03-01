@@ -9,9 +9,9 @@ const faqs = [
       "No. DepositReady is a self-help documentation tool, not a law firm. We help you organize evidence and generate state-specific documents, but we don't provide legal advice or represent you in court.",
   },
   {
-    question: "What's included in the demand letter?",
+    question: "What's included in the recovery letter?",
     answer:
-      "Your demand letter includes your state's specific statute references, your landlord's legal deadlines, a professional request for your deposit return, and delivery instructions. It's formatted and ready to send.",
+      "Your recovery letter includes your state's specific statute references, your landlord's legal deadlines, a professional request for your deposit return, and delivery instructions. It's formatted and ready to send.",
   },
   {
     question: "How does the chat work?",

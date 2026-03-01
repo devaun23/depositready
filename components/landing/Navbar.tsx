@@ -31,19 +31,19 @@ export function Navbar() {
           {/* Logo */}
           <Link
             href="/"
-            className="flex items-center gap-2 text-xl font-semibold text-brand"
+            className="flex items-center gap-2.5 text-xl font-semibold text-brand"
           >
-            <Logo size="md" />
-            <span className="font-serif">DepositReady</span>
+            <Logo size="lg" />
+            <span className="font-serif tracking-tight">DepositReady</span>
           </Link>
 
           {/* Center — capsule pill nav (desktop) */}
-          <div className="hidden md:flex items-center bg-slate-100/80 backdrop-blur-md rounded-full px-1 py-1">
+          <div className="hidden md:flex items-center bg-gray-100/90 backdrop-blur-md rounded-full px-1 py-1">
             {NAV_LINKS.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className="rounded-full px-4 py-1.5 text-sm font-medium text-gray-600 hover:bg-white/80 hover:text-black transition-all"
+                className="rounded-full px-5 py-2 text-sm font-medium text-gray-700 hover:bg-white/80 hover:text-black transition-all"
               >
                 {link.label}
               </Link>
@@ -59,7 +59,8 @@ export function Navbar() {
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-white opacity-60" />
               <span className="relative inline-flex h-2 w-2 rounded-full bg-white" />
             </span>
-            Start Free Chat
+            Chat with Insight
+            <span className="animate-cursor-blink">|</span>
           </Link>
 
           {/* Hamburger — mobile */}
@@ -119,7 +120,7 @@ export function Navbar() {
               onClick={() => setMenuOpen(false)}
               className="block mt-2 text-center py-3 bg-accent text-white font-medium rounded-full hover:bg-accent-hover transition-colors"
             >
-              Start Free Chat
+              Chat with Insight
             </Link>
           </div>
         )}

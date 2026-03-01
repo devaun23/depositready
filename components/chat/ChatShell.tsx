@@ -160,7 +160,7 @@ export function ChatShell({ initialMessage }: { initialMessage?: string }) {
               <span className="relative inline-flex h-2 w-2 rounded-full bg-accent" />
             </span>
             <h1 className="font-serif text-lg font-semibold text-brand">
-              Deposit Recovery Chat
+              Insight
             </h1>
           </div>
           {/* Mobile summary toggle */}
@@ -214,10 +214,10 @@ export function ChatShell({ initialMessage }: { initialMessage?: string }) {
                   </svg>
                 </div>
                 <h2 className="font-serif text-xl font-semibold text-brand mb-2">
-                  What happened with your deposit?
+                  Hi, I&apos;m Insight
                 </h2>
-                <p className="text-sm text-gray-400 mb-8">
-                  Free analysis. No sign-up.
+                <p className="text-sm text-gray-500 mb-8">
+                  Tell me about your deposit situation. I&apos;ll help you understand your rights — for free.
                 </p>
                 <div className="flex flex-wrap justify-center gap-2">
                   {SUGGESTION_CHIPS.map((chip) => (

@@ -23,7 +23,7 @@ export function Footer() {
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-white opacity-60" />
               <span className="relative inline-flex h-2 w-2 rounded-full bg-white" />
             </span>
-            Chat Free
+            Chat with Insight
           </Link>
         </div>
       </div>
@@ -34,7 +34,7 @@ export function Footer() {
           <div className="col-span-2 md:col-span-1">
             <div className="flex items-center gap-2 mb-3">
               <Logo size="sm" className="text-white" />
-              <span className="font-serif font-semibold">DepositReady</span>
+              <span className="font-serif font-semibold tracking-tight">DepositReady</span>
             </div>
             <p className="text-gray-300 text-sm leading-relaxed max-w-xs">
               Tools to help renters understand their rights and recover their

@@ -8,7 +8,7 @@ const bullets = [
     description: "Exact legal deadlines from your move-out date",
   },
   {
-    title: "Formal demand letters",
+    title: "Recovery letters",
     description: "Correct legal language for your jurisdiction",
   },
   {
@@ -26,13 +26,13 @@ export function TrustBullets() {
         </h2>
 
         {/* 2x2 card grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
           {bullets.map((bullet) => (
             <div
               key={bullet.title}
-              className="border-l-4 border-accent bg-[var(--section-bg-alt)] rounded-r-xl p-4"
+              className="border-l-4 border-accent bg-white rounded-r-xl p-5 shadow-sm"
             >
-              <p className="font-semibold text-sm text-black mb-1">
+              <p className="font-semibold text-base text-black mb-1">
                 {bullet.title}
               </p>
               <p className="text-sm text-gray-600 leading-relaxed">

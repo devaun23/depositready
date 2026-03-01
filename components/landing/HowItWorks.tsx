@@ -60,7 +60,7 @@ const steps = [
     icon: ChatBubbleIcon,
     title: "Tell us what happened",
     description:
-      "Chat with our AI about your situation. It only takes a couple of minutes.",
+      "Chat with Insight about your situation. It only takes a couple of minutes.",
   },
   {
     icon: MagnifyingGlassIcon,
@@ -70,9 +70,9 @@ const steps = [
   },
   {
     icon: SendIcon,
-    title: "Send your demand packet",
+    title: "Send your recovery letter",
     description:
-      "Download a state-specific demand letter and evidence checklist — ready to send.",
+      "Download a state-specific recovery letter and evidence checklist — ready to send.",
   },
 ];
 
@@ -84,7 +84,7 @@ export function HowItWorks() {
           How it works
         </h2>
 
-        <div className="relative space-y-5">
+        <div className="relative space-y-6">
           {/* Vertical dashed connecting line */}
           <div
             className="absolute left-6 top-6 bottom-6 border-l-2 border-dashed border-gray-200 pointer-events-none"
@@ -94,21 +94,21 @@ export function HowItWorks() {
           {steps.map((step, i) => (
             <div
               key={step.title}
-              className="relative flex gap-4 items-start bg-[var(--section-bg-alt)] rounded-xl p-5 hover:shadow-[var(--shadow-card-hover)] transition-shadow"
+              className="relative flex gap-4 items-start bg-[var(--section-bg-alt)] rounded-xl p-6 hover:shadow-[var(--shadow-card-hover)] transition-shadow"
             >
               {/* Icon with numbered badge */}
               <div className="relative flex-shrink-0">
-                <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center shadow-[var(--shadow-card)]">
+                <div className="w-12 h-12 rounded-full bg-accent-light flex items-center justify-center shadow-[var(--shadow-card)]">
                   <step.icon />
                 </div>
                 {/* Number badge */}
-                <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-brand text-[11px] font-bold text-white">
+                <span className="absolute -top-1 -right-1 flex h-6 w-6 items-center justify-center rounded-full bg-brand text-xs font-bold text-white">
                   {i + 1}
                 </span>
               </div>
 
               <div>
-                <h3 className="text-base font-semibold text-black mb-1">
+                <h3 className="font-serif text-base font-semibold text-black mb-1">
                   {step.title}
                 </h3>
                 <p className="text-gray-600 text-sm leading-relaxed">

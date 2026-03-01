@@ -13,7 +13,7 @@ const testimonials = [
   },
   {
     quote:
-      "I was so stressed about confronting my landlord. The demand letter made it professional and easy.",
+      "I was so stressed about confronting my landlord. The recovery letter made it professional and easy.",
     name: "Michael R.",
     location: "Texas",
     amount: "$1,800",
@@ -43,7 +43,7 @@ function StarRow() {
       {[...Array(5)].map((_, i) => (
         <svg
           key={i}
-          className="w-4 h-4 text-accent"
+          className="w-5 h-5 text-accent"
           fill="currentColor"
           viewBox="0 0 20 20"
           aria-hidden="true"
@@ -91,7 +91,7 @@ export function Testimonials() {
           {testimonials.map((t, i) => (
             <div
               key={t.name}
-              className={`w-[85vw] flex-shrink-0 snap-center md:w-auto bg-white/70 backdrop-blur-sm border border-white/50 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all ${
+              className={`w-[85vw] flex-shrink-0 snap-center md:w-auto bg-white/85 backdrop-blur-sm border border-gray-200/50 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all ${
                 visible ? "animate-fadeSlideUp" : "opacity-0"
               }`}
               style={{ animationDelay: visible ? `${i * 100}ms` : undefined, animationFillMode: "both" }}
