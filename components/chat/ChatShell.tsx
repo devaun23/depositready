@@ -116,9 +116,12 @@ export function ChatShell({ initialMessage }: { initialMessage?: string }) {
 
   // ── Send handler for ChatInput ─────────────────────────────────
   const handleSend = useCallback(
-    (content: string) => {
+    (content: string, files?: import("ai").FileUIPart[]) => {
       if (isLoading) return;
-      sendMessage({ text: content });
+      sendMessage({
+        text: content || "Please analyze these files.",
+        files: files?.length ? files : undefined,
+      });
     },
     [isLoading, sendMessage]
   );

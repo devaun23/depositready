@@ -88,7 +88,8 @@ export async function POST(request: NextRequest) {
         model: anthropic("claude-sonnet-4-20250514"),
         system: buildChatSystemPrompt(sessionSummary),
         messages: await convertToModelMessages(messages),
-        maxOutputTokens: 2048,
+        // Bump tokens when files are attached — image descriptions need more room
+        maxOutputTokens: hasFileAttachments(messages) ? 4096 : 2048,
         stopWhen: stepCountIs(8),
         tools: {
           analyze_deadline: tool({
@@ -206,14 +207,16 @@ async function saveSession(
   caseData?: Record<string, unknown>
 ) {
   // Flatten UIMessage parts to simple { role, content } for storage
-  const simplified = messages.map((m: UIMessage) => ({
-    role: m.role,
-    content:
-      m.parts
-        ?.filter((p: { type: string }) => p.type === "text")
-        .map((p: { type: string; text?: string }) => p.text ?? "")
-        .join("") || "",
-  }));
+  // Note file attachments but don't store base64 data
+  const simplified = messages.map((m: UIMessage) => {
+    const textParts = m.parts
+      ?.filter((p: { type: string }) => p.type === "text")
+      .map((p: { type: string; text?: string }) => p.text ?? "")
+      .join("") || "";
+    const fileCount = m.parts?.filter((p: { type: string }) => p.type === "file").length ?? 0;
+    const content = fileCount > 0 ? `[${fileCount} file(s) attached]\n${textParts}` : textParts;
+    return { role: m.role, content };
+  });
 
   const allMessages = [
     ...simplified,
@@ -243,4 +246,11 @@ async function saveSession(
   if (error) {
     console.error("Failed to save chat session:", error);
   }
+}
+
+/** Check if any user message contains file parts */
+function hasFileAttachments(messages: UIMessage[]): boolean {
+  return messages.some(
+    (m) => m.role === "user" && m.parts?.some((p: { type: string }) => p.type === "file")
+  );
 }

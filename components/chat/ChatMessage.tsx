@@ -22,6 +22,7 @@ export function ChatMessage({ message, isStreaming }: ChatMessageProps) {
   const textContent = getTextContent(message);
   const toolNames = getToolNames(message);
   const purchaseOffer = getPurchaseOffer(message);
+  const fileParts = getFileParts(message);
   const hasAnalysis = toolNames.some((t) => MILESTONE_TOOLS.includes(t));
   const milestoneTools = toolNames.filter((t) => MILESTONE_TOOLS.includes(t));
 
@@ -36,6 +37,32 @@ export function ChatMessage({ message, isStreaming }: ChatMessageProps) {
             : "bg-white text-gray-900 shadow-sm border border-gray-100/80 rounded-bl-md"
         }`}
       >
+        {/* File attachments (images / PDFs) */}
+        {fileParts.length > 0 && (
+          <div className="mb-2 flex flex-wrap gap-2">
+            {fileParts.map((fp, i) =>
+              fp.mediaType.startsWith("image/") ? (
+                <img
+                  key={i}
+                  src={fp.url}
+                  alt={fp.filename || "Attached image"}
+                  className="max-h-48 rounded-lg object-cover border border-gray-200/50"
+                />
+              ) : (
+                <div
+                  key={i}
+                  className="inline-flex items-center gap-1.5 rounded-lg border border-gray-200/50 bg-white/60 px-2.5 py-1.5 text-xs text-gray-600"
+                >
+                  <svg className="h-3.5 w-3.5 text-gray-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+                  </svg>
+                  <span className="max-w-[120px] truncate">{fp.filename || "Document"}</span>
+                </div>
+              )
+            )}
+          </div>
+        )}
+
         {/* Message content — render with basic formatting */}
         {textContent && (
           <div className="whitespace-pre-wrap break-words">
@@ -114,6 +141,14 @@ function getToolNames(message: UIMessage): string[] {
       return (p as { state?: string }).state === "output-available";
     })
     .map((p) => p.type.slice(TOOL_PREFIX.length));
+}
+
+/** Extract file parts from user messages */
+function getFileParts(message: UIMessage): { mediaType: string; url: string; filename?: string }[] {
+  if (message.role !== "user" || !message.parts?.length) return [];
+  return message.parts
+    .filter((p): p is { type: "file"; mediaType: string; url: string; filename?: string } => p.type === "file")
+    .map((p) => ({ mediaType: p.mediaType, url: p.url, filename: p.filename }));
 }
 
 /** Extract purchase offer from custom data parts */

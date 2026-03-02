@@ -1,26 +1,76 @@
 "use client";
 
 import { useRef, useState, useCallback } from "react";
+import type { FileUIPart } from "ai";
+import { useFileAttachments } from "@/lib/chat/useFileAttachments";
+import { useVoiceToText } from "@/lib/chat/useVoiceToText";
 
 interface ChatInputProps {
-  onSend: (message: string) => void;
+  onSend: (message: string, files?: FileUIPart[]) => void;
   disabled?: boolean;
 }
 
 export function ChatInput({ onSend, disabled }: ChatInputProps) {
   const [value, setValue] = useState("");
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const imageInputRef = useRef<HTMLInputElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const {
+    attachments,
+    error: fileError,
+    addFiles,
+    removeAttachment,
+    clearAttachments,
+    toFileUIParts,
+  } = useFileAttachments();
+
+  // Voice transcript replaces textarea content while speaking
+  const interimRef = useRef("");
+  const baseTextRef = useRef("");
+
+  const { isListening, isSupported, toggle: toggleVoice } = useVoiceToText({
+    onTranscript: (text, isFinal) => {
+      if (isFinal) {
+        // Commit final transcript and reset
+        const committed = baseTextRef.current + text + " ";
+        setValue(committed);
+        baseTextRef.current = committed;
+        interimRef.current = "";
+      } else {
+        // Show interim text after the committed base
+        interimRef.current = text;
+        setValue(baseTextRef.current + text);
+      }
+      autoResize();
+    },
+  });
+
+  const autoResize = useCallback(() => {
+    const el = textareaRef.current;
+    if (!el) return;
+    el.style.height = "auto";
+    el.style.height = Math.min(el.scrollHeight, 200) + "px";
+  }, []);
+
+  const canSend = (value.trim() || attachments.length > 0) && !disabled;
 
   const handleSend = useCallback(() => {
-    const trimmed = value.trim();
-    if (!trimmed || disabled) return;
-    onSend(trimmed);
+    if (!canSend) return;
+    // Stop voice if active
+    if (isListening) toggleVoice();
+    baseTextRef.current = "";
+    interimRef.current = "";
+
+    const files = attachments.length > 0 ? toFileUIParts() : undefined;
+    onSend(value.trim(), files);
     setValue("");
-    // Reset textarea height
+    clearAttachments();
+
     if (textareaRef.current) {
       textareaRef.current.style.height = "auto";
     }
-  }, [value, disabled, onSend]);
+  }, [canSend, value, attachments.length, toFileUIParts, onSend, clearAttachments, isListening, toggleVoice]);
 
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
@@ -32,48 +82,182 @@ export function ChatInput({ onSend, disabled }: ChatInputProps) {
     [handleSend]
   );
 
-  const handleInput = useCallback(() => {
-    const el = textareaRef.current;
-    if (!el) return;
-    el.style.height = "auto";
-    el.style.height = Math.min(el.scrollHeight, 120) + "px";
-  }, []);
+  const handleChange = useCallback(
+    (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+      setValue(e.target.value);
+      // Update base text when user manually types (not during voice)
+      if (!isListening) {
+        baseTextRef.current = e.target.value;
+      }
+      autoResize();
+    },
+    [isListening, autoResize]
+  );
+
+  const handleToggleVoice = useCallback(() => {
+    if (!isListening) {
+      // Starting: capture current text as base
+      baseTextRef.current = value;
+      interimRef.current = "";
+    }
+    toggleVoice();
+  }, [isListening, value, toggleVoice]);
 
   return (
     <div className="bg-white px-4 py-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))] shadow-[0_-1px_3px_rgba(0,0,0,0.04)]">
-      <div className="relative mx-auto max-w-3xl">
-        <textarea
-          ref={textareaRef}
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
-          onKeyDown={handleKeyDown}
-          onInput={handleInput}
-          placeholder="Tell me what happened with your deposit..."
-          disabled={disabled}
-          rows={1}
-          className="w-full resize-none rounded-2xl border border-gray-200 bg-white px-4 py-3 pr-12 text-[15px] leading-relaxed text-gray-900 shadow-sm placeholder:text-gray-400 transition-shadow focus:shadow-md focus:border-gray-300 focus:outline-none disabled:opacity-50"
-          style={{ minHeight: "44px", maxHeight: "120px" }}
-        />
-        <button
-          onClick={handleSend}
-          disabled={disabled || !value.trim()}
-          aria-label="Send message"
-          className="absolute right-2 bottom-2 flex h-9 w-9 items-center justify-center rounded-xl bg-accent text-white shadow-sm transition-all hover:bg-accent/90 hover:shadow-md disabled:bg-gray-200 disabled:text-gray-400 disabled:shadow-none"
-        >
-          <svg
-            className="h-4 w-4"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth={2.5}
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M4.5 10.5L12 3m0 0l7.5 7.5M12 3v18"
-            />
-          </svg>
-        </button>
+      <div className="mx-auto max-w-3xl">
+        <div className="rounded-2xl border border-gray-200 bg-gray-50/50 shadow-sm transition-shadow focus-within:shadow-md focus-within:border-gray-300">
+          {/* ── Preview strip ─────────────────────────────────── */}
+          {attachments.length > 0 && (
+            <div className="flex gap-2 overflow-x-auto px-3 pt-3 pb-1">
+              {attachments.map((a) => (
+                <div key={a.id} className="relative shrink-0 group">
+                  {a.mediaType.startsWith("image/") ? (
+                    <img
+                      src={a.previewUrl}
+                      alt={a.filename}
+                      className="h-14 w-14 rounded-lg object-cover border border-gray-200"
+                    />
+                  ) : (
+                    <div className="flex h-14 w-14 flex-col items-center justify-center rounded-lg border border-gray-200 bg-white px-1">
+                      <svg className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+                      </svg>
+                      <span className="mt-0.5 max-w-[48px] truncate text-[9px] text-gray-500">
+                        {a.filename}
+                      </span>
+                    </div>
+                  )}
+                  {/* Remove button */}
+                  <button
+                    onClick={() => removeAttachment(a.id)}
+                    className="absolute -top-1.5 -right-1.5 flex h-5 w-5 items-center justify-center rounded-full bg-gray-700 text-white opacity-0 transition-opacity group-hover:opacity-100 hover:bg-gray-900"
+                    aria-label={`Remove ${a.filename}`}
+                  >
+                    <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* ── Error message ─────────────────────────────────── */}
+          {fileError && (
+            <div className="px-3 pt-2 text-xs text-red-500">{fileError}</div>
+          )}
+
+          {/* ── Textarea ──────────────────────────────────────── */}
+          <textarea
+            ref={textareaRef}
+            value={value}
+            onChange={handleChange}
+            onKeyDown={handleKeyDown}
+            placeholder="Tell me what happened with your deposit..."
+            disabled={disabled}
+            rows={2}
+            className="w-full resize-none border-none bg-transparent px-4 pt-3 pb-2 text-[15px] leading-relaxed text-gray-900 placeholder:text-gray-400 focus:outline-none disabled:opacity-50"
+            style={{ minHeight: "80px", maxHeight: "200px" }}
+          />
+
+          {/* ── Toolbar ───────────────────────────────────────── */}
+          <div className="flex items-center justify-between border-t border-gray-200/60 px-2 py-1.5">
+            {/* Left: attachment + voice buttons */}
+            <div className="flex items-center gap-0.5">
+              {/* Image / Camera button */}
+              <button
+                onClick={() => imageInputRef.current?.click()}
+                disabled={disabled}
+                title="Add photo"
+                className="flex h-9 w-9 items-center justify-center rounded-lg text-gray-400 transition-colors hover:bg-gray-200/60 hover:text-gray-600 disabled:opacity-40"
+                style={{ minHeight: "44px", minWidth: "44px" }}
+              >
+                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0z" />
+                </svg>
+              </button>
+              <input
+                ref={imageInputRef}
+                type="file"
+                accept="image/*"
+                capture="environment"
+                className="hidden"
+                onChange={(e) => {
+                  if (e.target.files?.length) addFiles(e.target.files);
+                  e.target.value = "";
+                }}
+              />
+
+              {/* File / Document button */}
+              <button
+                onClick={() => fileInputRef.current?.click()}
+                disabled={disabled}
+                title="Attach file"
+                className="flex h-9 w-9 items-center justify-center rounded-lg text-gray-400 transition-colors hover:bg-gray-200/60 hover:text-gray-600 disabled:opacity-40"
+                style={{ minHeight: "44px", minWidth: "44px" }}
+              >
+                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M18.375 12.739l-7.693 7.693a4.5 4.5 0 01-6.364-6.364l10.94-10.94A3 3 0 1119.5 7.372L8.552 18.32m.009-.01l-.01.01m5.699-9.941l-7.81 7.81a1.5 1.5 0 002.112 2.13" />
+                </svg>
+              </button>
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*,.pdf"
+                multiple
+                className="hidden"
+                onChange={(e) => {
+                  if (e.target.files?.length) addFiles(e.target.files);
+                  e.target.value = "";
+                }}
+              />
+
+              {/* Microphone button */}
+              {isSupported && (
+                <button
+                  onClick={handleToggleVoice}
+                  disabled={disabled}
+                  title={isListening ? "Stop recording" : "Voice input"}
+                  className={`flex h-9 w-9 items-center justify-center rounded-lg transition-colors ${
+                    isListening
+                      ? "bg-accent/10 text-accent animate-mic-pulse"
+                      : "text-gray-400 hover:bg-gray-200/60 hover:text-gray-600"
+                  } disabled:opacity-40`}
+                  style={{ minHeight: "44px", minWidth: "44px" }}
+                >
+                  <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 18.75a6 6 0 006-6v-1.5m-6 7.5a6 6 0 01-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 01-3-3V4.5a3 3 0 116 0v8.25a3 3 0 01-3 3z" />
+                  </svg>
+                </button>
+              )}
+            </div>
+
+            {/* Right: send button */}
+            <button
+              onClick={handleSend}
+              disabled={!canSend}
+              aria-label="Send message"
+              className="flex h-9 w-9 items-center justify-center rounded-xl bg-accent text-white shadow-sm transition-all hover:bg-accent/90 hover:shadow-md disabled:bg-gray-200 disabled:text-gray-400 disabled:shadow-none"
+              style={{ minHeight: "44px", minWidth: "44px" }}
+            >
+              <svg
+                className="h-4 w-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2.5}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M4.5 10.5L12 3m0 0l7.5 7.5M12 3v18"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );
