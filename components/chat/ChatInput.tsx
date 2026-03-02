@@ -107,6 +107,11 @@ export function ChatInput({ onSend, disabled }: ChatInputProps) {
     <div className="bg-white px-4 py-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))] shadow-[0_-1px_3px_rgba(0,0,0,0.04)]">
       <div className="mx-auto max-w-3xl">
         <div className="rounded-2xl border border-gray-200 bg-gray-50/50 shadow-sm transition-shadow focus-within:shadow-md focus-within:border-gray-300">
+          {/* ── Label ──────────────────────────────────────────── */}
+          <span className="block px-4 pt-2.5 pb-0 text-[11px] font-medium tracking-wide uppercase text-gray-300 select-none">
+            Chat with Insight
+          </span>
+
           {/* ── Preview strip ─────────────────────────────────── */}
           {attachments.length > 0 && (
             <div className="flex gap-2 overflow-x-auto px-3 pt-3 pb-1">
@@ -165,17 +170,16 @@ export function ChatInput({ onSend, disabled }: ChatInputProps) {
           <div className="flex items-center justify-between border-t border-gray-200/60 px-2 py-1.5">
             {/* Left: attachment + voice buttons */}
             <div className="flex items-center gap-0.5">
-              {/* Image / Camera button */}
+              {/* Image / Photo button */}
               <button
                 onClick={() => imageInputRef.current?.click()}
                 disabled={disabled}
                 title="Add photo"
-                className="flex h-9 w-9 items-center justify-center rounded-lg text-gray-400 transition-colors hover:bg-gray-200/60 hover:text-gray-600 disabled:opacity-40"
+                className="flex h-9 w-9 items-center justify-center rounded-lg text-gray-400 transition-colors hover:bg-accent/5 hover:text-accent disabled:opacity-40"
                 style={{ minHeight: "44px", minWidth: "44px" }}
               >
-                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0z" />
+                <svg className="h-[18px] w-[18px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.75}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909M3.75 21h16.5A2.25 2.25 0 0022.5 18.75V5.25A2.25 2.25 0 0020.25 3H3.75A2.25 2.25 0 001.5 5.25v13.5A2.25 2.25 0 003.75 21zM10.5 6.75a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z" />
                 </svg>
               </button>
               <input
@@ -190,15 +194,15 @@ export function ChatInput({ onSend, disabled }: ChatInputProps) {
                 }}
               />
 
-              {/* File / Document button */}
+              {/* File / Attach button */}
               <button
                 onClick={() => fileInputRef.current?.click()}
                 disabled={disabled}
                 title="Attach file"
-                className="flex h-9 w-9 items-center justify-center rounded-lg text-gray-400 transition-colors hover:bg-gray-200/60 hover:text-gray-600 disabled:opacity-40"
+                className="flex h-9 w-9 items-center justify-center rounded-lg text-gray-400 transition-colors hover:bg-accent/5 hover:text-accent disabled:opacity-40"
                 style={{ minHeight: "44px", minWidth: "44px" }}
               >
-                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                <svg className="h-[18px] w-[18px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.75}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M18.375 12.739l-7.693 7.693a4.5 4.5 0 01-6.364-6.364l10.94-10.94A3 3 0 1119.5 7.372L8.552 18.32m.009-.01l-.01.01m5.699-9.941l-7.81 7.81a1.5 1.5 0 002.112 2.13" />
                 </svg>
               </button>
@@ -223,11 +227,11 @@ export function ChatInput({ onSend, disabled }: ChatInputProps) {
                   className={`flex h-9 w-9 items-center justify-center rounded-lg transition-colors ${
                     isListening
                       ? "bg-accent/10 text-accent animate-mic-pulse"
-                      : "text-gray-400 hover:bg-gray-200/60 hover:text-gray-600"
+                      : "text-gray-400 hover:bg-accent/5 hover:text-accent"
                   } disabled:opacity-40`}
                   style={{ minHeight: "44px", minWidth: "44px" }}
                 >
-                  <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                  <svg className="h-[18px] w-[18px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.75}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M12 18.75a6 6 0 006-6v-1.5m-6 7.5a6 6 0 01-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 01-3-3V4.5a3 3 0 116 0v8.25a3 3 0 01-3 3z" />
                   </svg>
                 </button>

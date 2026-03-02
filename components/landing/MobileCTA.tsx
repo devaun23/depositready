@@ -20,10 +20,10 @@ export function MobileCTA() {
             strokeLinecap="round"
             strokeLinejoin="round"
             strokeWidth={2}
-            d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+            d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
           />
         </svg>
-        Chat with Insight
+        Get Started — Free
         <span className="rounded-full bg-white/20 px-2 py-0.5 text-xs font-semibold">
           Free
         </span>

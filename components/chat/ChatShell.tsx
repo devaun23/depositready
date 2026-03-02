@@ -9,6 +9,7 @@ import { ChatMessage } from "./ChatMessage";
 import { ChatInput } from "./ChatInput";
 import { CaseSummaryCard } from "./CaseSummaryCard";
 import { ChatTestimonials } from "./ChatTestimonials";
+import { Logo } from "@/components/ui";
 
 const RETURNING_GREETING =
   "Welcome back! I still have your case details from our last conversation. Feel free to pick up where we left off, or ask me anything about your deposit situation.";
@@ -158,10 +159,7 @@ export function ChatShell({ initialMessage }: { initialMessage?: string }) {
             &larr; DepositReady
           </Link>
           <div className="flex items-center gap-2">
-            <span className="relative flex h-2 w-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-75" />
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-accent" />
-            </span>
+            <Logo size="sm" />
             <h1 className="font-serif text-lg font-semibold text-brand">
               Insight
             </h1>
@@ -211,11 +209,6 @@ export function ChatShell({ initialMessage }: { initialMessage?: string }) {
             {/* ── Empty state with suggestion chips ─────────── */}
             {showEmptyState && (
               <div className="flex flex-col items-center justify-center py-12 animate-fadeIn">
-                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-brand/10 mb-5">
-                  <svg className="h-7 w-7 text-brand" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                  </svg>
-                </div>
                 <h2 className="font-serif text-xl font-semibold text-brand mb-2">
                   Hi, I&apos;m Insight
                 </h2>
