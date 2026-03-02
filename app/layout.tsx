@@ -2,7 +2,6 @@ import type { Metadata, Viewport } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
 // Removed: import { Analytics } from "@vercel/analytics/react"; - reduces JS bundle
 import Script from "next/script";
-import { LazyFeedbackButton } from "@/components/feedback/LazyFeedbackButton";
 import { AttributionCapture } from "@/components/tracking/AttributionCapture";
 import "./globals.css";
 
@@ -106,7 +105,6 @@ export default function RootLayout({
         </a>
         {children}
         <AttributionCapture />
-        <LazyFeedbackButton />
         {/* Delay analytics by 5s to reduce TBT - most real users stay longer */}
         <Script id="delayed-analytics" strategy="lazyOnload">
           {`

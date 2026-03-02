@@ -31,7 +31,7 @@ export function FeedbackPanel({ pagePath, onClose }: FeedbackPanelProps) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           page_path: pagePath,
-          trigger_type: "floating_button",
+          trigger_type: "navbar",
           session_id: getSessionId(),
           improvement_suggestion: text,
           user_agent: navigator.userAgent,
@@ -55,7 +55,7 @@ export function FeedbackPanel({ pagePath, onClose }: FeedbackPanelProps) {
   }, [submitted, onClose]);
 
   return (
-    <div className="fixed bottom-32 sm:bottom-16 left-4 z-50 w-80 bg-white rounded-xl shadow-2xl border border-gray-200 overflow-hidden">
+    <div className="fixed top-16 right-4 z-50 w-80 bg-white rounded-xl shadow-2xl border border-gray-200 overflow-hidden animate-fadeIn">
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-3 bg-gray-50 border-b border-gray-200">
         <span className="text-sm font-medium text-gray-900">
