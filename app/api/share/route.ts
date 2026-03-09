@@ -15,7 +15,6 @@ export async function POST(request: NextRequest) {
       landlordInViolation,
       caseStrength,
       damagesMultiplier,
-      creatorCode,
       utmSource,
     } = body;
 
@@ -38,7 +37,6 @@ export async function POST(request: NextRequest) {
         landlord_in_violation: landlordInViolation ?? false,
         case_strength: caseStrength ?? null,
         damages_multiplier: damagesMultiplier ?? 1,
-        creator_code: creatorCode ?? null,
         utm_source: utmSource ?? null,
       })
       .select("id")

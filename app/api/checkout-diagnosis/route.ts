@@ -24,7 +24,6 @@ export async function POST(request: NextRequest) {
       email,
       utm_source,
       utm_medium,
-      creator_code,
     } = body;
 
     // Validate required fields
@@ -76,7 +75,6 @@ export async function POST(request: NextRequest) {
         post_payment_completed: false,
         utm_source: utm_source || null,
         utm_medium: utm_medium || null,
-        creator_code: creator_code || null,
       })
       .select()
       .single();
@@ -116,7 +114,6 @@ export async function POST(request: NextRequest) {
         move_out_date: moveOutDate,
         ...(utm_source && { utm_source }),
         ...(utm_medium && { utm_medium }),
-        ...(creator_code && { creator_code }),
       },
       success_url: `${baseUrl}/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${baseUrl}/next-steps`,

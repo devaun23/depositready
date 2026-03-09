@@ -11,7 +11,7 @@ const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { email, stateCode, depositAmount, landlordInViolation, potentialRecovery, source, utm_source, utm_medium, creator_code } = body;
+    const { email, stateCode, depositAmount, landlordInViolation, potentialRecovery, source, utm_source, utm_medium } = body;
 
     // Validate email
     if (!email || !EMAIL_REGEX.test(email)) {
@@ -36,7 +36,6 @@ export async function POST(request: NextRequest) {
         source: validSource,
         utm_source: utm_source || null,
         utm_medium: utm_medium || null,
-        creator_code: creator_code || null,
       });
 
     if (dbError) {

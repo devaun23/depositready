@@ -1,5 +1,5 @@
 /**
- * UTM and creator attribution capture.
+ * UTM attribution capture.
  * Reads URL params on landing, stores in sessionStorage for the conversion funnel.
  * Auto-detects platform from document.referrer when utm_source isn't explicit.
  */
@@ -10,7 +10,6 @@ export interface Attribution {
   utm_source?: string;
   utm_medium?: string;
   utm_campaign?: string;
-  creator_code?: string;
 }
 
 const REFERRER_PLATFORM_MAP: Record<string, string> = {
@@ -49,7 +48,7 @@ function detectPlatformFromReferrer(): string | undefined {
 }
 
 /**
- * Read UTM and creator params from the current URL and persist in sessionStorage.
+ * Read UTM params from the current URL and persist in sessionStorage.
  * If no explicit utm_source, auto-detects platform from referrer.
  * Only captures on first visit in the session (doesn't overwrite).
  */
@@ -65,7 +64,6 @@ export function captureAttribution(): void {
   const utmSource = params.get("utm_source");
   const utmMedium = params.get("utm_medium");
   const utmCampaign = params.get("utm_campaign");
-  const creatorCode = params.get("ref") || params.get("creator");
 
   // Use explicit utm_source, or fall back to referrer detection
   if (utmSource) {
@@ -77,7 +75,6 @@ export function captureAttribution(): void {
 
   if (utmMedium) attribution.utm_medium = utmMedium;
   if (utmCampaign) attribution.utm_campaign = utmCampaign;
-  if (creatorCode) attribution.creator_code = creatorCode;
 
   // Only store if we actually captured something
   if (Object.keys(attribution).length > 0) {
