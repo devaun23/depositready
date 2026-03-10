@@ -32,7 +32,7 @@ export default function LandlordHubPage() {
       <header className="bg-white border-b border-gray-200">
         <div className="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
           <Link
-            href="/"
+            href="/landlord"
             className="flex items-center gap-2 font-serif text-xl font-semibold text-black"
           >
             <Logo size="md" />

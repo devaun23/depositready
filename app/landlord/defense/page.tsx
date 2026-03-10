@@ -4,6 +4,7 @@ import { Logo } from "@/components/ui";
 import { LandlordHero } from "@/components/landlord/shared/LandlordHero";
 import { LandlordFeatures } from "@/components/landlord/shared/LandlordFeatures";
 import { LandlordPricing } from "@/components/landlord/shared/LandlordPricing";
+import { LandlordTestimonials } from "@/components/landlord/shared/LandlordTestimonials";
 import { LandlordTrustSignals } from "@/components/landlord/shared/LandlordTrustSignals";
 import { LandlordFAQ } from "@/components/landlord/shared/LandlordFAQ";
 
@@ -20,7 +21,7 @@ export default function DefenseLandingPage() {
       <header className="bg-white border-b border-gray-200">
         <div className="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
           <Link
-            href="/"
+            href="/landlord/defense"
             className="flex items-center gap-2 font-serif text-xl font-semibold text-black"
           >
             <Logo size="md" />
@@ -53,6 +54,7 @@ export default function DefenseLandingPage() {
         />
         <LandlordFeatures mode="defense" />
         <LandlordPricing mode="defense" />
+        <LandlordTestimonials />
         <LandlordTrustSignals />
         <LandlordFAQ mode="defense" />
       </main>

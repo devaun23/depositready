@@ -44,7 +44,7 @@ export function LandlordIntakeShell() {
       <header className="bg-white border-b border-gray-200">
         <div className="max-w-2xl mx-auto px-4 py-4 flex items-center justify-between">
           <Link
-            href="/landlord"
+            href={isDefense ? "/landlord/defense" : "/landlord/compliance"}
             className="flex items-center gap-2 font-serif text-xl font-semibold text-black"
           >
             <Logo size="md" />
