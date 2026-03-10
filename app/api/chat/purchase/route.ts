@@ -6,7 +6,7 @@ export const runtime = "nodejs";
 export const maxDuration = 30;
 
 interface PurchaseBody {
-  product: "demand_letter" | "legal_packet" | "case_review";
+  product: "demand_letter" | "legal_packet" | "case_review" | "filing_kit" | "landlord_compliance" | "landlord_defense";
   sessionToken?: string;
   email?: string;
 }
@@ -30,6 +30,27 @@ const PRODUCTS = {
     price: 14900,
     productType: "case_review" as const,
   },
+  filing_kit: {
+    name: "Small Claims Filing Kit",
+    description: "Court-ready filing documents with state-specific instructions",
+    price: 7900,
+    productType: "filing_kit_standard" as const,
+    redirect: "/filing-kit/intake",
+  },
+  landlord_compliance: {
+    name: "Landlord Compliance Kit",
+    description: "Proactive compliance audit and deposit handling documents",
+    price: 9900,
+    productType: "landlord_compliance_standard" as const,
+    redirect: "/landlord/compliance/intake",
+  },
+  landlord_defense: {
+    name: "Landlord Defense Kit",
+    description: "Liability assessment and response documents for tenant disputes",
+    price: 12900,
+    productType: "landlord_defense_standard" as const,
+    redirect: "/landlord/defense/intake",
+  },
 };
 
 export async function POST(request: NextRequest) {
@@ -46,6 +67,11 @@ export async function POST(request: NextRequest) {
 
     const productInfo = PRODUCTS[product];
     const baseUrl = (process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000").trim();
+
+    // For products that need intake forms, redirect to their intake page
+    if ("redirect" in productInfo) {
+      return NextResponse.json({ url: `${baseUrl}${productInfo.redirect}` });
+    }
 
     // Try to load chat session data for context
     let sessionData: Record<string, unknown> | null = null;

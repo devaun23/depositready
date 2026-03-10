@@ -34,7 +34,7 @@ export interface OrderConfirmationEmailData {
   email: string;
   orderId: string;
   downloadToken: string;
-  productType: "basic" | "full" | "pm";
+  productType: "basic" | "full" | "pm" | "filing_kit_standard" | "filing_kit_complete" | "landlord_compliance_standard" | "landlord_compliance_complete" | "landlord_defense_standard" | "landlord_defense_complete";
   amountPaid: number;
   tenantName?: string;
   stateName?: string;
@@ -94,13 +94,27 @@ function getWelcomeEmailHtml(data: WelcomeEmailData): string {
 
 function getOrderConfirmationHtml(data: OrderConfirmationEmailData): string {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://depositready.com";
-  const downloadUrl = `${baseUrl}/download?token=${data.downloadToken}`;
 
-  const productName = {
+  const productNames: Record<string, string> = {
     basic: "Recovery Kit",
     full: "Full Recovery Package",
     pm: "Deposit Disposition Packet",
-  }[data.productType];
+    filing_kit_standard: "Small Claims Filing Kit — Standard",
+    filing_kit_complete: "Small Claims Filing Kit — Complete",
+    landlord_compliance_standard: "Landlord Compliance Kit — Standard",
+    landlord_compliance_complete: "Landlord Compliance Kit — Complete",
+    landlord_defense_standard: "Landlord Defense Kit — Standard",
+    landlord_defense_complete: "Landlord Defense Kit — Complete",
+  };
+
+  const productName = productNames[data.productType] || "Your Documents";
+
+  // Determine download URL based on product type
+  const downloadUrlPath = data.productType.startsWith("filing_kit")
+    ? `/api/filing-kit/generate?token=${data.downloadToken}`
+    : data.productType.startsWith("landlord_")
+    ? `/api/landlord/generate?token=${data.downloadToken}`
+    : `/download?token=${data.downloadToken}`;
 
   return `
 <!DOCTYPE html>
@@ -128,7 +142,7 @@ function getOrderConfirmationHtml(data: OrderConfirmationEmailData): string {
   <p>Thank you for your purchase. Your documents are ready to download.</p>
 
   <div style="background: #f9fafb; border-radius: 8px; padding: 20px; margin: 24px 0; text-align: center;">
-    <a href="${downloadUrl}" style="display: inline-block; background: #000; color: #fff; padding: 14px 28px; border-radius: 6px; text-decoration: none; font-weight: 500; font-size: 16px;">Download Your Documents</a>
+    <a href="${baseUrl}${downloadUrlPath}" style="display: inline-block; background: #000; color: #fff; padding: 14px 28px; border-radius: 6px; text-decoration: none; font-weight: 500; font-size: 16px;">Download Your Documents</a>
     <p style="margin: 12px 0 0 0; font-size: 12px; color: #666;">This link doesn't expire — you can download anytime.</p>
   </div>
 
@@ -138,6 +152,34 @@ function getOrderConfirmationHtml(data: OrderConfirmationEmailData): string {
     <li>State-specific demand letter</li>
     <li>Evidence checklist</li>
     <li>Deadline calculator</li>
+    ` : data.productType === "filing_kit_standard" ? `
+    <li>Damage calculation worksheet</li>
+    <li>State-specific filing guide</li>
+    <li>Service of process instructions</li>
+    ` : data.productType === "filing_kit_complete" ? `
+    <li>Damage calculation worksheet</li>
+    <li>State-specific filing guide</li>
+    <li>Service of process instructions</li>
+    <li>Pre-filled statement of claim</li>
+    <li>Courtroom script</li>
+    <li>Post-judgment collection guide</li>
+    ` : data.productType.startsWith("landlord_compliance") ? `
+    <li>Compliance audit report</li>
+    <li>Legal deadline timeline</li>
+    <li>Move-out inspection checklist</li>
+    <li>Deduction letter template</li>
+    <li>Wear & tear guide</li>
+    <li>Certified mail instructions</li>
+    ${data.productType === "landlord_compliance_complete" ? `<li>Photo documentation guide</li>
+    <li>Evidence organizer</li>` : ""}
+    ` : data.productType.startsWith("landlord_defense") ? `
+    <li>Liability exposure report</li>
+    <li>Response letter template</li>
+    <li>Settle vs. fight analysis</li>
+    <li>Deadline timeline</li>
+    <li>Certified mail instructions</li>
+    ${data.productType === "landlord_defense_complete" ? `<li>Settlement agreement template</li>
+    <li>Evidence organizer</li>` : ""}
     ` : `
     <li>Professional demand letter</li>
     <li>Complete evidence checklist</li>
@@ -211,11 +253,18 @@ export async function sendOrderConfirmationEmail(data: OrderConfirmationEmailDat
     return { success: false, error: "Email not configured" };
   }
 
-  const productName = {
+  const productNameMap: Record<string, string> = {
     basic: "Recovery Kit",
     full: "Full Recovery Package",
     pm: "Deposit Disposition Packet",
-  }[data.productType];
+    filing_kit_standard: "Small Claims Filing Kit — Standard",
+    filing_kit_complete: "Small Claims Filing Kit — Complete",
+    landlord_compliance_standard: "Landlord Compliance Kit — Standard",
+    landlord_compliance_complete: "Landlord Compliance Kit — Complete",
+    landlord_defense_standard: "Landlord Defense Kit — Standard",
+    landlord_defense_complete: "Landlord Defense Kit — Complete",
+  };
+  const productName = productNameMap[data.productType] || "Your Documents";
 
   try {
     const { error } = await resend.emails.send({

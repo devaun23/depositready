@@ -56,18 +56,34 @@ export function Footer() {
               </li>
               <li>
                 <Link
-                  href="/blog"
+                  href="/calculator"
                   className="text-gray-300 hover:text-white text-sm transition-colors"
                 >
-                  Blog
+                  Free Calculator
                 </Link>
               </li>
               <li>
                 <Link
-                  href="/resources"
+                  href="/filing-kit"
                   className="text-gray-300 hover:text-white text-sm transition-colors"
                 >
-                  Legal Guides
+                  Filing Kit
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/landlord"
+                  className="text-gray-300 hover:text-white text-sm transition-colors"
+                >
+                  For Landlords
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/blog"
+                  className="text-gray-300 hover:text-white text-sm transition-colors"
+                >
+                  Blog
                 </Link>
               </li>
             </ul>

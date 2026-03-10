@@ -24,7 +24,7 @@ function CheckIcon({ className = "text-accent" }: { className?: string }) {
 
 const tiers = [
   {
-    name: "AI Chat Analysis",
+    name: "Insight",
     price: "Free",
     priceDetail: null,
     description: "Understand your rights in minutes",
@@ -148,22 +148,75 @@ export function Pricing() {
           ))}
         </div>
 
-        {/* Case Review premium callout */}
-        <div className="mt-8 rounded-2xl border border-gray-200 bg-white p-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-          <div>
-            <p className="font-semibold text-black">
-              Priority Case Review
-            </p>
-            <p className="text-sm text-gray-600 mt-0.5">
-              Enhanced analysis with personalized follow-up support
-            </p>
+        {/* Additional products */}
+        <div className="mt-8 space-y-4">
+          <div className="rounded-2xl border border-gray-200 bg-white p-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div>
+              <p className="font-semibold text-black">
+                Small Claims Filing Kit
+              </p>
+              <p className="text-sm text-gray-600 mt-0.5">
+                Court-ready documents, damage worksheets, and courtroom scripts
+              </p>
+            </div>
+            <Link
+              href="/filing-kit"
+              className="inline-flex items-center justify-center gap-1 rounded-xl border border-[var(--accent-orange)] px-5 py-2.5 text-sm font-medium text-[var(--accent-orange)] hover:bg-[var(--accent-orange-light)] transition-colors min-h-[44px] flex-shrink-0"
+            >
+              From $79 &rarr;
+            </Link>
           </div>
-          <Link
-            href="/case-review"
-            className="inline-flex items-center justify-center gap-1 rounded-xl border border-brand px-5 py-2.5 text-sm font-medium text-brand hover:bg-brand-bg transition-colors min-h-[44px] flex-shrink-0"
-          >
-            $149 &rarr;
-          </Link>
+
+          <div className="rounded-2xl border border-gray-200 bg-white p-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div>
+              <p className="font-semibold text-black">
+                Priority Case Review
+              </p>
+              <p className="text-sm text-gray-600 mt-0.5">
+                Enhanced analysis with personalized follow-up support
+              </p>
+            </div>
+            <Link
+              href="/case-review"
+              className="inline-flex items-center justify-center gap-1 rounded-xl border border-brand px-5 py-2.5 text-sm font-medium text-brand hover:bg-brand-bg transition-colors min-h-[44px] flex-shrink-0"
+            >
+              $149 &rarr;
+            </Link>
+          </div>
+
+          <div className="rounded-2xl border border-gray-200 bg-white p-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div>
+              <p className="font-semibold text-black">
+                For Landlords
+              </p>
+              <p className="text-sm text-gray-600 mt-0.5">
+                Compliance kits and defense tools for deposit disputes
+              </p>
+            </div>
+            <Link
+              href="/landlord"
+              className="inline-flex items-center justify-center gap-1 rounded-xl border border-[var(--accent-amber)] px-5 py-2.5 text-sm font-medium text-[var(--accent-amber)] hover:bg-[var(--accent-amber-light)] transition-colors min-h-[44px] flex-shrink-0"
+            >
+              From $99 &rarr;
+            </Link>
+          </div>
+
+          <div className="rounded-2xl border border-gray-200 bg-gradient-to-r from-accent-light/30 to-white p-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div>
+              <p className="font-semibold text-black">
+                Free Calculator
+              </p>
+              <p className="text-sm text-gray-600 mt-0.5">
+                Instant analysis for tenants and landlords — no account needed
+              </p>
+            </div>
+            <Link
+              href="/calculator"
+              className="inline-flex items-center justify-center gap-1 rounded-xl bg-accent text-white px-5 py-2.5 text-sm font-medium hover:bg-accent-hover transition-colors min-h-[44px] flex-shrink-0"
+            >
+              Try Free &rarr;
+            </Link>
+          </div>
         </div>
       </div>
     </section>

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase";
 import { verifyWebhookSignature } from "@/lib/stripe-fetch";
-import { sendOrderConfirmationEmail, sendB2BWelcomeEmail, isEmailConfigured } from "@/lib/email";
+import { sendOrderConfirmationEmail, sendB2BWelcomeEmail, isEmailConfigured, type OrderConfirmationEmailData } from "@/lib/email";
 
 export const runtime = "nodejs";
 export const maxDuration = 30;
@@ -188,7 +188,7 @@ export async function POST(request: NextRequest) {
               .single();
 
             if (orderData?.download_token) {
-              const productType = (session.metadata?.product_type || "full") as "basic" | "full";
+              const productType = (session.metadata?.product_type || "full") as OrderConfirmationEmailData["productType"];
               const formData = orderData.form_data as { stateCode?: string } | null;
 
               // Fire and forget email

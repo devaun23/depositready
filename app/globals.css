@@ -33,6 +33,16 @@
   --glass-border: rgba(255, 255, 255, 0.5);
   --glass-bg-strong: rgba(255, 255, 255, 0.85);
 
+  /* Product accent: Orange (Filing Kit) */
+  --accent-orange: #f97316;
+  --accent-orange-hover: #ea580c;
+  --accent-orange-light: #fff7ed;
+
+  /* Product accent: Amber (Landlord products) */
+  --accent-amber: #f59e0b;
+  --accent-amber-hover: #d97706;
+  --accent-amber-light: #fffbeb;
+
   /* Shimmer */
   --shimmer-base: #f3f4f6;
   --shimmer-highlight: #e5e7eb;
@@ -50,6 +60,12 @@
   --color-accent: var(--accent);
   --color-accent-hover: var(--accent-hover);
   --color-accent-light: var(--accent-light);
+  --color-accent-orange: var(--accent-orange);
+  --color-accent-orange-hover: var(--accent-orange-hover);
+  --color-accent-orange-light: var(--accent-orange-light);
+  --color-accent-amber: var(--accent-amber);
+  --color-accent-amber-hover: var(--accent-amber-hover);
+  --color-accent-amber-light: var(--accent-amber-light);
   --color-section-bg-alt: var(--section-bg-alt);
   --shadow-card: var(--shadow-card);
   --shadow-card-hover: var(--shadow-card-hover);

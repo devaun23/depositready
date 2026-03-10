@@ -16,7 +16,7 @@ const faqs = [
   {
     question: "How does the chat work?",
     answer:
-      "Our AI chat analyzes your situation based on your state's security deposit laws. It identifies potential violations, calculates deadlines, and helps you understand your options — all for free, no sign-up required.",
+      "Insight analyzes your situation based on your state's security deposit laws. It identifies potential violations, calculates deadlines, and helps you understand your options. All for free, no sign-up required.",
   },
   {
     question: "Can I get a refund?",
