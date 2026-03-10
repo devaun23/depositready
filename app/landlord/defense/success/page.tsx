@@ -54,7 +54,7 @@ function SuccessContent() {
   }, [isDownloading, paymentDetails]);
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-b from-amber-50/40 to-gray-50">
       <header className="bg-white border-b border-gray-200">
         <div className="max-w-2xl mx-auto px-4 py-4 flex items-center justify-between">
           <Link
@@ -102,13 +102,13 @@ function SuccessContent() {
         )}
 
         {status === "verified" && (
-          <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-8">
+          <div className="bg-white rounded-xl border border-gray-200 shadow-elevated p-8 animate-fadeSlideUp">
             <div
-              className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4"
-              style={{ backgroundColor: "var(--accent-amber-light, #fffbeb)" }}
+              className="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4 animate-fadeSlideUp"
+              style={{ backgroundColor: "var(--accent-amber-light, #fffbeb)", animationDelay: "80ms", animationFillMode: "both" }}
             >
               <svg
-                className="w-8 h-8"
+                className="w-10 h-10"
                 style={{ color: "var(--accent-amber, #d97706)" }}
                 fill="none"
                 stroke="currentColor"
@@ -123,12 +123,18 @@ function SuccessContent() {
               </svg>
             </div>
 
-            <h1 className="text-2xl font-serif font-semibold text-gray-900 mb-2">
+            <h1
+              className="text-2xl font-serif font-semibold text-gray-900 mb-2 animate-fadeSlideUp"
+              style={{ animationDelay: "160ms", animationFillMode: "both" }}
+            >
               Your Defense Kit is Ready!
             </h1>
 
             {paymentDetails && (
-              <div className="bg-gray-50 rounded-lg p-4 mt-2 mb-6 text-sm text-gray-600 inline-block">
+              <div
+                className="bg-gray-50 rounded-lg p-4 mt-2 mb-6 text-sm text-gray-600 inline-block animate-fadeSlideUp"
+                style={{ animationDelay: "240ms", animationFillMode: "both" }}
+              >
                 <p>
                   Amount paid:{" "}
                   <span className="font-semibold">
@@ -147,11 +153,14 @@ function SuccessContent() {
             )}
 
             {paymentDetails?.downloadToken && (
-              <div className="space-y-3 mb-6">
+              <div
+                className="space-y-3 mb-6 animate-fadeSlideUp"
+                style={{ animationDelay: "320ms", animationFillMode: "both" }}
+              >
                 <button
                   onClick={handleDownload}
                   disabled={isDownloading}
-                  className="w-full py-3 text-white font-medium rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full py-3 text-white font-medium rounded-lg hover:-translate-y-0.5 hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                   style={{ backgroundColor: "var(--accent-amber, #d97706)" }}
                 >
                   {isDownloading ? (
@@ -180,7 +189,57 @@ function SuccessContent() {
               </div>
             )}
 
-            <div className="space-y-3">
+            <div
+              className="border-t border-gray-200 pt-6 mt-6 animate-fadeSlideUp"
+              style={{ animationDelay: "400ms", animationFillMode: "both" }}
+            >
+              <h2 className="text-lg font-semibold text-gray-900 mb-4">
+                Next Steps
+              </h2>
+              <ol className="text-left text-sm text-gray-600 space-y-3">
+                <li className="flex gap-3">
+                  <span
+                    className="flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold"
+                    style={{ backgroundColor: "var(--accent-amber-light)", color: "var(--accent-amber)" }}
+                  >
+                    1
+                  </span>
+                  <span>
+                    <strong>Review your liability assessment</strong> &mdash;
+                    understand your exposure and compliance gaps
+                  </span>
+                </li>
+                <li className="flex gap-3">
+                  <span
+                    className="flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold"
+                    style={{ backgroundColor: "var(--accent-amber-light)", color: "var(--accent-amber)" }}
+                  >
+                    2
+                  </span>
+                  <span>
+                    <strong>Draft your response</strong> &mdash; use the
+                    included template to address the tenant&apos;s claims
+                  </span>
+                </li>
+                <li className="flex gap-3">
+                  <span
+                    className="flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold"
+                    style={{ backgroundColor: "var(--accent-amber-light)", color: "var(--accent-amber)" }}
+                  >
+                    3
+                  </span>
+                  <span>
+                    <strong>Send via certified mail</strong> &mdash; keep proof
+                    of delivery for your records
+                  </span>
+                </li>
+              </ol>
+            </div>
+
+            <div
+              className="space-y-3 mt-6 animate-fadeSlideUp"
+              style={{ animationDelay: "480ms", animationFillMode: "both" }}
+            >
               <Link
                 href="/chat"
                 className="block w-full text-white font-medium py-3 rounded-lg transition-colors"
@@ -204,7 +263,7 @@ function SuccessContent() {
 
 export default function DefenseSuccessPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-gray-50" />}>
+    <Suspense fallback={<div className="min-h-screen bg-gradient-to-b from-amber-50/40 to-gray-50" />}>
       <SuccessContent />
     </Suspense>
   );

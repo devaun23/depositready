@@ -39,7 +39,7 @@ export function LandlordIntakeShell() {
   const kitLabel = isDefense ? "Defense Kit" : "Compliance Kit";
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-b from-amber-50/40 to-gray-50">
       {/* Header */}
       <header className="bg-white border-b border-gray-200">
         <div className="max-w-2xl mx-auto px-4 py-4 flex items-center justify-between">
@@ -50,7 +50,15 @@ export function LandlordIntakeShell() {
             <Logo size="md" />
             <span className="hidden sm:inline">DepositReady</span>
           </Link>
-          <span className="text-xs text-[var(--accent-amber)]">{kitLabel}</span>
+          <span
+            className="inline-block rounded-full px-3 py-1 text-xs font-semibold"
+            style={{
+              backgroundColor: "var(--accent-amber-light)",
+              color: "var(--accent-amber-hover)",
+            }}
+          >
+            {kitLabel}
+          </span>
         </div>
       </header>
 
@@ -64,7 +72,10 @@ export function LandlordIntakeShell() {
 
       {/* Step Content */}
       <main className="max-w-2xl mx-auto px-4 py-6">
-        <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+        <div
+          key={step}
+          className="bg-white rounded-xl border border-gray-200 shadow-sm p-6 animate-fadeSlideUp"
+        >
           <StepComponent />
         </div>
 
@@ -85,7 +96,7 @@ export function LandlordIntakeShell() {
             <button
               onClick={nextStep}
               disabled={!canProceed}
-              className="bg-[var(--accent-amber)] text-white font-medium px-6 py-2.5 rounded-lg shadow-md hover:bg-[var(--accent-amber-hover)] hover:shadow-lg transition-all disabled:bg-gray-300 disabled:cursor-not-allowed disabled:shadow-none"
+              className="bg-[var(--accent-amber)] text-white font-medium px-6 py-2.5 rounded-lg shadow-md hover:bg-[var(--accent-amber-hover)] hover:shadow-lg hover:-translate-y-0.5 transition-all disabled:bg-gray-300 disabled:cursor-not-allowed disabled:shadow-none"
             >
               Continue
             </button>

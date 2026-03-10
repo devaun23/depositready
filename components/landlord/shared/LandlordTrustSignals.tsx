@@ -18,6 +18,11 @@ const signals = [
     title: "Not Legal Advice",
     description: "Informational tools, not attorney services",
   },
+  {
+    icon: "\u{1F512}",
+    title: "Secure & Private",
+    description: "Your data is never shared",
+  },
 ];
 
 export function LandlordTrustSignals() {
@@ -29,7 +34,7 @@ export function LandlordTrustSignals() {
       className="py-12 md:py-16 px-4 sm:px-6 bg-gray-50"
     >
       <div className="max-w-4xl mx-auto">
-        <div className="grid gap-6 sm:grid-cols-3">
+        <div className="grid gap-6 grid-cols-2 sm:grid-cols-4">
           {signals.map((signal, i) => (
             <div
               key={signal.title}

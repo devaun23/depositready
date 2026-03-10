@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useEffect, useRef } from "react";
+import { useState, useMemo, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
 import { Logo } from "@/components/ui";
 import {
@@ -43,6 +43,17 @@ export function CalculatorShell() {
   const [email, setEmail] = useState("");
   const [emailSubmitted, setEmailSubmitted] = useState(false);
   const [sessionSaved, setSessionSaved] = useState(false);
+
+  // ── Revealed sections (for first-time animation) ───────
+  const [revealedSections, setRevealedSections] = useState<Set<string>>(new Set());
+  const revealSection = useCallback((key: string) => {
+    setRevealedSections((prev) => {
+      if (prev.has(key)) return prev;
+      const next = new Set(prev);
+      next.add(key);
+      return next;
+    });
+  }, []);
 
   // ── Refs for auto-scroll ────────────────────────────────
   const stateRef = useRef<HTMLDivElement>(null);
@@ -110,26 +121,41 @@ export function CalculatorShell() {
     ? questionsActive && depositReturned !== null && parsedAmount > 0
     : questionsActive && complianceAnswers.length > 0 && parsedAmount > 0;
 
-  // ── Auto-scroll ─────────────────────────────────────────
+  // ── Auto-scroll + reveal ────────────────────────────────
   useEffect(() => {
-    if (stateActive) stateRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
-  }, [stateActive]);
+    if (stateActive) {
+      revealSection("state");
+      stateRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  }, [stateActive, revealSection]);
 
   useEffect(() => {
-    if (depositActive) depositRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
-  }, [depositActive]);
+    if (depositActive) {
+      revealSection("deposit");
+      depositRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  }, [depositActive, revealSection]);
 
   useEffect(() => {
-    if (dateActive) dateRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
-  }, [dateActive]);
+    if (dateActive) {
+      revealSection("date");
+      dateRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  }, [dateActive, revealSection]);
 
   useEffect(() => {
-    if (questionsActive) questionsRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
-  }, [questionsActive]);
+    if (questionsActive) {
+      revealSection("questions");
+      questionsRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  }, [questionsActive, revealSection]);
 
   useEffect(() => {
-    if (resultsActive) resultsRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
-  }, [resultsActive]);
+    if (resultsActive) {
+      revealSection("results");
+      resultsRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  }, [resultsActive, revealSection]);
 
   // ── Save session (analytics) ────────────────────────────
   useEffect(() => {
@@ -163,8 +189,16 @@ export function CalculatorShell() {
   }, [resultsActive, sessionSaved, role, stateCode, parsedAmount, moveOutDate, depositReturned, complianceAnswers, tenantHasViolation, auditResult, potentialRecovery, liabilityExposure, tenantCaseStrength]);
 
   // ── Helpers ─────────────────────────────────────────────
-  const sectionClass = (active: boolean) =>
-    `transition-all duration-500 ${active ? "opacity-100" : "opacity-40 pointer-events-none"}`;
+  const sectionClass = (active: boolean, key: string) => {
+    const isFirstReveal = active && !revealedSections.has(key);
+    return `transition-all duration-500 ${
+      active
+        ? isFirstReveal
+          ? "animate-fadeSlideUp"
+          : "opacity-100"
+        : "opacity-40 pointer-events-none"
+    }`;
+  };
 
   const today = useMemo(() => new Date(), []);
 
@@ -217,11 +251,33 @@ export function CalculatorShell() {
         </div>
       </header>
 
+      {/* Progress bar */}
+      <div className="max-w-2xl mx-auto px-4 pt-4">
+        <div className="h-1 bg-gray-200 rounded-full overflow-hidden">
+          <div
+            className="h-full bg-accent rounded-full transition-all duration-500"
+            style={{
+              width: resultsActive
+                ? "100%"
+                : questionsActive
+                ? "80%"
+                : dateActive
+                ? "60%"
+                : depositActive
+                ? "40%"
+                : stateActive
+                ? "20%"
+                : "0%",
+            }}
+          />
+        </div>
+      </div>
+
       {/* Main */}
       <main className="max-w-2xl mx-auto px-4 py-8 pb-24 md:pb-8 space-y-8">
         {/* Title */}
         <div className="text-center">
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
+          <h1 className="font-serif text-display font-semibold text-brand">
             Security Deposit Calculator
           </h1>
           <p className="text-gray-600 mt-2 text-sm">
@@ -233,7 +289,7 @@ export function CalculatorShell() {
         <RoleSelector role={role} onSelect={setRole} />
 
         {/* Step 2: State */}
-        <div ref={stateRef} className={sectionClass(stateActive)}>
+        <div ref={stateRef} className={sectionClass(stateActive, "state")}>
           <StateSelector
             stateCode={stateCode}
             onChange={setStateCode}
@@ -242,7 +298,7 @@ export function CalculatorShell() {
         </div>
 
         {/* Step 3: Deposit Amount */}
-        <div ref={depositRef} className={sectionClass(depositActive)}>
+        <div ref={depositRef} className={sectionClass(depositActive, "deposit")}>
           <DepositInput
             value={depositAmount}
             onChange={setDepositAmount}
@@ -251,7 +307,7 @@ export function CalculatorShell() {
         </div>
 
         {/* Step 4: Move-out Date */}
-        <div ref={dateRef} className={sectionClass(dateActive)}>
+        <div ref={dateRef} className={sectionClass(dateActive, "date")}>
           <MoveOutDateInput
             value={moveOutDate}
             onChange={setMoveOutDate}
@@ -261,7 +317,7 @@ export function CalculatorShell() {
         </div>
 
         {/* Step 5: Role-specific Questions */}
-        <div ref={questionsRef} className={sectionClass(questionsActive)}>
+        <div ref={questionsRef} className={sectionClass(questionsActive, "questions")}>
           {role === "tenant" ? (
             <TenantQuestions
               depositReturned={depositReturned}

@@ -22,9 +22,9 @@ export function StepIndicator({
         {steps.map((_, index) => (
           <div key={index} className="flex items-center">
             <div
-              className={`w-3 h-3 rounded-full transition-colors ${
+              className={`w-3 h-3 rounded-full transition-all duration-300 ${
                 index === currentStep
-                  ? "bg-brand"
+                  ? "bg-brand scale-125"
                   : index < currentStep
                   ? "bg-brand"
                   : "bg-gray-300"
@@ -32,7 +32,7 @@ export function StepIndicator({
             />
             {index < steps.length - 1 && (
               <div
-                className={`w-8 h-0.5 mx-1 ${
+                className={`w-8 h-0.5 mx-1 transition-all duration-300 ${
                   index < currentStep ? "bg-brand" : "bg-gray-300"
                 }`}
               />
@@ -46,7 +46,7 @@ export function StepIndicator({
         {steps.map((step, index) => (
           <span
             key={index}
-            className={`${
+            className={`transition-all duration-300 ${
               index === currentStep
                 ? "text-brand font-medium"
                 : index < currentStep

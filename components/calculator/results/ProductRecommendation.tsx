@@ -36,11 +36,15 @@ export function ProductRecommendation({
         <Link
           key={i}
           href={p.href}
-          className={`block p-4 rounded-xl border-2 transition-all duration-200 hover:-translate-y-0.5 ${
+          className={`block p-4 rounded-xl border-2 transition-all duration-200 hover:-translate-y-0.5 animate-fadeSlideUp ${
             p.primary
               ? "border-accent bg-accent-light hover:shadow-md"
               : "border-gray-200 bg-white hover:border-gray-300 hover:shadow-card-hover"
           }`}
+          style={{
+            animationDelay: `${i * 100}ms`,
+            animationFillMode: "both",
+          }}
         >
           <div className="flex items-center justify-between">
             <div>
@@ -49,9 +53,19 @@ export function ProductRecommendation({
               </p>
               <p className="text-xs text-gray-600 mt-0.5">{p.description}</p>
             </div>
-            {p.price && (
-              <span className="text-sm font-medium text-gray-500">{p.price}</span>
-            )}
+            <div className="flex items-center gap-2 flex-shrink-0 ml-3">
+              {p.price && (
+                <span className="text-sm font-medium text-gray-500">{p.price}</span>
+              )}
+              <svg
+                className={`w-4 h-4 ${p.primary ? "text-accent" : "text-gray-400"}`}
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </div>
           </div>
         </Link>
       ))}
