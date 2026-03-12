@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase";
 import { verifyWebhookSignature } from "@/lib/stripe-fetch";
-import { sendOrderConfirmationEmail, sendB2BWelcomeEmail, isEmailConfigured, type OrderConfirmationEmailData } from "@/lib/email";
+import { sendOrderConfirmationEmail, isEmailConfigured, type OrderConfirmationEmailData } from "@/lib/email";
 
 export const runtime = "nodejs";
 export const maxDuration = 30;
@@ -62,89 +62,6 @@ export async function POST(request: NextRequest) {
         paymentStatus: session.payment_status,
         productType: session.metadata?.product_type,
       });
-
-      // --- B2B credit pack handling ---
-      if (session.metadata?.product_type === "b2b_credits") {
-        const creditId = session.metadata.b2b_credit_id;
-        if (!creditId) {
-          console.warn("B2B payment but no b2b_credit_id in metadata");
-          break;
-        }
-
-        const { error: b2bError } = await supabaseAdmin
-          .from("b2b_credits")
-          .update({
-            payment_status: "paid",
-            paid_at: new Date().toISOString(),
-          })
-          .eq("id", creditId);
-
-        if (b2bError) {
-          console.error("Failed to update b2b_credits:", b2bError);
-          return NextResponse.json(
-            { error: "Database update failed" },
-            { status: 500 }
-          );
-        }
-
-        console.log("B2B credit pack marked as paid:", creditId);
-
-        // Send welcome email with dashboard link
-        if (isEmailConfigured() && session.customer_email) {
-          const { data: creditData } = await supabaseAdmin
-            .from("b2b_credits")
-            .select("access_token, package_size, company_name")
-            .eq("id", creditId)
-            .single();
-
-          if (creditData?.access_token) {
-            sendB2BWelcomeEmail({
-              email: session.customer_email!,
-              accessToken: creditData.access_token,
-              packageSize: creditData.package_size,
-              companyName: creditData.company_name,
-              amountPaid: session.amount_total,
-            }).catch((emailErr: unknown) => {
-              console.error("B2B welcome email failed:", emailErr);
-            });
-          }
-        }
-
-        break;
-      }
-
-      // --- Case Review handling ---
-      if (session.metadata?.product_type === "case_review") {
-        const caseReviewId = session.metadata.case_review_id;
-        if (!caseReviewId) {
-          console.warn("Case review payment but no case_review_id in metadata");
-          break;
-        }
-
-        const { error: crError } = await supabaseAdmin
-          .from("case_reviews")
-          .update({
-            payment_status: "paid",
-            paid_at: new Date().toISOString(),
-            stripe_session_id: session.id,
-          })
-          .eq("id", caseReviewId);
-
-        if (crError) {
-          console.error("Failed to update case_reviews:", crError);
-          return NextResponse.json(
-            { error: "Database update failed" },
-            { status: 500 }
-          );
-        }
-
-        console.log("Case review marked as paid:", caseReviewId);
-
-        // TODO: Trigger AI generation after Task 11 is built
-        // Optionally send confirmation email after Task 13
-
-        break;
-      }
 
       // --- B2C order handling ---
       const orderId = session.metadata?.order_id;
@@ -217,26 +134,6 @@ export async function POST(request: NextRequest) {
       const session = event.data.object;
 
       console.log("Checkout session expired:", session.id);
-
-      // Clean up pending B2B credits
-      if (session.metadata?.product_type === "b2b_credits") {
-        const creditId = session.metadata.b2b_credit_id;
-        if (creditId) {
-          await supabaseAdmin.from("b2b_credits").delete().eq("id", creditId);
-          console.log("Deleted expired B2B credit:", creditId);
-        }
-        break;
-      }
-
-      // Clean up pending case reviews
-      if (session.metadata?.product_type === "case_review") {
-        const caseReviewId = session.metadata.case_review_id;
-        if (caseReviewId) {
-          await supabaseAdmin.from("case_reviews").delete().eq("id", caseReviewId);
-          console.log("Deleted expired case review:", caseReviewId);
-        }
-        break;
-      }
 
       // Clean up pending B2C orders
       const orderId = session.metadata?.order_id;

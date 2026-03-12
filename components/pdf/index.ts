@@ -5,4 +5,3 @@ export { EvidenceChecklist } from "./EvidenceChecklist";
 export { SmallClaimsGuide } from "./SmallClaimsGuide";
 export { FullPacket } from "./FullPacket";
 export { FreeLetter } from "./FreeLetter";
-export { PMDispositionPacket } from "./PMDispositionPacket";

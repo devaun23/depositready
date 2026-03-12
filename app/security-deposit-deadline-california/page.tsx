@@ -25,7 +25,7 @@ export default function CaliforniaSecurityDepositDeadlinePage() {
         title="California Security Deposit Deadlines"
         subtitle="What the Law Requires After You Move Out"
         intro="California law gives landlords a short window to return your deposit or justify deductions. If they miss it—or deduct improperly—you may have strong leverage to recover your money."
-        primaryButton={{ text: "Start My Dispute Packet", href: "/wizard" }}
+        primaryButton={{ text: "Chat with Insight", href: "/chat" }}
         secondaryButton={{
           text: "See how California deposit disputes work",
           href: "/security-deposit-dispute",
@@ -186,8 +186,8 @@ export default function CaliforniaSecurityDepositDeadlinePage() {
         title="Check your California security deposit deadline in 30 seconds"
         description="Know where you stand before taking action. $79 one time · Takes about 10 minutes · Instant download. Typical California deposits range from $1,500–$3,500."
         primaryButton={{
-          text: "Start My Dispute Packet",
-          href: "/wizard",
+          text: "Chat with Insight",
+          href: "/chat",
         }}
         secondaryButtons={[
           { text: "My landlord kept my deposit", href: "/landlord-kept-security-deposit" },

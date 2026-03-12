@@ -202,8 +202,8 @@ export default function FloridaRulesPage() {
         title="Ready to Get Your Deposit Back?"
         description="Generate a customized demand letter and dispute packet in 10 minutes."
         primaryButton={{
-          text: "Start Your Dispute Packet",
-          href: "/wizard",
+          text: "Chat with Insight",
+          href: "/chat",
         }}
       />
 

@@ -25,7 +25,7 @@ export default function NormalWearAndTearPage() {
         title="Normal Wear and Tear vs. Damage"
         subtitle="What Your Landlord Can (and Can't) Charge You For"
         intro="Every state prohibits landlords from deducting for normal wear and tear. But what counts as 'normal'? Understanding the difference can save you hundreds—or even thousands—of dollars."
-        primaryButton={{ text: "Start My Dispute Packet", href: "/wizard" }}
+        primaryButton={{ text: "Chat with Insight", href: "/chat" }}
         secondaryButton={{
           text: "See how deposit disputes work",
           href: "/security-deposit-dispute",
@@ -215,8 +215,8 @@ export default function NormalWearAndTearPage() {
         title="Dispute unfair wear and tear charges"
         description="Know where you stand before taking action. $79 one time · Takes about 10 minutes · Instant download."
         primaryButton={{
-          text: "Start My Dispute Packet",
-          href: "/wizard",
+          text: "Chat with Insight",
+          href: "/chat",
         }}
         secondaryButtons={[
           { text: "My landlord kept my deposit", href: "/landlord-kept-security-deposit" },

@@ -105,8 +105,8 @@ export default function LandlordKeptDepositPage() {
         title="Ready to Get Your Deposit Back?"
         description="Build a professional dispute packet customized to your state in minutes."
         primaryButton={{
-          text: "Start My Dispute Packet",
-          href: "/wizard",
+          text: "Chat with Insight",
+          href: "/chat",
         }}
         secondaryButtons={[
           { text: "Check my deadline", href: "/security-deposit-deadline" },

@@ -34,7 +34,7 @@ export interface OrderConfirmationEmailData {
   email: string;
   orderId: string;
   downloadToken: string;
-  productType: "basic" | "full" | "pm" | "filing_kit_standard" | "filing_kit_complete" | "landlord_compliance_standard" | "landlord_compliance_complete" | "landlord_defense_standard" | "landlord_defense_complete";
+  productType: "basic" | "full";
   amountPaid: number;
   tenantName?: string;
   stateName?: string;
@@ -74,7 +74,7 @@ function getWelcomeEmailHtml(data: WelcomeEmailData): string {
 
   <div style="background: #f9fafb; border-radius: 8px; padding: 20px; margin: 24px 0; text-align: center;">
     <p style="margin: 0 0 12px 0; font-weight: bold;">Ready to get your deposit back?</p>
-    <a href="${baseUrl}/quiz" style="display: inline-block; background: #000; color: #fff; padding: 12px 24px; border-radius: 6px; text-decoration: none; font-weight: 500;">Start Your Recovery</a>
+    <a href="${baseUrl}/chat" style="display: inline-block; background: #000; color: #fff; padding: 12px 24px; border-radius: 6px; text-decoration: none; font-weight: 500;">Start Your Recovery</a>
   </div>
 
   <p style="font-size: 14px; color: #666;">
@@ -98,23 +98,11 @@ function getOrderConfirmationHtml(data: OrderConfirmationEmailData): string {
   const productNames: Record<string, string> = {
     basic: "Recovery Kit",
     full: "Full Recovery Package",
-    pm: "Deposit Disposition Packet",
-    filing_kit_standard: "Small Claims Filing Kit — Standard",
-    filing_kit_complete: "Small Claims Filing Kit — Complete",
-    landlord_compliance_standard: "Landlord Compliance Kit — Standard",
-    landlord_compliance_complete: "Landlord Compliance Kit — Complete",
-    landlord_defense_standard: "Landlord Defense Kit — Standard",
-    landlord_defense_complete: "Landlord Defense Kit — Complete",
   };
 
   const productName = productNames[data.productType] || "Your Documents";
 
-  // Determine download URL based on product type
-  const downloadUrlPath = data.productType.startsWith("filing_kit")
-    ? `/api/filing-kit/generate?token=${data.downloadToken}`
-    : data.productType.startsWith("landlord_")
-    ? `/api/landlord/generate?token=${data.downloadToken}`
-    : `/download?token=${data.downloadToken}`;
+  const downloadUrlPath = `/download?token=${data.downloadToken}`;
 
   return `
 <!DOCTYPE html>
@@ -152,34 +140,6 @@ function getOrderConfirmationHtml(data: OrderConfirmationEmailData): string {
     <li>State-specific demand letter</li>
     <li>Evidence checklist</li>
     <li>Deadline calculator</li>
-    ` : data.productType === "filing_kit_standard" ? `
-    <li>Damage calculation worksheet</li>
-    <li>State-specific filing guide</li>
-    <li>Service of process instructions</li>
-    ` : data.productType === "filing_kit_complete" ? `
-    <li>Damage calculation worksheet</li>
-    <li>State-specific filing guide</li>
-    <li>Service of process instructions</li>
-    <li>Pre-filled statement of claim</li>
-    <li>Courtroom script</li>
-    <li>Post-judgment collection guide</li>
-    ` : data.productType.startsWith("landlord_compliance") ? `
-    <li>Compliance audit report</li>
-    <li>Legal deadline timeline</li>
-    <li>Move-out inspection checklist</li>
-    <li>Deduction letter template</li>
-    <li>Wear & tear guide</li>
-    <li>Certified mail instructions</li>
-    ${data.productType === "landlord_compliance_complete" ? `<li>Photo documentation guide</li>
-    <li>Evidence organizer</li>` : ""}
-    ` : data.productType.startsWith("landlord_defense") ? `
-    <li>Liability exposure report</li>
-    <li>Response letter template</li>
-    <li>Settle vs. fight analysis</li>
-    <li>Deadline timeline</li>
-    <li>Certified mail instructions</li>
-    ${data.productType === "landlord_defense_complete" ? `<li>Settlement agreement template</li>
-    <li>Evidence organizer</li>` : ""}
     ` : `
     <li>Professional demand letter</li>
     <li>Complete evidence checklist</li>
@@ -256,13 +216,6 @@ export async function sendOrderConfirmationEmail(data: OrderConfirmationEmailDat
   const productNameMap: Record<string, string> = {
     basic: "Recovery Kit",
     full: "Full Recovery Package",
-    pm: "Deposit Disposition Packet",
-    filing_kit_standard: "Small Claims Filing Kit — Standard",
-    filing_kit_complete: "Small Claims Filing Kit — Complete",
-    landlord_compliance_standard: "Landlord Compliance Kit — Standard",
-    landlord_compliance_complete: "Landlord Compliance Kit — Complete",
-    landlord_defense_standard: "Landlord Defense Kit — Standard",
-    landlord_defense_complete: "Landlord Defense Kit — Complete",
   };
   const productName = productNameMap[data.productType] || "Your Documents";
 
@@ -288,227 +241,3 @@ export async function sendOrderConfirmationEmail(data: OrderConfirmationEmailDat
   }
 }
 
-// --- B2B Email Types ---
-
-export interface B2BWelcomeEmailData {
-  email: string;
-  accessToken: string;
-  packageSize: number;
-  companyName?: string | null;
-  amountPaid: number;
-}
-
-export interface B2BLetterGeneratedEmailData {
-  email: string;
-  downloadToken: string;
-  tenantName: string;
-  stateCode: string;
-  creditsRemaining: number;
-}
-
-// --- B2B Email Templates ---
-
-function getB2BWelcomeEmailHtml(data: B2BWelcomeEmailData): string {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://depositready.com";
-  const dashboardUrl = `${baseUrl}/business/dashboard?token=${data.accessToken}`;
-
-  return `<!DOCTYPE html>
-<html>
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"></head>
-<body style="font-family: Georgia, serif; line-height: 1.6; color: #1a1a1a; max-width: 600px; margin: 0 auto; padding: 20px;">
-  <div style="text-align: center; margin-bottom: 30px;">
-    <h1 style="font-size: 24px; margin: 0;">DepositReady</h1>
-    <p style="color: #666; margin: 4px 0 0;">Business</p>
-  </div>
-  <div style="background: #dcfce7; border-radius: 8px; padding: 20px; margin-bottom: 24px; text-align: center;">
-    <p style="margin: 0; color: #166534; font-size: 18px; font-weight: bold;">Payment Confirmed</p>
-  </div>
-  <h2 style="font-size: 20px; margin-bottom: 16px;">Your ${data.packageSize}-Letter Pack is Active</h2>
-  ${data.companyName ? `<p>Hi ${data.companyName} team,</p>` : ""}
-  <p>Your letter credits are ready to use.</p>
-  <div style="background: #f9fafb; border-radius: 8px; padding: 20px; margin: 24px 0;">
-    <p style="margin: 0 0 4px; font-size: 14px; color: #666;"><strong>Pack:</strong> ${data.packageSize} letters</p>
-    <p style="margin: 0 0 4px; font-size: 14px; color: #666;"><strong>Amount:</strong> $${(data.amountPaid / 100).toFixed(2)}</p>
-    <p style="margin: 0; font-size: 14px; color: #666;"><strong>Credits:</strong> ${data.packageSize}</p>
-  </div>
-  <div style="text-align: center; margin: 24px 0;">
-    <a href="${dashboardUrl}" style="display: inline-block; background: #000; color: #fff; padding: 14px 28px; border-radius: 6px; text-decoration: none; font-weight: 500;">Go to Dashboard</a>
-  </div>
-  <p style="font-size: 14px; color: #666; background: #fef3c7; padding: 12px; border-radius: 6px;">
-    <strong>Important:</strong> Save this email — the dashboard link is your access key.
-  </p>
-  <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 30px 0;">
-  <p style="font-size: 12px; color: #9ca3af; text-align: center;">DepositReady provides tools and templates based on state law. This is not legal advice.</p>
-</body>
-</html>`.trim();
-}
-
-function getB2BLetterGeneratedEmailHtml(data: B2BLetterGeneratedEmailData): string {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://depositready.com";
-  const downloadUrl = `${baseUrl}/download?token=${data.downloadToken}`;
-
-  return `<!DOCTYPE html>
-<html>
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"></head>
-<body style="font-family: Georgia, serif; line-height: 1.6; color: #1a1a1a; max-width: 600px; margin: 0 auto; padding: 20px;">
-  <div style="text-align: center; margin-bottom: 30px;">
-    <h1 style="font-size: 24px; margin: 0;">DepositReady</h1>
-  </div>
-  <h2 style="font-size: 20px; margin-bottom: 16px;">Letter Generated</h2>
-  <div style="background: #f9fafb; border-radius: 8px; padding: 20px; margin: 24px 0;">
-    <p style="margin: 0 0 4px; font-size: 14px; color: #666;"><strong>Tenant:</strong> ${data.tenantName}</p>
-    <p style="margin: 0 0 4px; font-size: 14px; color: #666;"><strong>State:</strong> ${data.stateCode}</p>
-    <p style="margin: 0; font-size: 14px; color: #666;"><strong>Credits Remaining:</strong> ${data.creditsRemaining}</p>
-  </div>
-  <div style="text-align: center; margin: 24px 0;">
-    <a href="${downloadUrl}" style="display: inline-block; background: #000; color: #fff; padding: 14px 28px; border-radius: 6px; text-decoration: none; font-weight: 500;">Download Letter</a>
-  </div>
-  <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 30px 0;">
-  <p style="font-size: 12px; color: #9ca3af; text-align: center;">DepositReady provides tools and templates based on state law. This is not legal advice.</p>
-</body>
-</html>`.trim();
-}
-
-// --- B2B Email Sending ---
-
-export async function sendB2BWelcomeEmail(data: B2BWelcomeEmailData): Promise<{ success: boolean; error?: string }> {
-  if (!resend) {
-    console.log("Email not configured, skipping B2B welcome email to:", data.email);
-    return { success: false, error: "Email not configured" };
-  }
-  try {
-    const { error } = await resend.emails.send({
-      from: EMAIL_CONFIG.from,
-      replyTo: EMAIL_CONFIG.replyTo,
-      to: data.email,
-      subject: `Your ${data.packageSize}-Letter Pack is Ready`,
-      html: getB2BWelcomeEmailHtml(data),
-    });
-    if (error) {
-      console.error("Failed to send B2B welcome email:", error);
-      return { success: false, error: error.message };
-    }
-    console.log("B2B welcome email sent to:", data.email);
-    return { success: true };
-  } catch (error) {
-    console.error("B2B welcome email error:", error);
-    return { success: false, error: error instanceof Error ? error.message : "Unknown error" };
-  }
-}
-
-// --- Case Review Email Types ---
-
-export interface CaseReviewDeliveryEmailData {
-  email: string;
-  name: string;
-  downloadToken: string;
-  stateCode: string;
-}
-
-function getCaseReviewDeliveryEmailHtml(data: CaseReviewDeliveryEmailData): string {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://depositready.com";
-  const downloadUrl = `${baseUrl}/api/case-review/download?token=${data.downloadToken}`;
-
-  return `<!DOCTYPE html>
-<html>
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Your Case Review is Ready</title></head>
-<body style="font-family: Georgia, serif; line-height: 1.6; color: #1a1a1a; max-width: 600px; margin: 0 auto; padding: 20px;">
-  <div style="text-align: center; margin-bottom: 30px;">
-    <h1 style="font-size: 24px; margin: 0;">DepositReady</h1>
-  </div>
-
-  <div style="background: #dcfce7; border-radius: 8px; padding: 20px; margin-bottom: 24px; text-align: center;">
-    <p style="margin: 0; color: #166534; font-size: 18px; font-weight: bold;">Your Case Review is Ready</p>
-  </div>
-
-  <p>Hi ${data.name},</p>
-
-  <p>Your personalized case review has been completed and is ready for download. A deposit recovery specialist has reviewed your ${data.stateCode} security deposit situation and prepared a detailed assessment.</p>
-
-  <div style="background: #f9fafb; border-radius: 8px; padding: 20px; margin: 24px 0; text-align: center;">
-    <a href="${downloadUrl}" style="display: inline-block; background: #000; color: #fff; padding: 14px 28px; border-radius: 6px; text-decoration: none; font-weight: 500; font-size: 16px;">Download Your Case Review</a>
-    <p style="margin: 12px 0 0 0; font-size: 12px; color: #666;">This link doesn't expire — you can download anytime.</p>
-  </div>
-
-  <h3 style="font-size: 16px; margin: 24px 0 12px;">Your Memo Includes:</h3>
-  <ul style="padding-left: 20px; color: #374151;">
-    <li>Your situation clearly restated</li>
-    <li>${data.stateCode} law applied to your specific facts</li>
-    <li>Honest case assessment — strengths and weaknesses</li>
-    <li>Step-by-step action plan with timeline</li>
-    <li>Key deadlines for your case</li>
-    <li>Guidance on when to escalate</li>
-  </ul>
-
-  <h3 style="font-size: 16px; margin: 24px 0 12px;">What to Do Next:</h3>
-  <ol style="padding-left: 20px;">
-    <li>Download and read through your case review</li>
-    <li>Follow the action plan section step by step</li>
-    <li>Note the key deadlines — some may be time-sensitive</li>
-    <li>Reply to this email if you have any questions</li>
-  </ol>
-
-  <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 30px 0;">
-
-  <p style="font-size: 14px; color: #666;">
-    Questions about your case review? Reply directly to this email — we're here to help.
-  </p>
-
-  <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 30px 0;">
-
-  <p style="font-size: 12px; color: #9ca3af; text-align: center;">
-    DepositReady provides informational case assessments, not legal advice. For legal representation, consult a licensed attorney.
-  </p>
-</body>
-</html>`.trim();
-}
-
-export async function sendCaseReviewDeliveryEmail(data: CaseReviewDeliveryEmailData): Promise<{ success: boolean; error?: string }> {
-  if (!resend) {
-    console.log("Email not configured, skipping case review delivery email to:", data.email);
-    return { success: false, error: "Email not configured" };
-  }
-  try {
-    const { error } = await resend.emails.send({
-      from: EMAIL_CONFIG.from,
-      replyTo: EMAIL_CONFIG.replyTo,
-      to: data.email,
-      subject: "Your Personalized Case Review is Ready — Download Now",
-      html: getCaseReviewDeliveryEmailHtml(data),
-    });
-    if (error) {
-      console.error("Failed to send case review delivery email:", error);
-      return { success: false, error: error.message };
-    }
-    console.log("Case review delivery email sent to:", data.email);
-    return { success: true };
-  } catch (error) {
-    console.error("Case review delivery email error:", error);
-    return { success: false, error: error instanceof Error ? error.message : "Unknown error" };
-  }
-}
-
-export async function sendB2BLetterGeneratedEmail(data: B2BLetterGeneratedEmailData): Promise<{ success: boolean; error?: string }> {
-  if (!resend) {
-    console.log("Email not configured, skipping B2B letter email to:", data.email);
-    return { success: false, error: "Email not configured" };
-  }
-  try {
-    const { error } = await resend.emails.send({
-      from: EMAIL_CONFIG.from,
-      replyTo: EMAIL_CONFIG.replyTo,
-      to: data.email,
-      subject: `Letter for ${data.tenantName} — Download Ready`,
-      html: getB2BLetterGeneratedEmailHtml(data),
-    });
-    if (error) {
-      console.error("Failed to send B2B letter email:", error);
-      return { success: false, error: error.message };
-    }
-    console.log("B2B letter generated email sent to:", data.email);
-    return { success: true };
-  } catch (error) {
-    console.error("B2B letter email error:", error);
-    return { success: false, error: error instanceof Error ? error.message : "Unknown error" };
-  }
-}

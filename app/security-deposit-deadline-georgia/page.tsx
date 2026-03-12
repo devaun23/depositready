@@ -25,7 +25,7 @@ export default function GeorgiaSecurityDepositDeadlinePage() {
         title="Georgia Security Deposit Deadlines"
         subtitle="What the Law Requires After You Move Out"
         intro="Georgia law requires landlords to inspect your unit and return your deposit on a strict timeline. If they skip steps or miss deadlines, you may have leverage to recover your money."
-        primaryButton={{ text: "Start My Dispute Packet", href: "/wizard" }}
+        primaryButton={{ text: "Chat with Insight", href: "/chat" }}
         secondaryButton={{
           text: "See how Georgia deposit disputes work",
           href: "/security-deposit-dispute",
@@ -181,8 +181,8 @@ export default function GeorgiaSecurityDepositDeadlinePage() {
         title="Check your Georgia security deposit deadline in 30 seconds"
         description="Know where you stand before taking action. $79 one time · Takes about 10 minutes · Instant download. Typical Georgia deposits range from $800–$2,500."
         primaryButton={{
-          text: "Start My Dispute Packet",
-          href: "/wizard",
+          text: "Chat with Insight",
+          href: "/chat",
         }}
         secondaryButtons={[
           { text: "My landlord kept my deposit", href: "/landlord-kept-security-deposit" },

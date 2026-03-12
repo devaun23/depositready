@@ -25,7 +25,7 @@ export default function CanLandlordChargeForPaintingPage() {
         title="Can My Landlord Charge for Painting?"
         subtitle="When Paint Deductions Are (and Aren't) Legitimate"
         intro="Paint charges are among the most common—and most disputed—security deposit deductions. The short answer: landlords usually CANNOT charge you for repainting. Paint fading is normal wear and tear."
-        primaryButton={{ text: "Start My Dispute Packet", href: "/wizard" }}
+        primaryButton={{ text: "Chat with Insight", href: "/chat" }}
         secondaryButton={{
           text: "See how deposit disputes work",
           href: "/security-deposit-dispute",
@@ -202,8 +202,8 @@ export default function CanLandlordChargeForPaintingPage() {
         title="Dispute unfair painting charges"
         description="Know where you stand before taking action. $79 one time · Takes about 10 minutes · Instant download."
         primaryButton={{
-          text: "Start My Dispute Packet",
-          href: "/wizard",
+          text: "Chat with Insight",
+          href: "/chat",
         }}
         secondaryButtons={[
           { text: "My landlord kept my deposit", href: "/landlord-kept-security-deposit" },

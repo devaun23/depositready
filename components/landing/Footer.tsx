@@ -56,30 +56,6 @@ export function Footer() {
               </li>
               <li>
                 <Link
-                  href="/calculator"
-                  className="text-gray-300 hover:text-white text-sm transition-colors"
-                >
-                  Free Calculator
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/filing-kit"
-                  className="text-gray-300 hover:text-white text-sm transition-colors"
-                >
-                  Filing Kit
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/landlord"
-                  className="text-gray-300 hover:text-white text-sm transition-colors"
-                >
-                  For Landlords
-                </Link>
-              </li>
-              <li>
-                <Link
                   href="/blog"
                   className="text-gray-300 hover:text-white text-sm transition-colors"
                 >

@@ -25,7 +25,7 @@ export default function SecurityDepositNotReturnedPage() {
         title="Security Deposit Not Returned After 30 Days?"
         subtitle="Your Landlord May Already Be in Violation"
         intro="If your landlord hasn't returned your deposit within the legal deadline, they may owe you MORE than just your deposit back. Many states impose double or triple damages for violations."
-        primaryButton={{ text: "Start My Dispute Packet", href: "/wizard" }}
+        primaryButton={{ text: "Chat with Insight", href: "/chat" }}
         secondaryButton={{
           text: "Check your state's deadline",
           href: "/security-deposit-deadline",
@@ -206,8 +206,8 @@ export default function SecurityDepositNotReturnedPage() {
         title="Your landlord missed the deadline. Take action."
         description="Calculate your deadline, penalties, and recovery amount. $79 one time · Takes about 10 minutes · Instant download."
         primaryButton={{
-          text: "Start My Dispute Packet",
-          href: "/wizard",
+          text: "Chat with Insight",
+          href: "/chat",
         }}
         secondaryButtons={[
           { text: "Check state deadlines", href: "/security-deposit-deadline" },

@@ -129,8 +129,8 @@ export default function SecurityDepositDeadlinePage() {
         title="Check Your Deadline Now"
         description="See if your landlord missed the deadline and get your dispute packet ready."
         primaryButton={{
-          text: "Start My Dispute Packet",
-          href: "/wizard",
+          text: "Chat with Insight",
+          href: "/chat",
         }}
         secondaryButtons={[
           { text: "My landlord kept my deposit", href: "/landlord-kept-security-deposit" },

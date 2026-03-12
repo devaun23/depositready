@@ -6,7 +6,7 @@ export const runtime = "nodejs";
 export const maxDuration = 30;
 
 interface PurchaseBody {
-  product: "demand_letter" | "legal_packet" | "case_review" | "filing_kit" | "landlord_compliance" | "landlord_defense";
+  product: "demand_letter" | "legal_packet";
   sessionToken?: string;
   email?: string;
 }
@@ -23,33 +23,6 @@ const PRODUCTS = {
     description: "Demand letter + evidence checklist + small claims filing guide",
     price: 7900,
     productType: "full" as const,
-  },
-  case_review: {
-    name: "Personalized Case Review",
-    description: "Expert analysis with personalized action plan for your situation",
-    price: 14900,
-    productType: "case_review" as const,
-  },
-  filing_kit: {
-    name: "Small Claims Filing Kit",
-    description: "Court-ready filing documents with state-specific instructions",
-    price: 7900,
-    productType: "filing_kit_standard" as const,
-    redirect: "/filing-kit/intake",
-  },
-  landlord_compliance: {
-    name: "Landlord Compliance Kit",
-    description: "Proactive compliance audit and deposit handling documents",
-    price: 9900,
-    productType: "landlord_compliance_standard" as const,
-    redirect: "/landlord/compliance/intake",
-  },
-  landlord_defense: {
-    name: "Landlord Defense Kit",
-    description: "Liability assessment and response documents for tenant disputes",
-    price: 12900,
-    productType: "landlord_defense_standard" as const,
-    redirect: "/landlord/defense/intake",
   },
 };
 
@@ -68,11 +41,6 @@ export async function POST(request: NextRequest) {
     const productInfo = PRODUCTS[product];
     const baseUrl = (process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000").trim();
 
-    // For products that need intake forms, redirect to their intake page
-    if ("redirect" in productInfo) {
-      return NextResponse.json({ url: `${baseUrl}${productInfo.redirect}` });
-    }
-
     // Try to load chat session data for context
     let sessionData: Record<string, unknown> | null = null;
     if (sessionToken) {
@@ -84,64 +52,7 @@ export async function POST(request: NextRequest) {
       sessionData = data;
     }
 
-    // Case review goes through the case_reviews table
-    if (product === "case_review") {
-      const { data: caseReview, error: crError } = await supabaseAdmin
-        .from("case_reviews")
-        .insert({
-          email: email || (sessionData?.email as string) || "",
-          name: "",
-          state_code: (sessionData?.state_code as string) || null,
-          deposit_amount: (sessionData?.deposit_amount as number) || null,
-          move_out_date: (sessionData?.move_out_date as string) || null,
-          situation_summary: "Submitted via chat — see chat session for details",
-          download_token: generateDownloadToken(),
-          review_status: "pending",
-          payment_status: "pending",
-          source: "chat",
-        })
-        .select("id")
-        .single();
-
-      if (crError || !caseReview) {
-        console.error("Failed to create case review from chat:", crError);
-        return NextResponse.json(
-          { error: "Failed to create order" },
-          { status: 500 }
-        );
-      }
-
-      const session = await stripeFetch.checkout.sessions.create({
-        payment_method_types: ["card"],
-        mode: "payment",
-        line_items: [
-          {
-            price_data: {
-              currency: "usd",
-              product_data: {
-                name: productInfo.name,
-                description: productInfo.description,
-              },
-              unit_amount: productInfo.price,
-            },
-            quantity: 1,
-          },
-        ],
-        metadata: {
-          product_type: "case_review",
-          case_review_id: caseReview.id,
-          source: "chat",
-        },
-        success_url: `${baseUrl}/success?session_id={CHECKOUT_SESSION_ID}&source=chat`,
-        cancel_url: `${baseUrl}/chat`,
-        ...(email && { customer_email: email }),
-        allow_promotion_codes: true,
-      });
-
-      return NextResponse.json({ url: session.url });
-    }
-
-    // Demand letter and legal packet go through the orders table
+    // Create order for demand letter or legal packet
     const downloadToken = generateDownloadToken();
 
     const { data: order, error: dbError } = await supabaseAdmin

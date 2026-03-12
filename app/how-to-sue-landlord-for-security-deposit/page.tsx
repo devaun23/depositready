@@ -25,7 +25,7 @@ export default function HowToSueLandlordPage() {
         title="How to Sue Your Landlord for Security Deposit"
         subtitle="A Step-by-Step Small Claims Court Guide"
         intro="Small claims court is designed for exactly this situation. You don't need a lawyer, filing is cheap ($30-100), and judges see deposit disputes all the time. Here's how to do it right."
-        primaryButton={{ text: "Start My Dispute Packet", href: "/wizard" }}
+        primaryButton={{ text: "Chat with Insight", href: "/chat" }}
         secondaryButton={{
           text: "Check your state deadline first",
           href: "/security-deposit-deadline",
@@ -237,8 +237,8 @@ export default function HowToSueLandlordPage() {
         title="Get ready for small claims court"
         description="Calculate your deadline, penalties, and build your case. $79 one time · Takes about 10 minutes · Instant download."
         primaryButton={{
-          text: "Start My Dispute Packet",
-          href: "/wizard",
+          text: "Chat with Insight",
+          href: "/chat",
         }}
         secondaryButtons={[
           { text: "Check state deadlines", href: "/security-deposit-deadline" },

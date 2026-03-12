@@ -181,7 +181,7 @@ export default async function SharedResultPage({ params }: PageProps) {
             Free 30-second analysis. No payment required.
           </p>
           <Link
-            href="/diagnose"
+            href="/chat"
             className="inline-block w-full sm:w-auto px-8 py-4 bg-accent text-white font-semibold rounded-lg hover:bg-accent-hover transition-colors text-lg"
           >
             Check YOUR Deposit &mdash; Free

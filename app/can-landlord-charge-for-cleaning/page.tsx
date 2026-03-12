@@ -25,7 +25,7 @@ export default function CanLandlordChargeForCleaningPage() {
         title="Can My Landlord Charge for Cleaning?"
         subtitle="When Cleaning Fees Are (and Aren't) Legitimate"
         intro="Cleaning fees are one of the most disputed security deposit deductions. The short answer: most cleaning charges are NOT legitimate. Your landlord can't charge you for routine turnover cleaning."
-        primaryButton={{ text: "Start My Dispute Packet", href: "/wizard" }}
+        primaryButton={{ text: "Chat with Insight", href: "/chat" }}
         secondaryButton={{
           text: "See how deposit disputes work",
           href: "/security-deposit-dispute",
@@ -198,8 +198,8 @@ export default function CanLandlordChargeForCleaningPage() {
         title="Dispute unfair cleaning charges"
         description="Know where you stand before taking action. $79 one time · Takes about 10 minutes · Instant download."
         primaryButton={{
-          text: "Start My Dispute Packet",
-          href: "/wizard",
+          text: "Chat with Insight",
+          href: "/chat",
         }}
         secondaryButtons={[
           { text: "My landlord kept my deposit", href: "/landlord-kept-security-deposit" },

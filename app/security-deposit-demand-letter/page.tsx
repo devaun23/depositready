@@ -88,8 +88,8 @@ export default function SecurityDepositDemandLetterPage() {
         title="Generate Your Demand Letter"
         description="Create a professional, state-specific demand letter in minutes."
         primaryButton={{
-          text: "Start My Dispute Packet",
-          href: "/wizard",
+          text: "Chat with Insight",
+          href: "/chat",
         }}
         secondaryButtons={[
           { text: "Check my deposit deadline", href: "/security-deposit-deadline" },

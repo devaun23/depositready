@@ -58,15 +58,15 @@ export default async function StateLandingPage({
               {rules.statuteTitle}.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-6">
-              <Button href={`/${state}/wizard`} size="lg">
-                Start Your Recovery Package
+              <Button href="/chat" size="lg">
+                Chat with Insight
               </Button>
               <Button href="#whats-included" variant="secondary" size="lg">
                 See what&apos;s included
               </Button>
             </div>
             <p className="text-sm text-gray-500">
-              $79 one-time purchase. Preview before you pay.
+              Free AI-powered analysis. No payment required.
             </p>
           </div>
         </section>
@@ -205,8 +205,8 @@ export default async function StateLandingPage({
               Most tenants recover 100% of their deposit. The $79 Recovery Package pays
               for itself.
             </p>
-            <Button href={`/${state}/wizard`} size="lg">
-              Start Your Recovery Package
+            <Button href="/chat" size="lg">
+              Chat with Insight
             </Button>
           </div>
         </section>

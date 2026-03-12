@@ -58,7 +58,7 @@ export default async function CityPage({
         title={`${cityData.name} Security Deposit Laws`}
         subtitle={`Know Your Rights as a ${stateRules.name} Tenant`}
         intro={`${cityData.name} follows ${stateRules.name} state law. Your landlord has ${stateRules.returnDeadline} days to return your deposit or send an itemized list of deductions. If they miss the deadline, they may owe you penalties.`}
-        primaryButton={{ text: "Start My Dispute Packet", href: `/${state}/wizard` }}
+        primaryButton={{ text: "Chat with Insight", href: "/chat" }}
         secondaryButton={{
           text: `See ${stateRules.name} law details`,
           href: `/${state}`,
@@ -204,8 +204,8 @@ export default async function CityPage({
         title={`Get your deposit back in ${cityData.name}`}
         description={`Calculate your deadline, penalties, and build your case. $79 one time · Takes about 10 minutes · Instant download.`}
         primaryButton={{
-          text: "Start My Dispute Packet",
-          href: `/${state}/wizard`,
+          text: "Chat with Insight",
+          href: "/chat",
         }}
         secondaryButtons={[
           { text: `${stateRules.name} deadline`, href: `/security-deposit-deadline-${state}` },

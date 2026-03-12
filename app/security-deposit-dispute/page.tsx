@@ -88,8 +88,8 @@ export default function SecurityDepositDisputePage() {
         title="Start Your Dispute Today"
         description="Get a professional dispute packet customized to your state in minutes."
         primaryButton={{
-          text: "Start My Dispute Packet",
-          href: "/wizard",
+          text: "Chat with Insight",
+          href: "/chat",
         }}
         secondaryButtons={[
           { text: "My landlord kept my deposit", href: "/landlord-kept-security-deposit" },
