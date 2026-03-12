@@ -93,10 +93,7 @@ export async function POST(request: NextRequest) {
         } else {
           console.log("Order marked as paid:", orderId);
 
-          // Skip email for diagnosis orders — email sent after PostPaymentForm
-          if (session.metadata?.product_type === 'diagnosis') {
-            console.log("Diagnosis order — skipping email until post-payment form:", orderId);
-          } else if (isEmailConfigured() && session.customer_email) {
+          if (isEmailConfigured() && session.customer_email) {
             // Look up the order to get download token
             const { data: orderData } = await supabaseAdmin
               .from("orders")

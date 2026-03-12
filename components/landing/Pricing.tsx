@@ -3,73 +3,6 @@
 import Link from "next/link";
 import { useScrollReveal } from "@/lib/useScrollReveal";
 
-function CheckIcon({ className = "text-accent" }: { className?: string }) {
-  return (
-    <svg
-      className={`w-4 h-4 flex-shrink-0 ${className}`}
-      fill="none"
-      stroke="currentColor"
-      viewBox="0 0 24 24"
-      aria-hidden="true"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth={2.5}
-        d="M5 13l4 4L19 7"
-      />
-    </svg>
-  );
-}
-
-const tiers = [
-  {
-    name: "Insight",
-    price: "Free",
-    priceDetail: null,
-    description: "Understand your rights in minutes",
-    cta: "Start Free Chat",
-    href: "/chat",
-    popular: false,
-    features: [
-      "State-specific deadline check",
-      "Violation detection",
-      "Recovery estimate",
-      "Case strength assessment",
-    ],
-  },
-  {
-    name: "Recovery Letter",
-    price: "$29",
-    priceDetail: "one-time",
-    description: "Professional letter ready to send",
-    cta: "Get My Letter",
-    href: "/quiz?product=basic",
-    popular: true,
-    features: [
-      "Custom recovery letter for your state",
-      "State law breakdown and deadlines",
-      "Legal timeline with key dates",
-      "Evidence checklist",
-    ],
-  },
-  {
-    name: "Recovery Kit",
-    price: "$79",
-    priceDetail: "one-time",
-    description: "Complete dispute documentation",
-    cta: "Get Recovery Kit",
-    href: "/quiz?product=full",
-    popular: false,
-    features: [
-      "Everything in Recovery Letter",
-      "Case review memo",
-      "Small claims filing guide",
-      "Follow-up letter templates",
-    ],
-  },
-];
-
 export function Pricing() {
   const { ref, visible } = useScrollReveal();
 
@@ -77,145 +10,176 @@ export function Pricing() {
     <section
       ref={ref as React.RefObject<HTMLElement>}
       id="pricing"
-      className="py-16 md:py-24 px-4 sm:px-6 bg-[var(--section-bg-alt)]"
+      className="section-padding bg-gray-50"
     >
-      <div className="max-w-5xl mx-auto">
-        <h2 className="font-serif text-3xl md:text-4xl font-semibold text-brand mb-3">
-          Simple, transparent pricing
-        </h2>
-        <p className="text-gray-600 text-base md:text-lg mb-10">
-          Start free. Pay only when you need legal documents.
-        </p>
-
-        {/* 3-tier card grid */}
-        <div className="grid gap-6 md:grid-cols-3">
-          {tiers.map((tier, i) => (
-            <div
-              key={tier.name}
-              className={`relative bg-white rounded-2xl p-6 hover:-translate-y-0.5 transition-all duration-200 ${
-                tier.popular
-                  ? "ring-2 ring-accent shadow-elevated bg-gradient-to-b from-accent-light/50 to-white hover:shadow-[0_12px_32px_rgba(0,0,0,0.12)]"
-                  : "shadow-[var(--shadow-card)] hover:shadow-elevated"
-              } ${visible ? "animate-fadeSlideUp" : "opacity-0"}`}
-              style={{ animationDelay: visible ? `${i * 100}ms` : undefined, animationFillMode: "both" }}
-            >
-              {/* Most Popular badge */}
-              {tier.popular && (
-                <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-accent px-3 py-1 text-xs font-semibold text-white shadow-sm">
-                  Most Popular
-                </span>
-              )}
-
-              <h3 className="font-serif text-lg font-semibold text-brand">
-                {tier.name}
-              </h3>
-              <p className="mt-1 text-sm text-gray-600">{tier.description}</p>
-
-              <p className="mt-4 mb-6">
-                <span className="text-3xl font-bold text-black">
-                  {tier.price}
-                </span>
-                {tier.priceDetail && (
-                  <span className="text-gray-500 text-sm ml-1">
-                    {tier.priceDetail}
-                  </span>
-                )}
-              </p>
-
-              <ul className="space-y-3 mb-8">
-                {tier.features.map((feature) => (
-                  <li
-                    key={feature}
-                    className="flex items-start gap-2 text-sm text-gray-700"
-                  >
-                    <CheckIcon />
-                    {feature}
-                  </li>
-                ))}
-              </ul>
-
-              <Link
-                href={tier.href}
-                className={`block text-center py-3 px-4 rounded-xl font-medium transition-colors min-h-[44px] ${
-                  tier.popular
-                    ? "bg-accent text-white hover:bg-accent-hover"
-                    : "bg-brand/5 text-brand hover:bg-brand/10"
-                }`}
-              >
-                {tier.cta}
-              </Link>
-            </div>
-          ))}
+      <div className="max-w-2xl mx-auto px-5">
+        <div className="text-center">
+          <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl text-gray-900">
+            The verdict is free. Recovery is $39.
+          </h2>
+          <p className="mt-2 text-sm text-gray-500">
+            Find out if you have a case — no cost, no sign-up. If you do, we build the enforcement packet.
+          </p>
         </div>
 
-        {/* Additional products */}
-        <div className="mt-8 space-y-4">
-          <div className="rounded-2xl border border-gray-200 bg-white p-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            <div>
-              <p className="font-semibold text-black">
-                Small Claims Filing Kit
-              </p>
-              <p className="text-sm text-gray-600 mt-0.5">
-                Court-ready documents, damage worksheets, and courtroom scripts
+        <div className="mt-10 space-y-3">
+          {/* Free — Case Verdict */}
+          <div
+            className={`rounded-xl p-4 sm:p-5 border border-gray-200 bg-white flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 ${
+              visible ? "animate-fadeSlideUp" : "opacity-0"
+            }`}
+            style={{ animationFillMode: "both" }}
+          >
+            <div className="flex-1">
+              <div className="flex items-center gap-2 mb-1">
+                <span className="text-xs font-bold text-green-600 uppercase tracking-wide bg-green-50 px-2 py-0.5 rounded">
+                  Free
+                </span>
+                <span className="font-semibold text-gray-900 text-sm">
+                  Case Verdict
+                </span>
+              </div>
+              <p className="text-xs text-gray-500">
+                Violations found, penalties calculated, case strength rated.
               </p>
             </div>
             <Link
-              href="/filing-kit"
-              className="inline-flex items-center justify-center gap-1 rounded-xl border border-[var(--accent-orange)] px-5 py-2.5 text-sm font-medium text-[var(--accent-orange)] hover:bg-[var(--accent-orange-light)] transition-colors min-h-[44px] flex-shrink-0"
+              href="/chat"
+              className="inline-flex items-center justify-center px-5 py-2.5 border-2 border-accent text-accent text-sm font-medium rounded-xl hover:bg-accent/5 transition-colors min-h-[44px] w-full sm:w-auto flex-shrink-0"
             >
-              From $79 &rarr;
+              Check My Case Free
             </Link>
           </div>
 
-          <div className="rounded-2xl border border-gray-200 bg-white p-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            <div>
-              <p className="font-semibold text-black">
-                Priority Case Review
-              </p>
-              <p className="text-sm text-gray-600 mt-0.5">
-                Enhanced analysis with personalized follow-up support
-              </p>
+          {/* $39 — Recovery Packet */}
+          <div
+            className={`relative rounded-xl p-5 sm:p-6 border-2 border-accent bg-white shadow-lg ring-1 ring-accent/20 ${
+              visible ? "animate-fadeSlideUp" : "opacity-0"
+            }`}
+            style={{ animationDelay: visible ? "80ms" : undefined, animationFillMode: "both" }}
+          >
+            <span className="absolute -top-2.5 left-5 bg-accent text-white text-[10px] font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wide">
+              Most Popular
+            </span>
+            <div className="flex flex-col sm:flex-row sm:items-start gap-4 sm:gap-5">
+              <div className="flex-1">
+                <div className="flex items-baseline gap-2 mb-2">
+                  <span className="text-3xl font-bold text-gray-900">$39</span>
+                  <span className="text-sm text-gray-500">one-time</span>
+                </div>
+                <p className="font-semibold text-gray-900 text-sm">
+                  Recovery Packet
+                </p>
+                <p className="text-xs text-gray-500 mt-1 mb-3">
+                  Built from your specific violations — not a template.
+                </p>
+                <ul className="space-y-1.5">
+                  {[
+                    "Demand letter citing your exact violations",
+                    "Penalty calculations with statute references",
+                    "Evidence checklist tailored to your case",
+                    "Follow-up + escalation timeline",
+                  ].map((f) => (
+                    <li
+                      key={f}
+                      className="flex items-start gap-2 text-xs text-gray-900"
+                    >
+                      <svg
+                        className="h-3.5 w-3.5 text-green-600 flex-shrink-0 mt-0.5"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        strokeWidth={2.5}
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M5 13l4 4L19 7"
+                        />
+                      </svg>
+                      {f}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <Link
+                href="/chat"
+                className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-accent text-white text-sm font-semibold rounded-xl hover:bg-accent-hover transition-all shadow-xl shadow-accent/20 min-h-[44px] w-full sm:w-auto flex-shrink-0"
+              >
+                Check My Case Free
+                <svg
+                  className="h-4 w-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
+                  />
+                </svg>
+              </Link>
             </div>
-            <Link
-              href="/case-review"
-              className="inline-flex items-center justify-center gap-1 rounded-xl border border-brand px-5 py-2.5 text-sm font-medium text-brand hover:bg-brand-bg transition-colors min-h-[44px] flex-shrink-0"
-            >
-              $149 &rarr;
-            </Link>
           </div>
 
-          <div className="rounded-2xl border border-gray-200 bg-white p-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            <div>
-              <p className="font-semibold text-black">
-                For Landlords
-              </p>
-              <p className="text-sm text-gray-600 mt-0.5">
-                Compliance kits and defense tools for deposit disputes
+          {/* Add-ons */}
+          <div
+            className={`grid grid-cols-1 sm:grid-cols-2 gap-3 ${
+              visible ? "animate-fadeSlideUp" : "opacity-0"
+            }`}
+            style={{ animationDelay: visible ? "150ms" : undefined, animationFillMode: "both" }}
+          >
+            <div className="rounded-xl p-4 sm:p-5 border border-gray-200 bg-white">
+              <div className="flex items-center justify-between mb-1.5">
+                <span className="font-semibold text-gray-900 text-sm">
+                  We Send It For You
+                </span>
+                <span className="flex items-center gap-0.5 text-sm font-bold text-gray-900">
+                  <span className="text-gray-400 text-xs">+</span>$29
+                </span>
+              </div>
+              <p className="text-xs text-gray-500">
+                Certified mail, delivery proof, auto follow-up.
               </p>
             </div>
-            <Link
-              href="/landlord"
-              className="inline-flex items-center justify-center gap-1 rounded-xl border border-[var(--accent-amber)] px-5 py-2.5 text-sm font-medium text-[var(--accent-amber)] hover:bg-[var(--accent-amber-light)] transition-colors min-h-[44px] flex-shrink-0"
-            >
-              From $99 &rarr;
-            </Link>
-          </div>
 
-          <div className="rounded-2xl border border-gray-200 bg-gradient-to-r from-accent-light/30 to-white p-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            <div>
-              <p className="font-semibold text-black">
-                Free Calculator
-              </p>
-              <p className="text-sm text-gray-600 mt-0.5">
-                Instant analysis for tenants and landlords — no account needed
+            <div className="rounded-xl p-4 sm:p-5 border border-gray-200 bg-white">
+              <div className="flex items-center justify-between mb-1.5">
+                <span className="font-semibold text-gray-900 text-sm">
+                  Expert Case Review
+                </span>
+                <span className="flex items-center gap-0.5 text-sm font-bold text-gray-900">
+                  <span className="text-gray-400 text-xs">+</span>$49
+                </span>
+              </div>
+              <p className="text-xs text-gray-500">
+                Human review, case score, counter-argument prep.
               </p>
             </div>
-            <Link
-              href="/calculator"
-              className="inline-flex items-center justify-center gap-1 rounded-xl bg-accent text-white px-5 py-2.5 text-sm font-medium hover:bg-accent-hover transition-colors min-h-[44px] flex-shrink-0"
+          </div>
+        </div>
+
+        {/* Guarantee */}
+        <div className="mt-8 text-center">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-accent/20 bg-accent/5">
+            <svg
+              className="h-4 w-4 text-accent"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
             >
-              Try Free &rarr;
-            </Link>
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z"
+              />
+            </svg>
+            <span className="text-xs font-semibold text-gray-900">
+              Don&rsquo;t recover? Full refund.
+            </span>
           </div>
         </div>
       </div>

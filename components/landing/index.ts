@@ -1,13 +1,10 @@
 export { Navbar } from "./Navbar";
 export { Hero } from "./Hero";
-export { FeedbackBanner } from "./FeedbackBanner";
-export { HowItWorks } from "./HowItWorks";
+export { ProductDemo } from "./ProductDemo";
+export { MoneyProof } from "./MoneyProof";
+export { WhyNotChatGPT } from "./WhyNotChatGPT";
 export { Testimonials } from "./Testimonials";
-export { TrustBullets } from "./TrustBullets";
 export { Pricing } from "./Pricing";
-export { BlogPreview } from "./BlogPreview";
 export { FAQ } from "./FAQ";
 export { Footer } from "./Footer";
-export { MobileCTA } from "./MobileCTA";
 export { EligibilityModal } from "./EligibilityModal";
-export { SocialProofBar } from "./SocialProofBar";

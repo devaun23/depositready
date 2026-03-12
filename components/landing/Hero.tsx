@@ -1,192 +1,78 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-
-const suggestions = [
-  "My landlord kept my deposit",
-  "Unfair deductions from my deposit",
-  "Landlord never returned my deposit",
-  "How much can I recover?",
-];
-
-const avatars = [
-  { initials: "SM", bg: "bg-indigo-100 text-indigo-700" },
-  { initials: "MR", bg: "bg-amber-100 text-amber-700" },
-  { initials: "JL", bg: "bg-emerald-100 text-emerald-700" },
-  { initials: "DK", bg: "bg-rose-100 text-rose-700" },
-];
+import Link from "next/link";
 
 export function Hero() {
-  const router = useRouter();
-  const [input, setInput] = useState("");
-
-  function go(message: string) {
-    if (!message.trim()) return;
-    router.push(`/chat?message=${encodeURIComponent(message.trim())}`);
-  }
-
   return (
-    <section className="relative min-h-[85vh] flex items-center justify-center px-4 sm:px-6 bg-gradient-to-b from-brand-bg/30 via-white to-white overflow-hidden">
-      <div className="relative z-10 w-full max-w-2xl mx-auto text-center">
+    <section className="relative pt-28 sm:pt-32 pb-20 sm:pb-28 overflow-hidden">
+      {/* Background gradient */}
+      <div className="absolute inset-0 z-0">
+        <div className="absolute inset-0 bg-gradient-to-b from-accent/[0.08] via-white to-white" />
+      </div>
+
+      <div className="relative z-10 max-w-2xl mx-auto px-5 text-center">
         {/* Headline */}
         <div
           className="opacity-0 animate-fadeSlideUp"
-          style={{ animationDelay: "0ms", animationFillMode: "both" }}
+          style={{ animationDelay: "0ms", animationFillMode: "both", animationDuration: "0.6s" }}
         >
-          <h1 className="font-serif text-5xl sm:text-6xl md:text-7xl font-semibold text-gray-900 tracking-tight leading-[1.1]">
-            Get your deposit{" "}
-            <span className="animate-gradient-text">back.</span>
+          <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl leading-[1.15] tracking-tight text-gray-900">
+            Did your landlord{" "}
+            <span className="gradient-text">break the law?</span>
           </h1>
         </div>
 
         {/* Subtitle */}
         <div
           className="opacity-0 animate-fadeSlideUp"
-          style={{ animationDelay: "80ms", animationFillMode: "both" }}
+          style={{ animationDelay: "150ms", animationFillMode: "both", animationDuration: "0.5s" }}
         >
-          <p className="mt-4 text-gray-600 text-base md:text-lg max-w-lg mx-auto">
-            AI-powered deposit recovery — free to start.
+          <p className="mt-5 text-base sm:text-lg text-gray-500 max-w-md mx-auto leading-relaxed">
+            Find out in 60 seconds — free. See exactly what violations exist and how much you may be owed.
           </p>
         </div>
 
-        {/* ── THE INPUT BOX ─────────────────────────────────── */}
+        {/* CTA Button */}
         <div
           className="opacity-0 animate-fadeSlideUp"
-          style={{ animationDelay: "160ms", animationFillMode: "both" }}
+          style={{ animationDelay: "300ms", animationFillMode: "both", animationDuration: "0.5s" }}
         >
-          <div className="relative mt-8 mx-auto max-w-xl">
-            {/* Glow layer */}
-            <div
-              className="absolute -inset-1 rounded-2xl blur-xl animate-glow-pulse"
-              style={{ background: "var(--glow-gradient)" }}
-              aria-hidden="true"
-            />
-
-            {/* Input container — mirrors ChatInput style */}
-            <div className="relative rounded-2xl bg-white shadow-elevated">
-              <span className="block px-4 pt-3 pb-0 text-[11px] font-medium tracking-wide uppercase text-gray-300 select-none">
-                Chat with Insight
-              </span>
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  go(input);
-                }}
-              >
-                <input
-                  type="text"
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                  placeholder="Tell us what happened with your deposit..."
-                  className="w-full bg-transparent px-4 pt-2 pb-3 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none min-h-[44px]"
-                />
-
-                {/* Toolbar — decorative, mirrors ChatInput */}
-                <div className="flex items-center justify-between border-t border-gray-200/60 px-2 py-1.5">
-                  {/* Left: decorative icons */}
-                  <div className="flex items-center gap-0.5">
-                    <button
-                      type="button"
-                      onClick={() => router.push("/chat")}
-                      title="Add photo"
-                      className="flex h-9 w-9 items-center justify-center rounded-lg text-gray-300 transition-colors hover:bg-accent/5 hover:text-accent"
-                      style={{ minHeight: "44px", minWidth: "44px" }}
-                    >
-                      <svg className="h-[18px] w-[18px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.75}>
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909M3.75 21h16.5A2.25 2.25 0 0022.5 18.75V5.25A2.25 2.25 0 0020.25 3H3.75A2.25 2.25 0 001.5 5.25v13.5A2.25 2.25 0 003.75 21zM10.5 6.75a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z" />
-                      </svg>
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => router.push("/chat")}
-                      title="Attach file"
-                      className="flex h-9 w-9 items-center justify-center rounded-lg text-gray-300 transition-colors hover:bg-accent/5 hover:text-accent"
-                      style={{ minHeight: "44px", minWidth: "44px" }}
-                    >
-                      <svg className="h-[18px] w-[18px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.75}>
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M18.375 12.739l-7.693 7.693a4.5 4.5 0 01-6.364-6.364l10.94-10.94A3 3 0 1119.5 7.372L8.552 18.32m.009-.01l-.01.01m5.699-9.941l-7.81 7.81a1.5 1.5 0 002.112 2.13" />
-                      </svg>
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => router.push("/chat")}
-                      title="Voice input"
-                      className="flex h-9 w-9 items-center justify-center rounded-lg text-gray-300 transition-colors hover:bg-accent/5 hover:text-accent"
-                      style={{ minHeight: "44px", minWidth: "44px" }}
-                    >
-                      <svg className="h-[18px] w-[18px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.75}>
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 18.75a6 6 0 006-6v-1.5m-6 7.5a6 6 0 01-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 01-3-3V4.5a3 3 0 116 0v8.25a3 3 0 01-3 3z" />
-                      </svg>
-                    </button>
-                  </div>
-
-                  {/* Right: send button */}
-                  <button
-                    type="submit"
-                    className="flex h-9 w-9 items-center justify-center rounded-xl bg-accent text-white shadow-sm transition-all hover:bg-accent/90 hover:shadow-md"
-                    style={{ minHeight: "44px", minWidth: "44px" }}
-                    aria-label="Send message"
-                  >
-                    <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 10.5L12 3m0 0l7.5 7.5M12 3v18" />
-                    </svg>
-                  </button>
-                </div>
-              </form>
-            </div>
+          <div className="mt-10">
+            <Link
+              href="/chat"
+              className="inline-flex items-center gap-2 px-8 py-4 bg-accent text-white text-base font-semibold rounded-2xl hover:bg-accent-hover transition-all shadow-xl shadow-accent/20 min-h-[44px]"
+            >
+              Check My Case Free
+              <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+              </svg>
+            </Link>
+            <p className="mt-3 text-xs text-gray-400 flex items-center justify-center gap-1.5">
+              {/* Clock icon */}
+              <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              60 seconds · No sign-up · Free verdict
+            </p>
           </div>
         </div>
 
-        {/* Suggestion chips */}
+        {/* Bottom trust signals */}
         <div
           className="opacity-0 animate-fadeSlideUp"
-          style={{ animationDelay: "240ms", animationFillMode: "both" }}
+          style={{ animationDelay: "500ms", animationFillMode: "both", animationDuration: "0.5s" }}
         >
-          <div className="mt-5 flex flex-wrap justify-center gap-2">
-            {suggestions.map((chip) => (
-              <button
-                key={chip}
-                onClick={() => go(chip)}
-                className="rounded-full border border-gray-200 bg-white px-4 py-2.5 text-sm font-medium text-gray-600 shadow-sm hover:shadow-md transition-all hover:border-accent hover:bg-accent/5 hover:text-accent active:scale-[0.97] min-h-[44px]"
-              >
-                {chip}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Avatar stack + testimonial quote */}
-        <div
-          className="opacity-0 animate-fadeSlideUp"
-          style={{ animationDelay: "320ms", animationFillMode: "both" }}
-        >
-          <div className="mt-8 flex items-center justify-center gap-3">
-            <div className="flex items-center">
-              {avatars.map((a, i) => (
-                <div
-                  key={a.initials}
-                  className={`w-8 h-8 rounded-full ${a.bg} flex items-center justify-center text-xs font-semibold ring-2 ring-white ${i > 0 ? "-ml-2" : ""}`}
-                >
-                  {a.initials}
-                </div>
-              ))}
-              <span className="ml-2 text-xs text-gray-400">+3 more</span>
-            </div>
-            <span className="text-sm italic text-gray-500">
-              &ldquo;Got my full $2,400 back&rdquo; &mdash; Sarah M.
+          <div className="mt-10 flex items-center justify-center gap-5 text-xs text-gray-400">
+            <span className="flex items-center gap-1.5">
+              {/* ShieldCheck icon */}
+              <svg className="h-3.5 w-3.5 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
+              </svg>
+              Money-back guarantee
             </span>
+            <span className="h-3 w-px bg-gray-200" />
+            <span>2,400+ cases checked</span>
           </div>
-        </div>
-
-        {/* Disclaimer */}
-        <div
-          className="opacity-0 animate-fadeSlideUp"
-          style={{ animationDelay: "400ms", animationFillMode: "both" }}
-        >
-          <p className="mt-8 text-xs text-gray-500 max-w-md mx-auto">
-            Not a law firm. No legal advice. No guaranteed outcomes.
-          </p>
         </div>
       </div>
     </section>

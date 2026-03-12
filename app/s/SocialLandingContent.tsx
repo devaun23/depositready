@@ -38,7 +38,7 @@ export function SocialLandingContent() {
 
       {/* Single CTA */}
       <Link
-        href={`/diagnose?${quizParams.toString()}`}
+        href="/chat"
         className="block w-full py-4 px-6 bg-accent text-white text-lg font-bold rounded-xl hover:bg-accent-hover transition-colors shadow-lg shadow-accent/25"
       >
         See How Much &rarr;

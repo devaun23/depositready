@@ -502,14 +502,14 @@ function SuccessContent() {
                       <input
                         type="text"
                         readOnly
-                        value={`depositready.co/diagnose?ref=${referralCode}`}
+                        value={`depositready.co/chat?ref=${referralCode}`}
                         className="flex-1 px-3 py-2 bg-white border border-gray-300 rounded-lg text-sm text-gray-700 select-all"
                         onClick={(e) => (e.target as HTMLInputElement).select()}
                       />
                       <button
                         onClick={() => {
                           navigator.clipboard.writeText(
-                            `https://depositready.co/diagnose?ref=${referralCode}`
+                            `https://depositready.co/chat?ref=${referralCode}`
                           );
                           setReferralCopied(true);
                           setTimeout(() => setReferralCopied(false), 2000);
@@ -543,8 +543,8 @@ function SuccessContent() {
                         );
                         const url = encodeURIComponent(
                           referralCode
-                            ? `https://depositready.co/diagnose?ref=${referralCode}`
-                            : "https://depositready.co/diagnose"
+                            ? `https://depositready.co/chat?ref=${referralCode}`
+                            : "https://depositready.co/chat"
                         );
                         window.open(
                           `https://twitter.com/intent/tweet?text=${text}&url=${url}`,
@@ -563,8 +563,8 @@ function SuccessContent() {
                       onClick={() => {
                         const url = encodeURIComponent(
                           referralCode
-                            ? `https://depositready.co/diagnose?ref=${referralCode}`
-                            : "https://depositready.co/diagnose"
+                            ? `https://depositready.co/chat?ref=${referralCode}`
+                            : "https://depositready.co/chat"
                         );
                         window.open(
                           `https://www.facebook.com/sharer/sharer.php?u=${url}`,
@@ -586,8 +586,8 @@ function SuccessContent() {
                             title: "Check if your landlord owes you money",
                             text: "Just found out my landlord violated state law. Check yours free:",
                             url: referralCode
-                              ? `https://depositready.co/diagnose?ref=${referralCode}`
-                              : "https://depositready.co/diagnose",
+                              ? `https://depositready.co/chat?ref=${referralCode}`
+                              : "https://depositready.co/chat",
                           });
                         }}
                         className="flex items-center gap-1.5 px-3 py-2 bg-white border border-gray-300 rounded-lg text-sm hover:bg-gray-50 transition-colors"

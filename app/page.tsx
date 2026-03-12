@@ -1,8 +1,28 @@
 import dynamic from "next/dynamic";
-import { Navbar, Hero, SocialProofBar } from "@/components/landing";
+import { Navbar, Hero } from "@/components/landing";
 import { ViewLandingTracker } from "@/components/tracking";
 
 // Below-fold sections — lazy loaded for faster initial paint
+const ProductDemo = dynamic(
+  () =>
+    import("@/components/landing/ProductDemo").then((mod) => mod.ProductDemo),
+  { ssr: true }
+);
+
+const MoneyProof = dynamic(
+  () =>
+    import("@/components/landing/MoneyProof").then((mod) => mod.MoneyProof),
+  { ssr: true }
+);
+
+const WhyNotChatGPT = dynamic(
+  () =>
+    import("@/components/landing/WhyNotChatGPT").then(
+      (mod) => mod.WhyNotChatGPT
+    ),
+  { ssr: true }
+);
+
 const Testimonials = dynamic(
   () =>
     import("@/components/landing/Testimonials").then(
@@ -11,28 +31,8 @@ const Testimonials = dynamic(
   { ssr: true }
 );
 
-const HowItWorks = dynamic(
-  () =>
-    import("@/components/landing/HowItWorks").then((mod) => mod.HowItWorks),
-  { ssr: true }
-);
-
-const TrustBullets = dynamic(
-  () =>
-    import("@/components/landing/TrustBullets").then(
-      (mod) => mod.TrustBullets
-    ),
-  { ssr: true }
-);
-
 const Pricing = dynamic(
   () => import("@/components/landing/Pricing").then((mod) => mod.Pricing),
-  { ssr: true }
-);
-
-const BlogPreview = dynamic(
-  () =>
-    import("@/components/landing/BlogPreview").then((mod) => mod.BlogPreview),
   { ssr: true }
 );
 
@@ -46,9 +46,6 @@ const Footer = dynamic(
   { ssr: true }
 );
 
-// Client component — imported directly (ssr:false not allowed in Server Components)
-import { MobileCTA } from "@/components/landing/MobileCTA";
-
 export default function Home() {
   return (
     <div className="min-h-screen bg-white">
@@ -56,16 +53,14 @@ export default function Home() {
       <Navbar />
       <main id="main-content">
         <Hero />
-        <SocialProofBar />
-        <HowItWorks />
-        <TrustBullets />
+        <ProductDemo />
+        <MoneyProof />
+        <WhyNotChatGPT />
         <Testimonials />
         <Pricing />
-        <BlogPreview />
         <FAQ />
       </main>
       <Footer />
-      <MobileCTA />
     </div>
   );
 }

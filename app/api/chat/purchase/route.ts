@@ -6,22 +6,16 @@ export const runtime = "nodejs";
 export const maxDuration = 30;
 
 interface PurchaseBody {
-  product: "demand_letter" | "legal_packet";
+  product: "recovery_packet";
   sessionToken?: string;
   email?: string;
 }
 
 const PRODUCTS = {
-  demand_letter: {
-    name: "Personalized Demand Letter",
-    description: "Formal demand letter citing your state's specific security deposit statutes",
-    price: 2900,
-    productType: "basic" as const,
-  },
-  legal_packet: {
-    name: "Complete Legal Packet",
-    description: "Demand letter + evidence checklist + small claims filing guide",
-    price: 7900,
+  recovery_packet: {
+    name: "Recovery Packet",
+    description: "Demand letter citing your violations + penalty calculations + evidence checklist + escalation timeline",
+    price: 3900,
     productType: "full" as const,
   },
 };
