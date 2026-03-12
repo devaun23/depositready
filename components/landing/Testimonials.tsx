@@ -38,7 +38,7 @@ const testimonials = [
 ];
 
 const initialsColors: Record<string, string> = {
-  SM: "bg-indigo-100 text-indigo-700",
+  SM: "bg-accent-light text-accent",
   MR: "bg-amber-100 text-amber-700",
   JL: "bg-emerald-100 text-emerald-700",
   DK: "bg-rose-100 text-rose-700",
@@ -53,7 +53,7 @@ export function Testimonials() {
       className="section-padding"
     >
       <div className="max-w-4xl mx-auto px-5">
-        <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl text-center text-gray-900">
+        <h2 className="text-2xl sm:text-3xl md:text-4xl text-center text-foreground">
           They didn&rsquo;t know they had a case.
         </h2>
 
@@ -61,7 +61,7 @@ export function Testimonials() {
           {testimonials.map((t, i) => (
             <div
               key={t.name}
-              className={`glass-card rounded-2xl p-5 sm:p-6 ${
+              className={`glass-card glass-card-hover rounded-2xl p-5 sm:p-6 ${
                 visible ? "animate-fadeSlideUp" : "opacity-0"
               }`}
               style={{
@@ -71,16 +71,16 @@ export function Testimonials() {
             >
               {/* Recovery amount */}
               <div className="flex items-center gap-2 mb-3">
-                <span className="text-xl sm:text-2xl font-bold text-green-600">
+                <span className="text-xl sm:text-2xl font-bold text-success">
                   {t.amount}
                 </span>
-                <span className="text-[10px] font-medium text-green-600 uppercase">
+                <span className="text-[10px] font-medium text-success uppercase">
                   recovered
                 </span>
               </div>
 
               {/* Quote */}
-              <p className="text-gray-900 leading-relaxed text-sm mb-4">
+              <p className="text-foreground leading-relaxed text-sm mb-4">
                 &ldquo;{t.quote}&rdquo;
               </p>
 
@@ -88,14 +88,14 @@ export function Testimonials() {
               <div className="flex items-center gap-3">
                 <div
                   className={`w-9 h-9 rounded-full flex items-center justify-center text-xs font-semibold ${
-                    initialsColors[t.initials] || "bg-gray-100 text-gray-600"
+                    initialsColors[t.initials] || "bg-section-bg-alt text-muted"
                   }`}
                 >
                   {t.initials}
                 </div>
                 <div>
-                  <p className="font-semibold text-sm text-gray-900">{t.name}</p>
-                  <p className="text-xs text-gray-500">{t.state}</p>
+                  <p className="font-semibold text-sm text-foreground">{t.name}</p>
+                  <p className="text-xs text-muted">{t.state}</p>
                 </div>
                 {/* Verified badge */}
                 <div className="ml-auto flex items-center gap-1 text-xs text-accent">
@@ -117,7 +117,7 @@ export function Testimonials() {
           ))}
         </div>
 
-        <p className="mt-6 text-center text-[11px] text-gray-400">
+        <p className="mt-6 text-center text-[11px] text-muted/70">
           Outcomes depend on facts, timing, and local law.
         </p>
       </div>

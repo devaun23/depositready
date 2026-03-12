@@ -52,10 +52,10 @@ export function WhyNotChatGPT() {
     <section ref={ref as React.RefObject<HTMLElement>} className="section-padding">
       <div className="max-w-3xl mx-auto px-5">
         <div className="text-center">
-          <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl text-gray-900">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl text-foreground">
             Why a free template won&rsquo;t work
           </h2>
-          <p className="mt-2 text-sm text-gray-500">
+          <p className="mt-2 text-sm text-muted">
             Templates give you words. You need a verdict, leverage, and a plan.
           </p>
         </div>
@@ -64,19 +64,19 @@ export function WhyNotChatGPT() {
           {gaps.map((g, i) => (
             <div
               key={i}
-              className={`flex items-start gap-4 p-4 sm:p-5 rounded-xl border border-gray-200/50 ${
+              className={`flex items-start gap-4 p-4 sm:p-5 rounded-xl border border-border/50 ${
                 visible ? "animate-fadeSlideUp" : "opacity-0"
               }`}
               style={{ animationDelay: visible ? `${i * 60}ms` : undefined, animationFillMode: "both" }}
             >
-              <div className="h-8 w-8 rounded-lg bg-gray-100 text-accent flex items-center justify-center flex-shrink-0 mt-0.5">
+              <div className="h-8 w-8 rounded-lg bg-section-bg-alt text-accent flex items-center justify-center flex-shrink-0 mt-0.5">
                 {g.icon}
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3">
-                  <span className="text-sm text-gray-400 line-through">{g.template}</span>
-                  <span className="hidden sm:block text-gray-300">→</span>
-                  <span className="text-sm font-semibold text-gray-900">{g.depositready}</span>
+                  <span className="text-sm text-muted/70 line-through">{g.template}</span>
+                  <span className="hidden sm:block text-border">→</span>
+                  <span className="text-sm font-semibold text-foreground">{g.depositready}</span>
                 </div>
               </div>
             </div>

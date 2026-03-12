@@ -21,8 +21,8 @@ export function Navbar() {
 
   return (
     <header
-      className={`sticky top-0 z-50 backdrop-blur-xl bg-white/80 border-b transition-shadow duration-200 ${
-        scrolled ? "border-gray-200/50 shadow-sm" : "border-transparent"
+      className={`sticky top-0 z-50 backdrop-blur-xl bg-background/80 border-b transition-shadow duration-200 ${
+        scrolled ? "border-border/50 shadow-sm" : "border-transparent"
       }`}
     >
       <nav className="max-w-6xl mx-auto px-4 sm:px-6">
@@ -45,7 +45,7 @@ export function Navbar() {
               <Link
                 key={link.href}
                 href={link.href}
-                className="px-4 py-2 text-sm font-medium text-gray-500 hover:text-black transition-colors rounded-lg hover:bg-gray-50"
+                className="px-4 py-2 text-sm font-medium text-muted hover:text-foreground transition-colors rounded-lg hover:bg-accent-light"
               >
                 {link.label}
               </Link>
@@ -55,7 +55,7 @@ export function Navbar() {
           {/* Desktop CTA */}
           <div className="hidden md:block">
             <Link
-              href="/chat"
+              href="/check-my-case"
               className="inline-flex items-center gap-2 px-5 py-2.5 bg-accent text-white text-sm font-medium rounded-xl hover:bg-accent-hover transition-colors shadow-sm shadow-accent/20"
             >
               Check My Case Free
@@ -65,7 +65,7 @@ export function Navbar() {
           {/* Mobile hamburger */}
           <button
             onClick={() => setMenuOpen(!menuOpen)}
-            className="md:hidden p-2 text-gray-500 hover:text-black transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
+            className="md:hidden p-2 text-muted hover:text-foreground transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
             aria-label={menuOpen ? "Close menu" : "Open menu"}
             aria-expanded={menuOpen}
           >
@@ -83,20 +83,20 @@ export function Navbar() {
 
         {/* Mobile dropdown */}
         {menuOpen && (
-          <div className="md:hidden border-t border-gray-100 pb-4 pt-2 space-y-1">
+          <div className="md:hidden border-t border-border-light pb-4 pt-2 space-y-1">
             {links.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
                 onClick={() => setMenuOpen(false)}
-                className="block px-4 py-3 text-sm font-medium text-gray-500 hover:text-black rounded-lg hover:bg-gray-50 transition-colors"
+                className="block px-4 py-3 text-sm font-medium text-muted hover:text-foreground rounded-lg hover:bg-accent-light transition-colors"
               >
                 {link.label}
               </Link>
             ))}
             <div className="pt-2 px-2">
               <Link
-                href="/chat"
+                href="/check-my-case"
                 onClick={() => setMenuOpen(false)}
                 className="flex items-center justify-center gap-2 w-full py-3 bg-accent text-white font-medium rounded-xl hover:bg-accent-hover transition-colors text-sm min-h-[44px]"
               >

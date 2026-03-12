@@ -37,9 +37,9 @@ const faqs = [
 
 export function FAQ() {
   return (
-    <section className="section-padding bg-gray-50">
+    <section className="section-padding bg-section-bg-alt">
       <div className="max-w-2xl mx-auto px-5">
-        <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl text-center text-gray-900">
+        <h2 className="text-2xl sm:text-3xl md:text-4xl text-center text-foreground">
           Frequently asked questions
         </h2>
 
@@ -48,9 +48,9 @@ export function FAQ() {
             <Collapsible
               key={faq.question}
               title={faq.question}
-              className="bg-white"
+              className="bg-card"
             >
-              <p className="text-sm text-gray-500 leading-relaxed">
+              <p className="text-sm text-muted leading-relaxed">
                 {faq.answer}
               </p>
             </Collapsible>

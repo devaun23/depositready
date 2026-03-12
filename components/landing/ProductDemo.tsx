@@ -30,10 +30,10 @@ function DiagnosePreview() {
         </div>
       </div>
       <div className="flex justify-start animate-fadeSlideUp" style={{ animationDelay: "700ms", animationFillMode: "both" }}>
-        <div className="bg-gray-50 text-gray-900 rounded-2xl rounded-bl-md px-4 py-2.5 text-sm max-w-[85%]">
-          <span className="font-semibold text-red-600">⚠ 2 violations found.</span>
+        <div className="bg-section-bg-alt text-foreground rounded-2xl rounded-bl-md px-4 py-2.5 text-sm max-w-[85%]">
+          <span className="font-semibold text-destructive">⚠ 2 violations found.</span>
           <br />
-          <span className="text-xs text-gray-500 mt-1 block">Missed 21-day deadline · No itemized statement</span>
+          <span className="text-xs text-muted mt-1 block">Missed 21-day deadline · No itemized statement</span>
         </div>
       </div>
     </div>
@@ -42,9 +42,9 @@ function DiagnosePreview() {
 
 function CalculatePreview() {
   const rows = [
-    { label: "Deposit withheld", value: "$1,200", color: "text-gray-900" },
-    { label: "Late return penalty", value: "+$1,200", color: "text-green-600" },
-    { label: "Bad faith penalty", value: "+$1,200", color: "text-green-600" },
+    { label: "Deposit withheld", value: "$1,200", color: "text-foreground" },
+    { label: "Late return penalty", value: "+$1,200", color: "text-success" },
+    { label: "Bad faith penalty", value: "+$1,200", color: "text-success" },
   ];
   return (
     <div className="space-y-2.5">
@@ -54,15 +54,15 @@ function CalculatePreview() {
           className="flex justify-between text-sm animate-fadeSlideUp"
           style={{ animationDelay: `${i * 200 + 100}ms`, animationFillMode: "both" }}
         >
-          <span className="text-gray-900">{row.label}</span>
+          <span className="text-foreground">{row.label}</span>
           <span className={`font-semibold ${row.color}`}>{row.value}</span>
         </div>
       ))}
       <div
-        className="border-t border-gray-200 pt-2.5 flex justify-between items-baseline animate-fadeSlideUp"
+        className="border-t border-border pt-2.5 flex justify-between items-baseline animate-fadeSlideUp"
         style={{ animationDelay: "700ms", animationFillMode: "both" }}
       >
-        <span className="font-bold text-gray-900 text-sm">You may be owed</span>
+        <span className="font-bold text-foreground text-sm">You may be owed</span>
         <span className="font-bold text-accent text-xl">$3,600</span>
       </div>
     </div>
@@ -87,7 +87,7 @@ function EnforcePreview() {
           <svg className="h-5 w-5 text-accent flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
-          <span className="text-sm text-gray-900">{text}</span>
+          <span className="text-sm text-foreground">{text}</span>
         </div>
       ))}
     </div>
@@ -180,10 +180,10 @@ export function ProductDemo() {
   return (
     <section id="how-it-works" className="section-padding" ref={ref}>
       <div className="max-w-3xl mx-auto px-5">
-        <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl text-center text-gray-900 mb-3">
+        <h2 className="text-2xl sm:text-3xl md:text-4xl text-center text-foreground mb-3">
           A free template can&rsquo;t do this.
         </h2>
-        <p className="text-center text-sm text-gray-500 mb-10 sm:mb-12 max-w-md mx-auto">
+        <p className="text-center text-sm text-muted mb-10 sm:mb-12 max-w-md mx-auto">
           We don&rsquo;t just give you words. We diagnose violations, calculate penalties, and build an enforcement packet.
         </p>
 
@@ -203,7 +203,7 @@ export function ProductDemo() {
                       ? "bg-accent text-white shadow-lg scale-110"
                       : i < activeStep
                       ? "bg-accent/10 text-accent"
-                      : "bg-gray-100 text-gray-400"
+                      : "bg-section-bg-alt text-muted/70"
                   }`}
                 >
                   {i < activeStep ? (
@@ -214,7 +214,7 @@ export function ProductDemo() {
                 </div>
                 <span
                   className={`text-sm font-medium hidden sm:block transition-colors ${
-                    activeStep === i ? "text-gray-900" : "text-gray-400"
+                    activeStep === i ? "text-foreground" : "text-muted/70"
                   }`}
                 >
                   {s.label}
@@ -222,7 +222,7 @@ export function ProductDemo() {
                 {i < steps.length - 1 && (
                   <div
                     className={`w-5 sm:w-10 h-0.5 rounded-full transition-colors duration-300 ${
-                      i < activeStep ? "bg-accent" : "bg-gray-200"
+                      i < activeStep ? "bg-accent" : "bg-border"
                     }`}
                   />
                 )}
@@ -232,7 +232,7 @@ export function ProductDemo() {
         </div>
 
         {/* Step label on mobile */}
-        <p className="sm:hidden text-center text-sm font-medium text-gray-900 mb-4">{step.label}</p>
+        <p className="sm:hidden text-center text-sm font-medium text-foreground mb-4">{step.label}</p>
 
         {/* Preview card */}
         <div
@@ -240,12 +240,12 @@ export function ProductDemo() {
           className="glass-card rounded-2xl overflow-hidden max-w-xl mx-auto animate-fadeSlideUp"
           style={{ animationDuration: "0.3s" }}
         >
-          <div className="px-4 sm:px-5 py-3 border-b border-gray-100 flex items-center gap-2">
+          <div className="px-4 sm:px-5 py-3 border-b border-border/50 flex items-center gap-2">
             <div className="h-6 w-6 rounded-lg bg-accent/10 text-accent flex items-center justify-center">
               {(() => { const Icon = stepIcons[activeStep]; return <Icon className="h-4 w-4" />; })()}
             </div>
-            <p className="text-sm font-semibold text-gray-900">{step.label}</p>
-            <p className="text-xs text-gray-400 ml-auto hidden sm:block">{step.desc}</p>
+            <p className="text-sm font-semibold text-foreground">{step.label}</p>
+            <p className="text-xs text-muted/70 ml-auto hidden sm:block">{step.desc}</p>
           </div>
           <div className="p-5 sm:p-6 min-h-[160px] sm:min-h-[180px]">
             <Preview />
@@ -255,8 +255,8 @@ export function ProductDemo() {
         {/* CTA */}
         <div className="mt-10 text-center">
           <Link
-            href="/chat"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-accent text-white text-sm font-semibold rounded-xl hover:bg-accent-hover transition-all shadow-xl shadow-accent/20 min-h-[44px]"
+            href="/check-my-case"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-accent text-white text-sm font-semibold rounded-xl hover:bg-accent-hover hover:-translate-y-0.5 hover:shadow-xl transition-all duration-300 shadow-xl shadow-accent/20 min-h-[44px]"
           >
             Check My Case Free
             <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
