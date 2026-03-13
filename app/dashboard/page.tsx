@@ -142,8 +142,8 @@ export default function DashboardPage() {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            tenantName: "",
-            propertyAddress: "",
+            tenantName: "Dashboard User",
+            propertyAddress: `${analysis.stateName} property`,
             depositAmount: analysis.deposit,
             formData: {
               source: "dashboard-pro",

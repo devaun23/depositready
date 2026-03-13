@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useCallback, useEffect } from "react";
+import { useState, useMemo, useCallback, useEffect, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Input } from "@/components/ui/Input";
@@ -245,9 +245,48 @@ export default function CheckMyCase() {
   const hasMinimumInput = !!(caseData.state && caseData.depositAmount && caseData.daysSinceMoveOut);
 
   const [checkoutLoading, setCheckoutLoading] = useState(false);
+  const checkoutUrlRef = useRef<string | null>(null);
+
+  // Prefetch checkout URL when analysis with violations is ready
+  useEffect(() => {
+    if (!analysis || analysis.violations.length === 0) return;
+    checkoutUrlRef.current = null;
+    const prefetch = async () => {
+      try {
+        const res = await fetch("/api/check-my-case/checkout", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            state: caseData.state,
+            stateName: analysis.stateName,
+            depositAmount: analysis.deposit,
+            daysSinceMoveOut: analysis.daysSinceMoveOut,
+            violations: analysis.violations,
+            penaltyAmount: analysis.penaltyAmount,
+            totalClaim: analysis.totalClaim,
+            statute: analysis.statute,
+            strength: analysis.strength,
+          }),
+        });
+        const data = await res.json();
+        if (data.url) checkoutUrlRef.current = data.url;
+      } catch {
+        // Fallback to on-click fetch
+      }
+    };
+    prefetch();
+  }, [analysis, caseData.state]);
 
   const handleCheckout = useCallback(async () => {
     if (!analysis || analysis.violations.length === 0) return;
+
+    // Use prefetched URL if available
+    if (checkoutUrlRef.current) {
+      window.location.href = checkoutUrlRef.current;
+      return;
+    }
+
+    // Fallback: fetch on click if prefetch failed
     setCheckoutLoading(true);
     try {
       const res = await fetch("/api/check-my-case/checkout", {

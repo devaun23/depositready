@@ -118,8 +118,8 @@ export async function POST(request: NextRequest) {
       allow_promotion_codes: true,
     });
 
-    // Update order with stripe session ID
-    await supabaseAdmin
+    // Update order with stripe session ID (non-blocking — webhook resolves via metadata)
+    supabaseAdmin
       .from("orders")
       .update({ stripe_session_id: session.id })
       .eq("id", order.id);

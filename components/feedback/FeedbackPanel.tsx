@@ -78,7 +78,7 @@ export function FeedbackPanel({ pagePath, onClose }: FeedbackPanelProps) {
             <textarea
               value={text}
               onChange={(e) => setText(e.target.value)}
-              placeholder="What's on your mind?"
+              placeholder="How can we improve DepositReady?"
               className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm resize-none focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent"
               rows={3}
               autoFocus

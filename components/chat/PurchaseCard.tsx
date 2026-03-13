@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import type { PurchaseOffer } from "./ChatContext";
 import { useChat } from "./ChatContext";
 import { DocumentPreview } from "./DocumentPreview";
@@ -18,6 +18,8 @@ interface PurchaseCardProps {
 export function PurchaseCard({ offer }: PurchaseCardProps) {
   const [loading, setLoading] = useState(false);
   const { sessionToken } = useChat();
+  const checkoutUrlRef = useRef<string | null>(null);
+  const [prefetched, setPrefetched] = useState(false);
 
   const stateAbbr = offer.stateName
     ? offer.stateName.split(" ").map((w) => w[0]).join("").slice(0, 2).toUpperCase()
@@ -28,7 +30,35 @@ export function PurchaseCard({ offer }: PurchaseCardProps) {
     ? `Get Your ${stateAbbr} ${productLabel} — ${priceFormatted}`
     : `Get Your ${productLabel} — ${priceFormatted}`;
 
+  // Prefetch checkout URL on mount
+  useEffect(() => {
+    const prefetch = async () => {
+      try {
+        const res = await fetch("/api/chat/purchase", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            product: offer.product,
+            sessionToken,
+          }),
+        });
+        const data = await res.json();
+        if (data.url) checkoutUrlRef.current = data.url;
+      } catch {
+        // Fallback to on-click fetch
+      } finally {
+        setPrefetched(true);
+      }
+    };
+    prefetch();
+  }, [offer.product, sessionToken]);
+
   const handlePurchase = async () => {
+    if (checkoutUrlRef.current) {
+      window.location.href = checkoutUrlRef.current;
+      return;
+    }
+    // Fallback: fetch on click if prefetch failed
     setLoading(true);
     try {
       const res = await fetch("/api/chat/purchase", {

@@ -4,12 +4,14 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Logo } from "@/components/ui";
 import { Button } from "@/components/ui/Button";
+import { FeedbackPanel } from "@/components/feedback/FeedbackPanel";
 import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 export function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [feedbackOpen, setFeedbackOpen] = useState(false);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10);
@@ -54,7 +56,13 @@ export function Navbar() {
           </div>
 
           {/* Desktop CTA */}
-          <div className="hidden md:block">
+          <div className="hidden md:flex items-center gap-3">
+            <button
+              onClick={() => setFeedbackOpen(!feedbackOpen)}
+              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+            >
+              Feedback
+            </button>
             <Button variant="hero" size="sm" onClick={scrollToEngine}>
               Check My Case Free
             </Button>
@@ -91,6 +99,12 @@ export function Navbar() {
                     {link.label}
                   </a>
                 ))}
+                <button
+                  onClick={() => { setMobileOpen(false); setFeedbackOpen(true); }}
+                  className="px-4 py-3 text-sm font-medium text-muted-foreground hover:text-foreground rounded-lg hover:bg-accent-light transition-colors"
+                >
+                  Feedback
+                </button>
                 <Button
                   variant="hero"
                   size="lg"
@@ -104,6 +118,10 @@ export function Navbar() {
           )}
         </AnimatePresence>
       </nav>
+
+      {feedbackOpen && (
+        <FeedbackPanel pagePath="/" onClose={() => setFeedbackOpen(false)} />
+      )}
     </header>
   );
 }

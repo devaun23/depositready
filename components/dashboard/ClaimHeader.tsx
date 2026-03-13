@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Link from "next/link";
 import { Shield, CheckCircle2, AlertTriangle, TrendingUp } from "lucide-react";
 import type { CaseAnalysis } from "@/lib/case-data";
 
@@ -25,8 +26,10 @@ export default function ClaimHeader({ analysis, evidenceCount }: ClaimHeaderProp
       <div className="container max-w-6xl mx-auto px-4 py-6 sm:py-8">
         {/* Breadcrumb */}
         <div className="flex items-center gap-2 mb-5">
-          <Shield className="h-5 w-5 text-primary" />
-          <span className="font-serif text-lg text-foreground">DepositReady</span>
+          <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
+            <Shield className="h-5 w-5 text-primary" />
+            <span className="font-serif text-lg text-foreground">DepositReady</span>
+          </Link>
           <span className="text-muted-foreground mx-1">/</span>
           <span className="text-sm font-medium text-muted-foreground">Claim Dashboard</span>
         </div>

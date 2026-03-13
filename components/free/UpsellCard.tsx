@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui";
 import type { StateCode } from "@/lib/state-rules";
 
@@ -30,6 +30,39 @@ export function UpsellCard({
   propertyAddress,
 }: UpsellCardProps) {
   const [isLoading, setIsLoading] = useState(false);
+  const checkoutUrlRef = useRef<string | null>(null);
+
+  // Prefetch checkout URL on mount
+  useEffect(() => {
+    const prefetch = async () => {
+      try {
+        const response = await fetch("/api/checkout-basic", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            tenantName: tenantName || "Tenant",
+            tenantEmail: email,
+            propertyAddress: propertyAddress || "Property Address",
+            depositAmount,
+            source: "free_upsell",
+            formData: {
+              stateCode,
+              moveOutDate,
+              tenantName,
+              landlordName,
+              propertyAddress,
+              depositAmount,
+            },
+          }),
+        });
+        const result = await response.json();
+        if (result.url) checkoutUrlRef.current = result.url;
+      } catch {
+        // Fallback to on-click fetch
+      }
+    };
+    prefetch();
+  }, [email, stateCode, depositAmount, moveOutDate, tenantName, landlordName, propertyAddress]);
 
   const handleUpsellClick = useCallback(async () => {
     if (isLoading) return;
@@ -51,8 +84,14 @@ export function UpsellCard({
       body: JSON.stringify({ email }),
     }).catch(() => {});
 
+    // Use prefetched URL if available
+    if (checkoutUrlRef.current) {
+      window.location.href = checkoutUrlRef.current;
+      return;
+    }
+
+    // Fallback: fetch on click if prefetch failed
     try {
-      // Call $29 checkout API directly
       const response = await fetch("/api/checkout-basic", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
