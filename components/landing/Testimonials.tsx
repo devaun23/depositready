@@ -10,7 +10,7 @@ const people = [
     amount: "$2,400",
     description: "Missed return deadline",
     quote:
-      "I had no idea my landlord missed the legal deadline.",
+      "I had no idea my landlord missed the legal deadline. DepositReady found it and showed me I was owed triple.",
     image: "/testimonials/sarah.jpg",
   },
   {
@@ -19,7 +19,7 @@ const people = [
     amount: "$1,800",
     description: "Illegal deduction notice",
     quote:
-      "I thought I had no case until DepositReady showed two violations.",
+      "I thought I had no case. The free check showed two violations I didn\u2019t know existed.",
     image: "/testimonials/michael.jpg",
   },
   {
@@ -28,8 +28,17 @@ const people = [
     amount: "$3,200",
     description: "Bad faith penalty",
     quote:
-      "The recovery packet cited the exact statute and my landlord paid within a week.",
+      "The recovery packet cited the exact statute my landlord violated. He paid within a week.",
     image: "/testimonials/jessica.jpg",
+  },
+  {
+    name: "David K.",
+    state: "Georgia",
+    amount: "$1,450",
+    description: "Deposit not returned",
+    quote:
+      "A free template wouldn\u2019t have found the penalty. DepositReady did.",
+    image: "/testimonials/david.jpg",
   },
 ];
 
@@ -43,15 +52,15 @@ export function Testimonials() {
     >
       <div className="max-w-4xl mx-auto px-5">
         <h2 className="text-2xl sm:text-3xl md:text-4xl text-center text-foreground">
-          Renters recovering their deposits
+          They didn&rsquo;t know they had a case.
         </h2>
 
-        {/* Stat cards row */}
-        <div className="mt-10 sm:mt-12 grid gap-4 sm:grid-cols-3">
+        {/* 2×2 glass card grid */}
+        <div className="mt-10 sm:mt-12 grid gap-4 sm:grid-cols-2">
           {people.map((p, i) => (
             <div
-              key={p.name + "-stat"}
-              className={`rounded-2xl border border-border bg-section-bg p-6 text-center ${
+              key={p.name}
+              className={`glass-card rounded-2xl p-6 ${
                 visible ? "animate-fadeSlideUp" : "opacity-0"
               }`}
               style={{
@@ -65,28 +74,13 @@ export function Testimonials() {
               <p className="mt-1 text-sm font-medium text-accent lowercase">
                 recovered
               </p>
-              <p className="mt-2 text-sm text-muted">{p.description}</p>
-            </div>
-          ))}
-        </div>
+              <p className="mt-1 text-sm text-muted">{p.description}</p>
 
-        {/* Quote cards row */}
-        <div className="mt-4 grid gap-4 sm:grid-cols-3">
-          {people.map((p, i) => (
-            <div
-              key={p.name + "-quote"}
-              className={`rounded-2xl border border-border bg-section-bg p-6 ${
-                visible ? "animate-fadeSlideUp" : "opacity-0"
-              }`}
-              style={{
-                animationDelay: visible ? `${(i + 3) * 80}ms` : undefined,
-                animationFillMode: "both",
-              }}
-            >
-              <p className="text-foreground text-sm italic leading-relaxed mb-4">
+              <p className="mt-4 text-foreground text-sm italic leading-relaxed">
                 &ldquo;{p.quote}&rdquo;
               </p>
-              <div className="flex items-center gap-3">
+
+              <div className="mt-4 flex items-center gap-3">
                 <Image
                   src={p.image}
                   alt={p.name}

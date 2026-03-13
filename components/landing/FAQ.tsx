@@ -37,7 +37,7 @@ const faqs = [
 
 export function FAQ() {
   return (
-    <section className="section-padding bg-section-bg-alt">
+    <section className="section-padding bg-card">
       <div className="max-w-2xl mx-auto px-5">
         <h2 className="text-2xl sm:text-3xl md:text-4xl text-center text-foreground">
           Frequently asked questions

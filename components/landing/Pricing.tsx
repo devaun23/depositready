@@ -10,7 +10,7 @@ export function Pricing() {
     <section
       ref={ref as React.RefObject<HTMLElement>}
       id="pricing"
-      className="section-padding bg-section-bg-alt"
+      className="section-padding bg-card"
     >
       <div className="max-w-2xl mx-auto px-5">
         <div className="text-center">

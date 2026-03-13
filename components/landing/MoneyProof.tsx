@@ -30,7 +30,7 @@ export function MoneyProof() {
   return (
     <section
       ref={ref as React.RefObject<HTMLElement>}
-      className="section-padding bg-section-bg-alt"
+      className="section-padding bg-card"
     >
       <div className="max-w-3xl mx-auto px-5">
         <h2 className="text-2xl sm:text-3xl md:text-4xl text-center text-foreground mb-3">
