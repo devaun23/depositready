@@ -3,6 +3,7 @@ import { DM_Sans, DM_Serif_Display } from "next/font/google";
 // Removed: import { Analytics } from "@vercel/analytics/react"; - reduces JS bundle
 import Script from "next/script";
 import { AttributionCapture } from "@/components/tracking/AttributionCapture";
+import PostHogProvider from "@/components/tracking/PostHogProvider";
 import "./globals.css";
 
 export const viewport: Viewport = {
@@ -105,7 +106,9 @@ export default function RootLayout({
         <a href="#main-content" className="skip-link">
           Skip to main content
         </a>
-        {children}
+        <PostHogProvider>
+          {children}
+        </PostHogProvider>
         <AttributionCapture />
         {/* Delay analytics by 5s to reduce TBT - most real users stay longer */}
         <Script id="delayed-analytics" strategy="lazyOnload">
