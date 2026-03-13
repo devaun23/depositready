@@ -28,15 +28,9 @@ export function Navbar() {
       <nav className="max-w-6xl mx-auto px-4 sm:px-6">
         <div className="flex items-center justify-between h-14 sm:h-16">
           {/* Logo */}
-          <Link
-            href="/"
-            className="group flex items-center gap-2 text-xl font-semibold text-brand"
-          >
-            <Logo
-              size="lg"
-              className="group-hover:scale-105 transition-transform duration-200"
-            />
-            <span className="font-serif tracking-tight">DepositReady</span>
+          <Link href="/" className="flex items-center gap-2">
+            <Logo size="md" className="text-accent" />
+            <span className="font-serif text-lg sm:text-xl text-foreground">DepositReady</span>
           </Link>
 
           {/* Desktop links */}
