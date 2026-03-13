@@ -199,8 +199,9 @@ export default function DashboardPage() {
                   Basic $39
                 </Button>
                 <Button
+                  variant="ghost"
                   size="sm"
-                  className="bg-primary-foreground text-primary hover:bg-primary-foreground/90 font-bold"
+                  className="bg-white text-primary hover:bg-white/90 font-bold"
                   onClick={() => handleSelectPlan("pro")}
                 >
                   Pro $79
