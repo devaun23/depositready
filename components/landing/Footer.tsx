@@ -18,9 +18,6 @@ export function Footer() {
             <Link href="/terms" className="hover:text-foreground transition-colors">
               Terms
             </Link>
-            <Link href="/blog" className="hover:text-foreground transition-colors">
-              Blog
-            </Link>
             <a href="mailto:support@depositready.co" className="hover:text-foreground transition-colors">
               Contact
             </a>
@@ -29,7 +26,7 @@ export function Footer() {
 
         <div className="mt-8 pt-6 border-t border-border-light text-center">
           <p className="text-xs text-muted/70">
-            DepositReady is a self-help documentation tool. Not a law firm. No legal advice. No guaranteed outcomes.
+            DepositReady is a self-help documentation tool and not a law firm. No legal advice provided.
           </p>
           <p className="text-xs text-muted/50 mt-2">
             &copy; {new Date().getFullYear()} DepositReady. All rights reserved.

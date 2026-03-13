@@ -26,20 +26,17 @@ export function Logo({ size = "md", className = "", checkColor = "#6366f1" }: Lo
       xmlns="http://www.w3.org/2000/svg"
       aria-hidden="true"
     >
-      {/* Shield body */}
+      {/* Shield outline */}
       <path
-        d="M16 2L4 7v7c0 7.5 5.1 14.5 12 16 6.9-1.5 12-8.5 12-16V7L16 2z"
-        fill="currentColor"
-      />
-      {/* Inner lighter shield (depth layer) */}
-      <path
-        d="M16 4.5L6 8.7v5.8c0 6.3 4.3 12.2 10 13.5 5.7-1.3 10-7.2 10-13.5V8.7L16 4.5z"
-        fill="currentColor"
-        opacity="0.7"
+        d="M16 3L5 7.5v6.5c0 7 4.8 13.5 11 15 6.2-1.5 11-8 11-15V7.5L16 3z"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinejoin="round"
       />
       {/* Checkmark */}
       <path
-        d="M11 15l3.5 3.5L21 12"
+        d="M11 15.5l3.5 3.5L21 12.5"
         stroke={checkColor}
         strokeWidth="2.5"
         strokeLinecap="round"
