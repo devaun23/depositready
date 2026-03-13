@@ -10,9 +10,9 @@ const recoveryCards = [
 ];
 
 const testimonials = [
-  { quote: "I had no idea my landlord missed the legal deadline.", name: "Sarah M.", state: "California", img: "/testimonials/sarah.jpg" },
-  { quote: "I thought I had no case until DepositReady showed two violations.", name: "Michael R.", state: "Texas", img: "/testimonials/michael.jpg" },
-  { quote: "The recovery packet cited the exact statute and my landlord paid within a week.", name: "Jessica L.", state: "New York", img: "/testimonials/jessica.jpg" },
+  { quote: "I had no idea my landlord missed the legal deadline.", name: "Sarah M.", state: "California", img: "/testimonials/testimonial-sarah.jpg" },
+  { quote: "I thought I had no case until DepositReady showed two violations.", name: "Michael R.", state: "Texas", img: "/testimonials/testimonial-michael.jpg" },
+  { quote: "The recovery packet cited the exact statute and my landlord paid within a week.", name: "Jessica L.", state: "New York", img: "/testimonials/testimonial-jessica.jpg" },
 ];
 
 export function SocialProof() {
@@ -22,8 +22,8 @@ export function SocialProof() {
     <section ref={ref as React.RefObject<HTMLElement>} className="py-16 sm:py-24 px-4">
       <div className="max-w-5xl mx-auto">
         <div className={`text-center mb-12 ${visible ? "animate-fadeSlideUp" : "opacity-0"}`} style={{ animationFillMode: "both" }}>
-          <p className="text-xs font-semibold text-accent uppercase tracking-[0.15em] mb-3">Results</p>
-          <h2 className="text-2xl sm:text-3xl text-foreground">Renters recovering their deposits</h2>
+          <p className="text-xs font-semibold text-primary uppercase tracking-[0.15em] mb-3">Results</p>
+          <h2 className="font-serif text-2xl sm:text-3xl text-foreground">Renters recovering their deposits</h2>
         </div>
 
         {/* Recovery cards */}
@@ -31,8 +31,8 @@ export function SocialProof() {
           {recoveryCards.map((card) => (
             <div key={card.amount} className="rounded-xl border border-border bg-card p-5 text-center">
               <p className="font-serif text-2xl text-foreground">{card.amount}</p>
-              <p className="text-xs text-accent font-medium mt-1">recovered</p>
-              <p className="text-xs text-muted mt-2">{card.reason}</p>
+              <p className="text-xs text-primary font-medium mt-1">recovered</p>
+              <p className="text-xs text-muted-foreground mt-2">{card.reason}</p>
             </div>
           ))}
         </div>
@@ -52,7 +52,7 @@ export function SocialProof() {
                 />
                 <div>
                   <p className="font-semibold text-sm text-foreground">{t.name}</p>
-                  <p className="text-xs text-muted">{t.state}</p>
+                  <p className="text-xs text-muted-foreground">{t.state}</p>
                 </div>
               </div>
             </div>

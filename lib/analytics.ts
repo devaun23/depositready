@@ -28,3 +28,19 @@ export const trackDiagnosis = {
   paymentCompleted: (data: { amount: number; state: string }) =>
     gtag('event', 'payment_completed', data),
 };
+
+export const trackClaimEngine = {
+  submit: (data: { state: string; deposit: number; violations: number; strength: string; total_claim: number }) =>
+    gtag('event', 'claim_engine_submit', data),
+
+  viewDashboard: (data: { state: string; total_claim: number }) =>
+    gtag('event', 'claim_engine_view_dashboard', data),
+};
+
+export const trackDashboard = {
+  view: (tab: string) =>
+    gtag('event', 'dashboard_tab_view', { tab }),
+
+  checkoutInitiated: (data: { plan: string; total_claim: number; state: string }) =>
+    gtag('event', 'dashboard_checkout_initiated', data),
+};

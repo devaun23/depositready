@@ -3,9 +3,12 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Logo } from "@/components/ui";
+import { Button } from "@/components/ui/Button";
+import { Menu, X } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 export function Navbar() {
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
@@ -29,11 +32,11 @@ export function Navbar() {
         scrolled ? "border-border/50 shadow-sm" : "border-transparent"
       }`}
     >
-      <nav className="max-w-5xl mx-auto px-4">
+      <nav className="container max-w-5xl mx-auto px-4">
         <div className="flex items-center justify-between h-14 sm:h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2">
-            <Logo size="md" className="text-accent" />
+            <Logo size="md" className="text-primary" />
             <span className="font-serif text-lg sm:text-xl text-foreground">DepositReady</span>
           </Link>
 
@@ -43,7 +46,7 @@ export function Navbar() {
               <a
                 key={link.href}
                 href={link.href}
-                className="px-4 py-2 text-sm font-medium text-muted hover:text-foreground transition-colors rounded-lg hover:bg-accent-light"
+                className="px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors rounded-lg hover:bg-accent-light"
               >
                 {link.label}
               </a>
@@ -52,56 +55,54 @@ export function Navbar() {
 
           {/* Desktop CTA */}
           <div className="hidden md:block">
-            <button
-              onClick={scrollToEngine}
-              className="inline-flex items-center gap-2 px-5 py-2.5 bg-accent text-white text-sm font-medium rounded-xl hover:bg-accent-hover transition-colors shadow-sm shadow-accent/20"
-            >
+            <Button variant="hero" size="sm" onClick={scrollToEngine}>
               Check My Case Free
-            </button>
+            </Button>
           </div>
 
           {/* Mobile hamburger */}
           <button
-            onClick={() => setMenuOpen(!menuOpen)}
-            className="md:hidden p-2 text-muted hover:text-foreground transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
-            aria-label={menuOpen ? "Close menu" : "Open menu"}
-            aria-expanded={menuOpen}
+            onClick={() => setMobileOpen(!mobileOpen)}
+            className="md:hidden p-2 text-muted-foreground hover:text-foreground transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
+            aria-label={mobileOpen ? "Close menu" : "Open menu"}
+            aria-expanded={mobileOpen}
           >
-            {menuOpen ? (
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            ) : (
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-              </svg>
-            )}
+            {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
         </div>
 
-        {/* Mobile dropdown */}
-        {menuOpen && (
-          <div className="md:hidden border-t border-border-light pb-4 pt-2 space-y-1">
-            {links.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                onClick={() => setMenuOpen(false)}
-                className="block px-4 py-3 text-sm font-medium text-muted hover:text-foreground rounded-lg hover:bg-accent-light transition-colors"
-              >
-                {link.label}
-              </a>
-            ))}
-            <div className="pt-2 px-2">
-              <button
-                onClick={() => { setMenuOpen(false); scrollToEngine(); }}
-                className="flex items-center justify-center gap-2 w-full py-3 bg-accent text-white font-medium rounded-xl hover:bg-accent-hover transition-colors text-sm min-h-[44px]"
-              >
-                Check My Case Free
-              </button>
-            </div>
-          </div>
-        )}
+        {/* Mobile dropdown with Framer Motion */}
+        <AnimatePresence>
+          {mobileOpen && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              className="md:hidden overflow-hidden bg-card border-b border-border"
+            >
+              <div className="px-4 py-4 flex flex-col gap-2">
+                {links.map((link) => (
+                  <a
+                    key={link.href}
+                    href={link.href}
+                    onClick={() => setMobileOpen(false)}
+                    className="px-4 py-3 text-sm font-medium text-muted-foreground hover:text-foreground rounded-lg hover:bg-accent-light transition-colors"
+                  >
+                    {link.label}
+                  </a>
+                ))}
+                <Button
+                  variant="hero"
+                  size="lg"
+                  className="mt-2"
+                  onClick={() => { setMobileOpen(false); scrollToEngine(); }}
+                >
+                  Check My Case Free
+                </Button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </nav>
     </header>
   );
