@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useMemo, useCallback } from "react";
+import { useState, useMemo, useCallback, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
@@ -177,6 +178,8 @@ interface CaseData {
 // ─── Page Component ────────────────────────────────────────────────────────────
 
 export default function CheckMyCase() {
+  const searchParams = useSearchParams();
+
   const [caseData, setCaseData] = useState<CaseData>({
     state: "",
     depositAmount: "",
@@ -185,6 +188,14 @@ export default function CheckMyCase() {
     writtenNotice: "no",
     damageDeductions: "no",
   });
+
+  // Pre-select state from URL param (e.g., ?state=FL from SEO pages)
+  useEffect(() => {
+    const stateParam = searchParams.get('state');
+    if (stateParam && stateParam in STATE_LAWS && !caseData.state) {
+      setCaseData((prev) => ({ ...prev, state: stateParam }));
+    }
+  }, [searchParams, caseData.state]);
 
   const update = (field: keyof CaseData, value: string) => {
     setCaseData((prev) => ({ ...prev, [field]: value }));

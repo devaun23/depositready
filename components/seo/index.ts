@@ -13,3 +13,5 @@ export { SEODisclaimer } from "./SEODisclaimer";
 export { SEODeadlineBox } from "./SEODeadlineBox";
 export { SEOComparisonGrid } from "./SEOComparisonGrid";
 export { SEOInfoList } from "./SEOInfoList";
+export { SEOVerdictCTA } from "./SEOVerdictCTA";
+export { SeoPageRenderer } from "./SeoPageRenderer";
