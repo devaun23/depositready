@@ -3,31 +3,46 @@ import { Navbar, Hero } from "@/components/landing";
 import { ViewLandingTracker } from "@/components/tracking";
 
 // Below-fold sections — lazy loaded for faster initial paint
-const ProductDemo = dynamic(
+const ClaimEngine = dynamic(
   () =>
-    import("@/components/landing/ProductDemo").then((mod) => mod.ProductDemo),
+    import("@/components/landing/ClaimEngine").then((mod) => mod.ClaimEngine),
   { ssr: true }
 );
 
-const MoneyProof = dynamic(
+const RealProblem = dynamic(
   () =>
-    import("@/components/landing/MoneyProof").then((mod) => mod.MoneyProof),
+    import("@/components/landing/RealProblem").then((mod) => mod.RealProblem),
   { ssr: true }
 );
 
-const WhyNotChatGPT = dynamic(
+const RecoveryMath = dynamic(
   () =>
-    import("@/components/landing/WhyNotChatGPT").then(
-      (mod) => mod.WhyNotChatGPT
+    import("@/components/landing/RecoveryMath").then((mod) => mod.RecoveryMath),
+  { ssr: true }
+);
+
+const TemplatesFail = dynamic(
+  () =>
+    import("@/components/landing/TemplatesFail").then(
+      (mod) => mod.TemplatesFail
     ),
   { ssr: true }
 );
 
-const Testimonials = dynamic(
+const HowItWorks = dynamic(
   () =>
-    import("@/components/landing/Testimonials").then(
-      (mod) => mod.Testimonials
-    ),
+    import("@/components/landing/HowItWorks").then((mod) => mod.HowItWorks),
+  { ssr: true }
+);
+
+const SocialProof = dynamic(
+  () =>
+    import("@/components/landing/SocialProof").then((mod) => mod.SocialProof),
+  { ssr: true }
+);
+
+const Urgency = dynamic(
+  () => import("@/components/landing/Urgency").then((mod) => mod.Urgency),
   { ssr: true }
 );
 
@@ -41,6 +56,11 @@ const FAQ = dynamic(
   { ssr: true }
 );
 
+const FinalCTA = dynamic(
+  () => import("@/components/landing/FinalCTA").then((mod) => mod.FinalCTA),
+  { ssr: true }
+);
+
 const Footer = dynamic(
   () => import("@/components/landing/Footer").then((mod) => mod.Footer),
   { ssr: true }
@@ -48,17 +68,21 @@ const Footer = dynamic(
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-background">
       <ViewLandingTracker />
       <Navbar />
       <main id="main-content">
         <Hero />
-        <ProductDemo />
-        <MoneyProof />
-        <WhyNotChatGPT />
-        <Testimonials />
+        <ClaimEngine />
+        <RealProblem />
+        <RecoveryMath />
+        <TemplatesFail />
+        <HowItWorks />
+        <SocialProof />
+        <Urgency />
         <Pricing />
         <FAQ />
+        <FinalCTA />
       </main>
       <Footer />
     </div>

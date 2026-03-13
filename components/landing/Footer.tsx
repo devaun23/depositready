@@ -3,7 +3,7 @@ import { Logo } from "@/components/ui";
 
 export function Footer() {
   return (
-    <footer className="border-t border-border py-12 px-4">
+    <footer className="border-t border-border bg-background py-10 px-4">
       <div className="max-w-5xl mx-auto">
         <div className="flex flex-col md:flex-row items-center justify-between gap-6">
           <Link href="/" className="flex items-center gap-2">
